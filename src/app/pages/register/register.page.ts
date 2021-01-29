@@ -25,8 +25,9 @@ export class RegisterPage implements OnInit {
     this.fireAuth.createUserWithEmailAndPassword(this.dataUser.email, this.dataUser.password)
         .then((userCredential) => {
           var user = userCredential.user;
-          this.router.navigate(['/home'])
-          this.presentToast( user.email + " created successfully.", "success", 3000)
+          user.sendEmailVerification();
+          this.router.navigate(['/login'])
+          this.presentToast( " Account created successfully.", "success", 3000)
         })
         .catch((error) => {
           this.presentToast( error.message, "danger", 3000)
