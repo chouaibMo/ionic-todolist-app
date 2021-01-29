@@ -1,0 +1,37 @@
+<ion-content >
+  <div class="padding">
+    
+    <div class="logo">
+      <!-- <ion-icon  name="contact"></ion-icon> -->
+      <!-- <ion-icon  name="cloudy-night"></ion-icon> -->
+      <img src="../../assets/icon/todo-icon.png">
+    </div>
+
+    <ion-item >
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-input class="ion-margin-start" type="text" placeholder="Username"></ion-input>
+    </ion-item>
+
+    <ion-item >
+      <ion-icon name="mail-outline"></ion-icon>
+      <ion-input class="ion-margin-start" type="text" placeholder="Email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="lock-closed-outline"></ion-icon>
+      <ion-input class="ion-margin-start" type="password" placeholder="Password"></ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+    </ion-item>
+    <ion-button class="ion-margin-top" color="yellow-dark" expand="block" shape="round">
+      Register
+    </ion-button>
+
+
+    <ion-item class='ion-text-center' lines="none" routerLink="/login">
+      <ion-button class="text-color" slot="end" fill="clear">Already a member? Login here</ion-button>
+    </ion-item>
+
+  </div>
+</ion-content>
