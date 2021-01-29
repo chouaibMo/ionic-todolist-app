@@ -8,15 +8,29 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import {AngularFirestoreModule} from "@angular/fire/firestore";
+import {AngularFireAnalyticsModule} from "@angular/fire/analytics";
+import {environment} from "../environments/environment";
+import {AngularFireModule} from "@angular/fire";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [
+      FormsModule,
+      ReactiveFormsModule,
+      BrowserModule,
+      IonicModule.forRoot(),
+      AppRoutingModule,
+      AngularFirestoreModule,
+      AngularFireAnalyticsModule,
+      AngularFireModule.initializeApp(environment.firebaseConfig)
+  ],
   providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+      StatusBar,
+      SplashScreen,
+     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

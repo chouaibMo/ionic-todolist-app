@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>New Todo</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="dismissModal()">close</ion-button>
+      <ion-button (color='yellow-light' click)="dismissModal()">close</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,6 +14,6 @@
     <ion-item>
       <ion-input placeholder="Todo Description" type="text" formControlName="description"></ion-input>
     </ion-item>
-    <ion-button type="submit" expand="block" [disabled]="!todoForm.valid">Create list</ion-button>
+    <ion-button color='yellow-light' type="submit" expand="block" [disabled]="!todoForm.valid">Create list</ion-button>
   </form>
 </ion-content>

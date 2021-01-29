@@ -2,10 +2,10 @@
     <ion-toolbar>
         <ion-title>{{list?.name}} </ion-title>
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="home"></ion-back-button>
+            <ion-back-button color='yellow-light' defaultHref="home"></ion-back-button>
         </ion-buttons>
         <ion-buttons slot="primary" (click)="addTodoModal()">
-            <ion-button>
+            <ion-button color='yellow-light'>
                 <ion-icon name="add-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -18,7 +18,7 @@
     <ion-list>
         <ion-item-sliding *ngFor="let todo of list?.todos">
             <ion-item>
-                <ion-checkbox checked="{{todo.isDone}}"></ion-checkbox>
+                <ion-checkbox color='yellow-light' checked="{{todo.isDone}}"></ion-checkbox>
                 <ion-label class="text-padding">
                     <h2>{{todo?.title}}</h2>
                     <p>{{todo?.description}}</p>

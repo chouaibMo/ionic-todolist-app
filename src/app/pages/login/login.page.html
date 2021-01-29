@@ -1,0 +1,51 @@
+<ion-content >
+  <div class="padding">
+    
+    <div class="logo">
+      <!-- <ion-icon  name="contact"></ion-icon> -->
+      <!-- <ion-icon  name="cloudy-night"></ion-icon> -->
+      <img src="../../assets/icon/todo-icon.png">
+    </div>
+
+    <ion-item >
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-input class="ion-margin-start" type="text" placeholder="Email or username"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="lock-closed-outline"></ion-icon>
+      <ion-input class="ion-margin-start" type="password" placeholder="Password"></ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-button class="text-color" slot="end" fill="clear">Forgot password ?</ion-button>
+    </ion-item>
+
+    <ion-button class="ion-margin-top login-btn" expand="block" shape="round" fill="outline" routerLink="/home">
+      Login
+    </ion-button>
+    <ion-button class="ion-margin-top" color="yellow-dark" expand="block" shape="round">
+      Register
+    </ion-button>
+
+    <div class="margin-30">
+      <span class="divider line one-line">or</span>
+    </div>
+    
+    <div class="ion-margin-top">
+      <ion-button color="facebook" expand="block" shape="round" (click)='signWithFacebook()'>
+        <ion-icon slot="start" name="logo-facebook"></ion-icon>
+        Facebook
+      </ion-button>
+      <ion-button color="light" expand="block" shape="round" (click)='signWithGoogle()'>
+        <ion-icon slot="start" name="logo-apple"></ion-icon>
+        Apple
+      </ion-button>
+      <ion-button color="google" expand="block" shape="round" (click)='signWithGoogle()'>
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Google
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

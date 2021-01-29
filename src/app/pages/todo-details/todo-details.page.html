@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>todo-details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item-sliding *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]">
+      <ion-item>
+        <ion-badge slot="end">{{number+1}}</ion-badge>
+        <ion-label>List number {{number+1}}</ion-label>
+        <p>Description number {{number}}</p>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="primary">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+</ion-content>
