@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {Router} from "@angular/router";
-import {ToastController} from "@ionic/angular";
+import {ModalController, ToastController} from "@ionic/angular";
+import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";
+import {PasswordRecoveryComponent} from "../../modals/password-recovery/password-recovery.component";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,10 @@ export class LoginPage implements OnInit {
     password: '',
   }
   
-  constructor(private fireAuth: AngularFireAuth, private router: Router, private toastController: ToastController) {
+  constructor(private fireAuth: AngularFireAuth,
+              private modalController: ModalController,
+              private toastController: ToastController,
+              private router: Router) {
     this.fireAuth.authState.subscribe(auth => {
       if(auth){
         this.isConnected = true;
@@ -27,9 +32,7 @@ export class LoginPage implements OnInit {
     })
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 
   signWithEmail(){
     this.fireAuth.signInWithEmailAndPassword(this.dataUser.email, this.dataUser.password)
@@ -70,6 +73,13 @@ export class LoginPage implements OnInit {
     });
     toast.color = color
     toast.present();
+  }
+
+  async passwordRecoveryModal() {
+    const modal = await this.modalController.create({
+      component: PasswordRecoveryComponent,
+    });
+    return await modal.present();
   }
 
 }

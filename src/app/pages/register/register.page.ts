@@ -10,6 +10,7 @@ import {ToastController} from "@ionic/angular";
 })
 export class RegisterPage implements OnInit {
   dataUser = {
+      username:'',
       email: '',
       password: '',
   }
