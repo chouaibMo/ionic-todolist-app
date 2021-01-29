@@ -1,6 +1,7 @@
 
 .padding {
     padding: 5%!important;
+    margin-top: 40px;
 }
 
 .logo img{
@@ -12,6 +13,7 @@
 }
 
 .logo {
+    margin-bottom: 10px;
     position: relative;
     height: 150px;
 }
@@ -30,6 +32,8 @@ ion-item {
 }
 
 .register-btn{
+    text-align: center;
+    font-size: 80%;
 }
 
 .login-btn{

@@ -9,24 +9,26 @@
 
     <ion-item >
       <ion-icon name="mail-outline"></ion-icon>
-      <ion-input class="ion-margin-start" type="text" placeholder="Email"></ion-input>
+      <ion-input class="ion-margin-start" type="text" placeholder="Email" [(ngModel)]=this.dataUser.email required></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-icon name="lock-closed-outline"></ion-icon>
-      <ion-input class="ion-margin-start" type="password" placeholder="Password"></ion-input>
+      <ion-input class="ion-margin-start" type="password" placeholder="Password" [(ngModel)]=this.dataUser.password required></ion-input>
     </ion-item>
 
     <ion-item lines="none">
       <ion-button class="text-color" slot="end" fill="clear">Forgot password ?</ion-button>
     </ion-item>
 
-    <ion-button class="ion-margin-top login-btn" expand="block" shape="round" fill="outline" routerLink="/home">
+    <ion-button class="ion-margin-top" color="yellow-dark"
+                expand="block" shape="round"
+                [disabled]="!this.dataUser.email || !this.dataUser.password"
+                (click)="signWithEmail()">
       Login
     </ion-button>
-    <ion-button class="ion-margin-top" color="yellow-dark" expand="block" shape="round" routerLink="/register">
-      Register
-    </ion-button>
+
+    <ion-button class="text-color register-btn" expand="block" fill="clear" routerLink="/register">Register now</ion-button>
 
     <div class="margin-30">
       <span class="divider line one-line">or</span>
@@ -37,10 +39,12 @@
         <ion-icon slot="start" name="logo-facebook"></ion-icon>
         Facebook
       </ion-button>
-      <ion-button color="light" expand="block" shape="round" (click)='signWithGoogle()'>
+
+      <ion-button color="light" expand="block" shape="round" (click)='signWithApple()'>
         <ion-icon slot="start" name="logo-apple"></ion-icon>
         Apple
       </ion-button>
+
       <ion-button color="google" expand="block" shape="round" (click)='signWithGoogle()'>
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Google
