@@ -35,7 +35,7 @@ export class LoginPage implements OnInit {
     this.fireAuth.signInWithEmailAndPassword(this.dataUser.email, this.dataUser.password)
         .then((userCredential) => {
             var user = userCredential.user;
-            this.presentToast( user.email + " Connected", "success", 3000)
+            this.presentToast( user.email + " connected successfully.", "success", 3000)
             this.router.navigate(['/home'])
         })
         .catch((error) => {

@@ -12,26 +12,29 @@
       <ion-input class="ion-margin-start" type="text" placeholder="Username"></ion-input>
     </ion-item>
 
-    <ion-item >
+    <ion-item>
       <ion-icon name="mail-outline"></ion-icon>
-      <ion-input class="ion-margin-start" type="text" placeholder="Email"></ion-input>
+      <ion-input class="ion-margin-start" type="text" placeholder="Email" [(ngModel)]=this.dataUser.email required></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-icon name="lock-closed-outline"></ion-icon>
-      <ion-input class="ion-margin-start" type="password" placeholder="Password"></ion-input>
+      <ion-input class="ion-margin-start" type="password" placeholder="Password" [(ngModel)]=this.dataUser.password required></ion-input>
     </ion-item>
 
     <ion-item lines="none">
     </ion-item>
-    <ion-button class="ion-margin-top" color="yellow-dark" expand="block" shape="round">
+    <ion-button class="ion-margin-top" color="yellow-dark"
+                expand="block" shape="round"
+                [disabled]="!this.dataUser.email || !this.dataUser.password"
+                (click)="createAccount()">
       Register
     </ion-button>
 
 
-    <ion-item class='ion-text-center' lines="none" routerLink="/login">
-      <ion-button class="text-color" slot="end" fill="clear">Already a member? Login here</ion-button>
-    </ion-item>
+    <ion-button class="text-color"  expand="block" fill="clear" routerLink="/login">
+      Already a member? Login here
+    </ion-button>
 
   </div>
 </ion-content>
