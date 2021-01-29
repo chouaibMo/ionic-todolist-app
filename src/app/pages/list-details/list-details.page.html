@@ -1,9 +1,40 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>list-details</ion-title>
-  </ion-toolbar>
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>{{list?.name}} </ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home"></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="primary" (click)="addTodoModal()">
+            <ion-button>
+                <ion-icon name="add-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-searchbar></ion-searchbar>
 </ion-header>
 
-<ion-content>
 
+<ion-content [fullscreen]="true">
+    <ion-list>
+        <ion-item-sliding *ngFor="let todo of list?.todos">
+            <ion-item>
+                <ion-checkbox checked="{{todo.isDone}}"></ion-checkbox>
+                <ion-label class="text-padding">
+                    <h2>{{todo?.title}}</h2>
+                    <p>{{todo?.description}}</p>
+                </ion-label>
+            </ion-item>
+
+            <ion-item-options side="end">
+                <ion-item-option color="primary" (click)="removeTodo(todo)">
+                    <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="removeTodo(todo)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+
+        </ion-item-sliding>
+
+    </ion-list>
 </ion-content>
