@@ -1,3 +1,16 @@
-<p>
-  create-list works!
-</p>
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>New List</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <form [formGroup]="listForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-input placeholder="List Name" type="text" formControlName="listName"></ion-input>
+    </ion-item>
+    <ion-button type="submit" expand="block" [disabled]="!listForm.valid">Create list</ion-button>
+  </form>
+</ion-content>

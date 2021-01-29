@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ListService} from "../../services/list.service";
+import {ModalController} from "@ionic/angular";
 
 @Component({
   selector: 'app-create-list',
@@ -6,9 +9,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-list.component.scss'],
 })
 export class CreateListComponent implements OnInit {
+  listForm: FormGroup;
 
-  constructor() { }
+  constructor(private listService: ListService,
+              private formBuilder: FormBuilder,
+              private modalController: ModalController) {
+
+    this.listForm = this.formBuilder.group({
+      listName: ['', Validators.required]
+    });
+  }
 
   ngOnInit() {}
+
+  onSubmit(){
+    this.listService.create(this.listForm.get('listName').value);
+    this.modalController.dismiss();
+  }
+
+  dismissModal() {
+    this.modalController.dismiss();
+  }
 
 }
