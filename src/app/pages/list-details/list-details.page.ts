@@ -27,8 +27,6 @@ export class ListDetailsPage implements OnInit {
         this.list = this.listService.getOne(id);
       }
     });
-
-
   }
 
   async addTodoModal() {
@@ -43,4 +41,11 @@ export class ListDetailsPage implements OnInit {
     this.listService.deleteTodo(this.list.id, todo);
   }
 
+  changed(todo: Todo) {
+    if(todo.isDone)
+      this.list.nbChecked++;
+    else
+      this.list.nbChecked--;
+
+    this.listService.updateProgress(this.list.id);  }
 }

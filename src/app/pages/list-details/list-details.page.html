@@ -11,6 +11,11 @@
         </ion-buttons>
     </ion-toolbar>
     <ion-searchbar></ion-searchbar>
+    <div class="progress-wrapper">
+        <div class="progress-bar" [style.width]="this.list.progress + '%'">
+            {{this.list.progress}}%
+        </div>
+    </div>
 </ion-header>
 
 
@@ -18,7 +23,7 @@
     <ion-list>
         <ion-item-sliding *ngFor="let todo of list?.todos">
             <ion-item>
-                <ion-checkbox color='yellow-light' checked="{{todo.isDone}}"></ion-checkbox>
+                <ion-checkbox color='yellow-light' [(ngModel)]="todo.isDone" (ngModelChange)="changed(todo)"></ion-checkbox>
                 <ion-label class="text-padding">
                     <h2>{{todo?.title}}</h2>
                     <p>{{todo?.description}}</p>

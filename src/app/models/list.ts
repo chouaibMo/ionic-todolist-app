@@ -4,12 +4,15 @@ export class List {
     static lastId = 0;
     id: string;
     name: string;
-    progress: number;
+    nbChecked: number;
+    progress: number
     todos: Todo[];
 
 
     constructor(name : string){
         this.id = Math.random().toString(20).substr(2, 6)
+        this.nbChecked = 0;
+        this.progress = 0;
         this.name = name;
         this.todos = [];
     }

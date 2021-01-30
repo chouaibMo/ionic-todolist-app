@@ -32,10 +32,12 @@ export class CreateTodoComponent implements OnInit {
     const name = this.todoForm.get('name').value;
     const description = this.todoForm.get('description').value;
     this.listService.addTodo(this.list.id, new Todo(name, description));
+    this.listService.updateProgress(this.list.id);
     this.modalController.dismiss();
   }
 
   dismissModal() {
     this.modalController.dismiss();
+
   }
 }
