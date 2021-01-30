@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {Router} from "@angular/router";
-import {ModalController, ToastController} from "@ionic/angular";
+import {IonRouterOutlet, MenuController, ModalController, ToastController} from "@ionic/angular";
 import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";
 import {PasswordRecoveryComponent} from "../../modals/password-recovery/password-recovery.component";
 
@@ -18,7 +18,9 @@ export class LoginPage implements OnInit {
   }
   
   constructor(private fireAuth: AngularFireAuth,
+              private routerOutlet: IonRouterOutlet,
               private modalController: ModalController,
+              private menuCtrl: MenuController,
               private toastController: ToastController,
               private router: Router) {
     this.fireAuth.authState.subscribe(auth => {
@@ -32,13 +34,25 @@ export class LoginPage implements OnInit {
     })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.routerOutlet.swipeGesture = false;
+
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(false);
+  }
+
+  ionViewWillLeave() {
+    this.menuCtrl.enable(true);
+  }
 
   signWithEmail(){
     this.fireAuth.signInWithEmailAndPassword(this.dataUser.email, this.dataUser.password)
         .then((userCredential) => {
             var user = userCredential.user;
-            if(user.emailVerified){
+            //if(user.emailVerified){
+            if(true){
               this.presentToast( user.email + " connected successfully.", "success", 3000)
               this.router.navigate(['/home'])
             }

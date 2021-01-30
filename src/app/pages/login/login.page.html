@@ -4,12 +4,12 @@
     <div class="logo">
       <!-- <ion-icon  name="contact"></ion-icon> -->
       <!-- <ion-icon  name="cloudy-night"></ion-icon> -->
-      <img src="../../assets/icon/todo-icon.png">
+      <img src="../../assets/icon/todo-icon.png" alt="app logo">
     </div>
 
     <ion-item >
       <ion-icon name="mail-outline"></ion-icon>
-      <ion-input class="ion-margin-start" type="text" placeholder="Email" [(ngModel)]=this.dataUser.email required></ion-input>
+      <ion-input class="ion-margin-start" inputmode="email" type="email" placeholder="Email" [(ngModel)]=this.dataUser.email required></ion-input>
     </ion-item>
 
     <ion-item>

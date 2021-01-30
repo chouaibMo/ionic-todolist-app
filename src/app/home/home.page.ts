@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {List} from "../models/list";
 import {ListService} from "../services/list.service";
-import {ModalController} from "@ionic/angular";
+import {IonRouterOutlet, ModalController} from "@ionic/angular";
 import {CreateListComponent} from "../modals/create-list/create-list.component";
 import {Todo} from "../models/todo";
 
@@ -14,6 +14,7 @@ export class HomePage {
     public lists: List[]
 
     constructor(private listService: ListService,
+                private routerOutlet: IonRouterOutlet,
                 private modalController: ModalController) {
         const nbLists = Math.floor(Math.random() * (40 - 20)) + 20;
         for (let i=0; i<nbLists; i++){
@@ -30,6 +31,11 @@ export class HomePage {
     }
 
     ngOnInit(){
+        this.routerOutlet.swipeGesture = false;
+    }
+
+    ionViewWillLeave() {
+        this.routerOutlet.swipeGesture = true;
     }
 
     async presentModal(){
