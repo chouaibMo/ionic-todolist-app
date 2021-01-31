@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {Router} from "@angular/router";
-import {IonRouterOutlet, MenuController, ModalController, ToastController} from "@ionic/angular";
-import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";
+import {IonRouterOutlet, MenuController, ModalController} from "@ionic/angular";
 import {PasswordRecoveryComponent} from "../../modals/password-recovery/password-recovery.component";
+import {UiService} from "../../services/ui/ui.service";
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,7 @@ export class LoginPage implements OnInit {
               private routerOutlet: IonRouterOutlet,
               private modalController: ModalController,
               private menuCtrl: MenuController,
-              private toastController: ToastController,
+              private uiService: UiService,
               private router: Router) {
     this.fireAuth.authState.subscribe(auth => {
       if(auth){
@@ -53,16 +53,16 @@ export class LoginPage implements OnInit {
             var user = userCredential.user;
             //if(user.emailVerified){
             if(true){
-              this.presentToast( user.email + " connected successfully.", "success", 3000)
+              this.uiService.presentToast( user.email + " connected successfully.", "success", 3000)
               this.router.navigate(['/home'])
             }
             else{
-              this.presentToast( "Please verify your mail address.", "danger", 3000)
+              this.uiService.presentToast( "Please verify your mail address.", "danger", 3000)
 
             }
         })
         .catch((error) => {
-            this.presentToast( error.message, "danger", 3000)
+          this.uiService.presentToast( error.message, "danger", 3000)
         });
     this.dataUser.email = ''
     this.dataUser.password = ''
@@ -78,15 +78,6 @@ export class LoginPage implements OnInit {
 
   signWithFacebook(){
     console.log('sign with Facebook')
-  }
-
-  async presentToast(message : string, color: string, duration : number) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: duration
-    });
-    toast.color = color
-    toast.present();
   }
 
   async passwordRecoveryModal() {
