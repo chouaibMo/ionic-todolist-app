@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {List} from "../../models/list";
-import {ListService} from "../../services/list.service";
+import {ListService} from "../../services/list/list.service";
 import {ModalController} from "@ionic/angular";
 import {ActivatedRoute} from "@angular/router";
 import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";

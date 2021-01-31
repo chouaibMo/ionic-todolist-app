@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {List} from "../../models/list";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ListService} from "../../services/list.service";
+import {ListService} from "../../services/list/list.service";
 import {ModalController} from "@ionic/angular";
 import {Todo} from "../../models/todo";
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ListService} from "../../services/list.service";
+import {ListService} from "../../services/list/list.service";
 import {ModalController, ToastController} from "@ionic/angular";
 import {AngularFireAuth} from "@angular/fire/auth";
 

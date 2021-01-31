@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {List} from "../models/list";
-import {Todo} from "../models/todo";
+import {List} from "../../models/list";
+import {Todo} from "../../models/todo";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ export class ListService {
   public lists: List[]
 
   constructor() {
-      this.lists = []
+    this.lists = []
   }
 
   public getAll() : List[] {
@@ -36,7 +36,7 @@ export class ListService {
     const list = this.lists.find(l => l.id === id)
     this.lists.find(l => l.id === id).addTodo(todo);
     this.updateProgress(id);
-}
+  }
 
   public deleteTodo(id: string, todo: Todo){
     const list = this.lists.find(l => l.id === id)
