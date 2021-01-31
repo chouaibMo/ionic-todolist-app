@@ -33,18 +33,22 @@ export class ListService {
   }
 
   public addTodo(id: string, todo: Todo) {
+    const list = this.lists.find(l => l.id === id)
     this.lists.find(l => l.id === id).addTodo(todo);
     this.updateProgress(id);
 }
 
   public deleteTodo(id: string, todo: Todo){
+    const list = this.lists.find(l => l.id === id)
     this.lists.find(l => l.id === id).removeTodo(todo);
+    if(todo.isDone)
+      list.nbChecked--;
     this.updateProgress(id);
   }
 
   public updateProgress(id :string){
     const list = this.getOne(id);
     if(list)
-      list.progress = (list.nbChecked / list.todos.length)*100  | 0;
+      list.progress = (list.nbChecked / list.todos.length)*100 | 0;
   }
 }
