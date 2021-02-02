@@ -1,6 +1,6 @@
 <ion-content >
   <div class="padding">
-    
+
     <div class="logo">
       <!-- <ion-icon  name="contact"></ion-icon> -->
       <!-- <ion-icon  name="cloudy-night"></ion-icon> -->
@@ -35,17 +35,17 @@
     </div>
     
     <div class="ion-margin-top">
-      <ion-button color="facebook" expand="block" shape="round" (click)='signWithFacebook()'>
+      <ion-button color="facebook" expand="block" shape="round" (click)='this.authService.signWithFacebook()'>
         <ion-icon slot="start" name="logo-facebook"></ion-icon>
         Facebook
       </ion-button>
 
-      <ion-button color="light" expand="block" shape="round" (click)='signWithApple()'>
+      <ion-button color="light" expand="block" shape="round" (click)='this.authService.signWithApple()'>
         <ion-icon slot="start" name="logo-apple"></ion-icon>
         Apple
       </ion-button>
 
-      <ion-button color="google" expand="block" shape="round" (click)='signWithGoogle()'>
+      <ion-button color="google" expand="block" shape="round" (click)='this.authService.signWithGoogle()'>
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Google
       </ion-button>
