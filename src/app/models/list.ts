@@ -1,7 +1,6 @@
 import { Todo } from "./todo";
 
 export class List {
-    static lastId = 0;
     id: string;
     name: string;
     nbChecked: number;
