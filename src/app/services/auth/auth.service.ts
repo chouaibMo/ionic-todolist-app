@@ -30,14 +30,13 @@ export class AuthService {
 
 
   public signWithEmail(email: string, password: string) {
-    this.fireAuth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            if(userCredential.user.emailVerified){
+    this.fireAuth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+            //if(userCredential.user.emailVerified){
                 this.uiService.presentToast( "Connected successfully.", "success", 3000);
                 this.router.navigate(['/home'])
-            }else{
-                this.uiService.presentToast( "Please verify your mail address.", "danger", 3000)
-            }
+            //}else{
+                //this.uiService.presentToast( "Please verify your mail address.", "danger", 3000)
+           //}
         })
         .catch((error) => {
           this.uiService.presentToast( error.message, "danger", 3000)
@@ -66,5 +65,16 @@ export class AuthService {
             this.uiService.presentToast( "An error occurred, please try again.", "danger", 4000)
         });
   }
+
+  public logout() {
+    this.fireAuth.signOut().then(
+        () => {
+            this.uiService.presentToast( "Logged out successfully.", "success", 3000);
+            this.router.navigate(['/login'])
+        },
+        error => {
+            this.uiService.presentToast( "An error occurred, please try again.", "danger", 4000)
+        });
+    }
 
 }
