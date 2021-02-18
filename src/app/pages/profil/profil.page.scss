@@ -1,0 +1,46 @@
+$SIDEMENU_TOP: #F3B74E;
+$SIDEMENU_BOTTOM: #D09C4D;
+$SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
+
+
+.edit-btn{
+  --ion-background-color: transparent;
+  .button{
+    --ion-background-color: transparent;
+    .button-native{
+      --ion-background-color: transparent;
+      display: inline-block;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+  }
+
+}
+
+.card-title{
+  font-size: 16px;
+  margin-bottom: -12px;
+}
+
+.logo-section__wrapper{
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  .logo-section__img{
+    display: inline;
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    border: 8px solid $SIDEMENU_TRANSPARENCY;
+    -webkit-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
+    -moz-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
+    box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
+    margin-top: 30px;
+  }
+  .logo-section__name{
+    display: contents;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}

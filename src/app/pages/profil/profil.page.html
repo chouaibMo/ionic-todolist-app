@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <!-- EDIT BUTTON -->
+    <ion-buttons slot="primary">
+      <ion-button color='yellow-light' (click)="presentActionSheet()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- MENU BUTTON -->
+    <ion-buttons slot="start">
+      <ion-menu-button color='yellow-light' menu='main-menu'></ion-menu-button>
+    </ion-buttons>
+    <!-- TITLE -->
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- PICTURE -->
+  <div class="logo-section__wrapper">
+    <img class="logo-section__img"
+         alt="profile picture"
+         [src]="this.authService.user?.photoURL ? this.authService.user?.photoURL : 'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"  />
+    <ion-button class="edit-btn"
+                strong="true"
+                style="color: #3880ff; display: initial"
+                color="transparent"
+                (click)="this.presentActionSheet()">edit</ion-button>
+    <ion-title class="logo-section__name">{{this.authService.user?.displayName ? this.authService.user?.displayName.split(' ')[0] : "N/A" }}</ion-title>
+  </div>
+
+  <!-- NAME -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Full Name</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{this.authService.user?.displayName ? this.authService.user?.displayName : "Not Available" }}</ion-card-content>
+  </ion-card>
+
+  <!-- EMAIL -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Email</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{this.authService.user?.email ? this.authService.user?.email : "Not Available" }}</ion-card-content>
+  </ion-card>
+
+  <!-- PHONE NUMBER -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Mobile</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{this.authService.user?.phoneNumber ? this.authService.user?.phoneNumber : "Not Available" }}</ion-card-content>
+  </ion-card>
+
+
+</ion-content>
