@@ -3,27 +3,44 @@
     <ion-header class="yellow-menu-gradient">
       <div class="logo-section">
         <div class="logo-section__wrapper">
-          <img class="logo-section__img" src="https://expertphotography.com/wp-content/uploads/2020/08/profile-photos-2.jpg" />
-          <ion-label class="logo-section__name"></ion-label>
+          <ion-menu-toggle>
+            <img class="logo-section__img"
+                 [src]="this.authService.user?.photoURL ? this.authService.user?.photoURL : 'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"
+                 [routerLink]="['/profil']"/>
+          </ion-menu-toggle>
+          <ion-title class="logo-section__name">{{this.authService.user?.displayName ? this.authService.user?.displayName.split(' ')[0] : "N/A" }}</ion-title>
+
+        </div>
+        <div>
         </div>
       </div>
     </ion-header>
     <ion-content>
       <ion-list class="ion-margin-vertical">
-        <ion-item lines="none">
-          <ion-icon class="ion-margin-start" name="person-outline"></ion-icon>
-          <ion-label class="ion-margin-start">My profil</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-icon class="ion-margin-start" name="list-outline"></ion-icon>
-          <ion-label class="ion-margin-start" >My Lists</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-icon class="ion-margin-start" name="settings-outline"></ion-icon>
-          <ion-label class="ion-margin-start">Settings</ion-label>
-        </ion-item>
+        <!------ HOME ------>
+        <ion-menu-toggle>
+          <ion-item lines="none" [routerLink]="['/home']">
+            <ion-icon class="ion-margin-start" name="home-outline"></ion-icon>
+            <ion-label class="ion-margin-start" >Home</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <!------ PROFILE ------>
+        <ion-menu-toggle>
+          <ion-item lines="none" [routerLink]="['/profil']">
+            <ion-icon class="ion-margin-start" name="person-outline"></ion-icon>
+            <ion-label class="ion-margin-start">Profile</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <!------ SETTINGS ------>
+        <ion-menu-toggle>
+          <ion-item lines="none" [routerLink]="['/settings']">
+            <ion-icon class="ion-margin-start" name="settings-outline"></ion-icon>
+            <ion-label class="ion-margin-start">Settings</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
       </ion-list>
     </ion-content>
+    <!------ LOGOUT ------>
     <ion-footer>
       <ion-button class="logout" color="danger" expand="block" (click)=this.authService.logout()>
         <ion-icon class="ion-margin-start" name="log-out-outline"></ion-icon>

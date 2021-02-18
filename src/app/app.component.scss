@@ -48,7 +48,7 @@ $SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
     text-align: center;
 
     .logo-section__img{
-      display: block;
+      display: inline;
       width: 120px;
       height: 120px;
       border-radius: 100%;
@@ -57,8 +57,10 @@ $SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
       -moz-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
       box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
       margin-top: 20px;
+      margin-bottom: 10px;
     }
     .logo-section__name{
+      display: contents;
       font-size: large;
       font-weight: bold;
     }

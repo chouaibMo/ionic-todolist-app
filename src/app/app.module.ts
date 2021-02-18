@@ -12,18 +12,26 @@ import {AngularFirestoreModule} from "@angular/fire/firestore";
 import {AngularFireAnalyticsModule} from "@angular/fire/analytics";
 import {environment} from "../environments/environment";
 import {AngularFireModule} from "@angular/fire";
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
       FormsModule,
+      HttpClientModule,
       ReactiveFormsModule,
       BrowserModule,
-      IonicModule.forRoot(),
+      IonicModule.forRoot({
+          scrollPadding: false,
+          scrollAssist: false
+      }),
       AppRoutingModule,
       AngularFirestoreModule,
+      AngularFireStorageModule,
       AngularFireAnalyticsModule,
       AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
