@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {IonRouterOutlet, MenuController, ModalController} from "@ionic/angular";
 import {PasswordRecoveryComponent} from "../../modals/password-recovery/password-recovery.component";
 import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
+import '@codetrix-studio/capacitor-google-auth';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +11,6 @@ import {Router} from "@angular/router";
 })
 
 export class LoginPage implements OnInit {
-  isConnected : boolean
   dataUser = {
     email: '',
     password: '',
@@ -24,17 +23,9 @@ export class LoginPage implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.routerOutlet.swipeGesture = false;
-  }
-
-  ionViewWillEnter() {
-    this.menuCtrl.enable(false);
-  }
-
-  ionViewWillLeave() {
-    this.menuCtrl.enable(true);
-  }
+  ngOnInit() {  this.routerOutlet.swipeGesture = false; }
+  ionViewWillEnter() { this.menuCtrl.enable(false); }
+  ionViewWillLeave() { this.menuCtrl.enable(true); }
 
   signWithEmail(){
     this.authService.signWithEmail(this.dataUser.email, this.dataUser.password)
@@ -47,6 +38,10 @@ export class LoginPage implements OnInit {
       component: PasswordRecoveryComponent,
     });
     return await modal.present();
+  }
+
+  signinWithFacebook(){
+
   }
 
 }
