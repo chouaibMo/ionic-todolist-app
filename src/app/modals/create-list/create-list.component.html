@@ -8,9 +8,17 @@
 </ion-header>
 <ion-content fullscreen>
   <form [formGroup]="listForm" (ngSubmit)="onSubmit()">
-    <ion-item>
-      <ion-input placeholder="List Name" type="text" formControlName="listName"></ion-input>
-    </ion-item>
-    <ion-button color='yellow-light' type="submit" expand="block" [disabled]="!listForm.valid">Create list</ion-button>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title class="card-title">List Name</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-input placeholder="List Name" type="text" formControlName="listName"></ion-input>
+        </ion-card-content>
+      </ion-card>
+    <ion-button style="padding-inline: 1em"
+                color='yellow-light'
+                type="submit"
+                expand="block" [disabled]="!listForm.valid">Create list</ion-button>
   </form>
 </ion-content>
