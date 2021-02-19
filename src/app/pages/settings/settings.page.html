@@ -28,7 +28,7 @@
       </ion-item-divider>
       <ion-item>
         <ion-label>Push notifications</ion-label>
-        <ion-toggle color="warning"></ion-toggle>
+        <ion-toggle [(ngModel)]="pushNotification" (ionChange)="onNotificationToggle($event)" color="warning"></ion-toggle>
       </ion-item>
     </div>
     <!-- SECURITY -->
@@ -38,11 +38,11 @@
       </ion-item-divider>
       <ion-item>
         <ion-label>Face ID - Fingerprint</ion-label>
-        <ion-toggle color="warning"></ion-toggle>
+        <ion-toggle [(ngModel)]="secureUnlock" (ionChange)="onSecureUnlockToggle($event)" color="warning"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label>Delete confirmation</ion-label>
-        <ion-toggle color="warning"></ion-toggle>
+        <ion-toggle [(ngModel)]="confirmDeletion" (ionChange)="onConfirmDeleteToggle($event)" color="warning"></ion-toggle>
       </ion-item>
     </div>
 
