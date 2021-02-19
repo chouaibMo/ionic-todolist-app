@@ -7,9 +7,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsPage implements OnInit {
 
-  constructor() { }
+  isDarkMode : boolean
 
-  ngOnInit() {
+  constructor() {
+    const theme = document.body.getAttribute('color-theme')
+    if(theme == 'dark')
+      this.isDarkMode = true;
+    else if(theme == 'light')
+      this.isDarkMode = false;
   }
 
+  ngOnInit() { }
+
+  onDarkModeToggle(event) {
+    if(event.detail.checked){
+      this.isDarkMode = true;
+      document.body.setAttribute('color-theme', 'dark');
+    }
+    else{
+      this.isDarkMode = false;
+      document.body.setAttribute('color-theme', 'light');
+    }
+  }
 }

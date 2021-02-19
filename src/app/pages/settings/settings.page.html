@@ -11,18 +11,40 @@
 
 <ion-content>
   <ion-list>
-    <ion-item-divider>
-      <ion-label>Security</ion-label>
-    </ion-item-divider>
-
-    <ion-item>
-      <ion-label>FaceID - Fingerprint</ion-label>
-      <ion-toggle color="warning"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Delete confirmation</ion-label>
-      <ion-toggle color="warning"></ion-toggle>
-    </ion-item> 
+    <!-- APPEARANCE -->
+    <div>
+      <ion-item-divider>
+        <ion-label>Appearance</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Dark mode</ion-label>
+        <ion-toggle [(ngModel)]="isDarkMode" (ionChange)="onDarkModeToggle($event)" color="warning"></ion-toggle>
+      </ion-item>
+    </div>
+    <!-- NOTIFICATION -->
+    <div>
+      <ion-item-divider>
+        <ion-label>Notifications</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Push notifications</ion-label>
+        <ion-toggle color="warning"></ion-toggle>
+      </ion-item>
+    </div>
+    <!-- SECURITY -->
+    <div>
+      <ion-item-divider>
+        <ion-label>Security</ion-label>
+      </ion-item-divider>
+      <ion-item>
+        <ion-label>Face ID - Fingerprint</ion-label>
+        <ion-toggle color="warning"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>Delete confirmation</ion-label>
+        <ion-toggle color="warning"></ion-toggle>
+      </ion-item>
+    </div>
 
   </ion-list>
 </ion-content>
