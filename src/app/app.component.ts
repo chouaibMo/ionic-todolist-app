@@ -21,6 +21,7 @@ export class AppComponent {
   }
 
   initializeApp() {
+    document.body.setAttribute('color-theme', 'dark');
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();

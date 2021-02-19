@@ -18,8 +18,8 @@
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item-sliding *ngFor="let list of lists" routerLink="/list-details/{{list.id}}">
-      <ion-item detail>
+    <ion-item-sliding *ngFor="let list of lists">
+      <ion-item detail routerLink="/list-details/{{list.id}}">
         <ion-badge slot="end" color='yellow-light' >{{list.todos.length}}</ion-badge>
         <ion-label>
           <h2>{{ list?.name }}</h2>

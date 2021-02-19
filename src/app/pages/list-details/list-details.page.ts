@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {List} from "../../models/list";
 import {ListService} from "../../services/list/list.service";
-import {ModalController} from "@ionic/angular";
+import {AlertController, ModalController} from "@ionic/angular";
 import {ActivatedRoute} from "@angular/router";
 import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";
 import {Todo} from "../../models/todo";
@@ -16,6 +16,7 @@ export class ListDetailsPage implements OnInit {
 
   constructor(
       private listService: ListService,
+      private alertController : AlertController,
       private activatedRoute: ActivatedRoute,
       private modalController: ModalController
   ) { }
@@ -38,14 +39,37 @@ export class ListDetailsPage implements OnInit {
   }
 
   removeTodo(todo: Todo): void {
-    this.listService.deleteTodo(this.list.id, todo);
+    this.presentTodoAlert(todo)
+    //this.listService.deleteTodo(this.list.id, todo);
   }
 
   changed(todo: Todo) {
-    if(todo.isDone)
-      this.list.nbChecked++;
-    else
-      this.list.nbChecked--;
+    todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
+    this.listService.updateProgress(this.list.id);
+  }
 
-    this.listService.updateProgress(this.list.id);  }
+  async presentTodoAlert(todo: Todo) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Delete '+todo.title + " ?",
+      message: 'Are you sure you want to delete this todo?\nThis todo will be permanently deleted',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.listService.deleteTodo(this.list.id, todo);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
 }

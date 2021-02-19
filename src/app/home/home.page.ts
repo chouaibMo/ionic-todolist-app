@@ -1,20 +1,21 @@
 import { Component } from '@angular/core';
 import {List} from "../models/list";
 import {ListService} from "../services/list/list.service";
-import {IonRouterOutlet, ModalController} from "@ionic/angular";
+import {AlertController, IonRouterOutlet, ModalController} from "@ionic/angular";
 import {CreateListComponent} from "../modals/create-list/create-list.component";
 import {Todo} from "../models/todo";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
 })
 export class HomePage {
     public lists: List[]
 
     constructor(private listService: ListService,
                 private routerOutlet: IonRouterOutlet,
+                private alertController: AlertController,
                 private modalController: ModalController) {
         const nbLists = Math.floor(Math.random() * (40 - 20)) + 20;
         for (let i=0; i<nbLists; i++){
@@ -46,6 +47,32 @@ export class HomePage {
     }
 
     delete(list: List): void {
-        this.listService.delete(list)
+        this.presentListAlert(list)
+        //this.listService.delete(list)
+    }
+
+    async presentListAlert(list: List) {
+        const alert = await this.alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Delete '+list.name,
+            message: 'Are you sure you want to delete this list?\nThis list will be permanently deleted',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {}
+                },
+                {
+                    text: 'Delete',
+                    role: 'destructive',
+                    handler: () => {
+                        this.listService.delete(list)
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
     }
 }
