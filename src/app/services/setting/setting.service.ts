@@ -13,7 +13,6 @@ export class SettingService {
 
   constructor() {
     const theme = document.body.getAttribute('color-theme')
-    console.log("initial theme : "+ theme)
     if(theme == 'dark')
       this.darkMode = new BehaviorSubject<boolean>(true);
     else if(theme == 'light')

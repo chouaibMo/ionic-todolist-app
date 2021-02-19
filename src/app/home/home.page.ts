@@ -12,7 +12,8 @@ import {SettingService} from "../services/setting/setting.service";
     styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-    public lists: List[]
+    private lists: List[]
+    private searchResult
     private deleteConfirmation : boolean
 
     constructor(private listService: ListService,
@@ -37,6 +38,8 @@ export class HomePage {
                 list.addTodo(new Todo("my todo number "+i, "description of my todo number "+i))
             }
         });
+
+        this.searchResult = this.lists
     }
 
     ngOnInit(){
@@ -85,5 +88,17 @@ export class HomePage {
         });
 
         await alert.present();
+    }
+
+    onSearchChange(event: any) {
+        const keyword = event.detail.value
+        this.searchResult = this.lists
+        if(keyword == '')
+            return this.lists
+        if(keyword && keyword.trim() != ''){
+            this.searchResult = this.searchResult.filter((item) => {
+                return (item.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
+            })
+        }
     }
 }

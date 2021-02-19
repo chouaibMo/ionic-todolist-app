@@ -10,7 +10,7 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
-    <ion-searchbar></ion-searchbar>
+    <ion-searchbar animated debounce="500" (ionChange)="onSearchChange($event)"></ion-searchbar>
     <div class="progress-wrapper">
         <div class="progress-bar" [style.width]="this.list.progress + '%'">
             {{this.list.progress}}%
@@ -21,7 +21,7 @@
 
 <ion-content [fullscreen]="true">
     <ion-list>
-        <ion-item-sliding *ngFor="let todo of list?.todos">
+        <ion-item-sliding *ngFor="let todo of searchResult">
             <ion-item>
                 <ion-checkbox color='yellow-light' [(ngModel)]="todo.isDone" (ngModelChange)="changed(todo)"></ion-checkbox>
                 <ion-label class="text-padding">

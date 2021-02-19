@@ -14,6 +14,7 @@ import {SettingService} from "../../services/setting/setting.service";
 })
 export class ListDetailsPage implements OnInit {
   private list: List;
+  private searchResult
   private deleteConfirmation : boolean
 
   constructor(
@@ -33,6 +34,7 @@ export class ListDetailsPage implements OnInit {
       const id = params.get('listId');
       if (id) {
         this.list = this.listService.getOne(id);
+        this.searchResult = this.list.todos
       }
     });
   }
@@ -80,5 +82,17 @@ export class ListDetailsPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  onSearchChange(event: any) {
+    const keyword = event.detail.value
+    this.searchResult = this.list.todos
+    if(keyword == '')
+      return this.list.todos
+    if(keyword && keyword.trim() != ''){
+      this.searchResult = this.searchResult.filter((item) => {
+        return (item.title.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
+      })
+    }
   }
 }

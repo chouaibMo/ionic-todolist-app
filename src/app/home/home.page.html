@@ -13,12 +13,12 @@
     <!-- TITLE -->
     <ion-title >Todo App</ion-title>
   </ion-toolbar>
-  <ion-searchbar></ion-searchbar>
+  <ion-searchbar animated debounce="500" (ionChange)="onSearchChange($event)"></ion-searchbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-list>
-    <ion-item-sliding *ngFor="let list of lists">
+    <ion-item-sliding *ngFor="let list of searchResult">
       <ion-item detail routerLink="/list-details/{{list.id}}">
         <ion-badge slot="end" color='yellow-light' >{{list.todos.length}}</ion-badge>
         <ion-label>
