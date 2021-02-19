@@ -22,7 +22,7 @@
     </ion-item>
 
     <ion-button class="ion-margin-top" color="yellow-dark"
-                expand="block" shape="round"
+                expand="block" shape=""
                 [disabled]="!this.dataUser.email || !this.dataUser.password"
                 (click)="signWithEmail()">
       Login
@@ -35,17 +35,17 @@
     </div>
     
     <div class="ion-margin-top">
-      <ion-button color="facebook" expand="block" shape="round" routerLink="/home" (click)='this.authService.signWithFacebook()'>
+      <ion-button color="facebook" expand="block" shape="" routerLink="/home" (click)='this.authService.signWithFacebook()'>
         <ion-icon slot="start" name="logo-facebook"></ion-icon>
         Facebook
       </ion-button>
 
-      <ion-button color="light" expand="block" shape="round" (click)='this.authService.signWithApple()'>
+      <ion-button color="light" expand="block" shape="" (click)='this.authService.signWithApple()'>
         <ion-icon slot="start" name="logo-apple"></ion-icon>
         Apple
       </ion-button>
 
-      <ion-button color="google" expand="block" shape="round" (click)='this.authService.signWithGoogle()'>
+      <ion-button color="google" expand="block" shape="" (click)='this.authService.signWithGoogle()'>
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Google
       </ion-button>

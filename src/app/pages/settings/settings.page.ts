@@ -22,7 +22,7 @@ export class SettingsPage implements OnInit {
       this.pushNotification = value;
     });
 
-    this.settingService.getConfirmDeletionValue().subscribe((value) => {
+    this.settingService.getDeleteConfirmationValue().subscribe((value) => {
       this.confirmDeletion = value;
     });
 
@@ -35,16 +35,10 @@ export class SettingsPage implements OnInit {
   ngOnInit() { }
 
   onDarkModeToggle(event) {
-    if(event.detail.checked){
-      //this.isDarkMode = true;
-      //document.body.setAttribute('color-theme', 'dark');
+    if(event.detail.checked)
       this.settingService.setDarkModeValue(true);
-    }
-    else{
-      //this.isDarkMode = false;
-      //document.body.setAttribute('color-theme', 'light');
+    else
       this.settingService.setDarkModeValue(false);
-    }
   }
 
   onNotificationToggle(event) {
@@ -56,9 +50,9 @@ export class SettingsPage implements OnInit {
 
   onConfirmDeleteToggle(event) {
     if(event.detail.checked)
-      this.settingService.setConfirmDeletionValue(true);
+      this.settingService.setDeleteConfirmationValue(true);
     else
-      this.settingService.setConfirmDeletionValue(false);
+      this.settingService.setDeleteConfirmationValue(false);
   }
 
   onSecureUnlockToggle(event) {

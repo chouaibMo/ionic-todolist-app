@@ -5,6 +5,7 @@ import {AlertController, ModalController} from "@ionic/angular";
 import {ActivatedRoute} from "@angular/router";
 import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";
 import {Todo} from "../../models/todo";
+import {SettingService} from "../../services/setting/setting.service";
 
 @Component({
   selector: 'app-list-details',
@@ -13,13 +14,19 @@ import {Todo} from "../../models/todo";
 })
 export class ListDetailsPage implements OnInit {
   private list: List;
+  private deleteConfirmation : boolean
 
   constructor(
       private listService: ListService,
+      private settingService : SettingService,
       private alertController : AlertController,
       private activatedRoute: ActivatedRoute,
       private modalController: ModalController
-  ) { }
+  ) {
+    this.settingService.getDeleteConfirmationValue().subscribe((value) => {
+      this.deleteConfirmation = value;
+    });
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -39,8 +46,10 @@ export class ListDetailsPage implements OnInit {
   }
 
   removeTodo(todo: Todo): void {
-    this.presentTodoAlert(todo)
-    //this.listService.deleteTodo(this.list.id, todo);
+    if(this.deleteConfirmation)
+      this.presentTodoAlert(todo)
+    else
+    this.listService.deleteTodo(this.list.id, todo);
   }
 
   changed(todo: Todo) {
@@ -52,7 +61,7 @@ export class ListDetailsPage implements OnInit {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Delete '+todo.title + " ?",
-      message: 'Are you sure you want to delete this todo?\nThis todo will be permanently deleted',
+      message: 'This todo will be permanently deleted.\nAre you sure you want to delete it?',
       buttons: [
         {
           text: 'Cancel',

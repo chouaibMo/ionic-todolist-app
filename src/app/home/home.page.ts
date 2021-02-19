@@ -4,6 +4,7 @@ import {ListService} from "../services/list/list.service";
 import {AlertController, IonRouterOutlet, ModalController} from "@ionic/angular";
 import {CreateListComponent} from "../modals/create-list/create-list.component";
 import {Todo} from "../models/todo";
+import {SettingService} from "../services/setting/setting.service";
 
 @Component({
     selector: 'app-home',
@@ -12,11 +13,18 @@ import {Todo} from "../models/todo";
 })
 export class HomePage {
     public lists: List[]
+    private deleteConfirmation : boolean
 
     constructor(private listService: ListService,
                 private routerOutlet: IonRouterOutlet,
+                private settingService : SettingService,
                 private alertController: AlertController,
                 private modalController: ModalController) {
+
+        this.settingService.getDeleteConfirmationValue().subscribe((value) => {
+            this.deleteConfirmation = value;
+        });
+
         const nbLists = Math.floor(Math.random() * (40 - 20)) + 20;
         for (let i=0; i<nbLists; i++){
             this.listService.create("my list number"+ i);
@@ -26,7 +34,7 @@ export class HomePage {
         this.lists.forEach(function (list) {
             const nb = Math.floor(Math.random() * (11));
             for (let i=0; i<nb; i++){
-                list.addTodo(new Todo("my todo number i", "decription of my todo number i"))
+                list.addTodo(new Todo("my todo number "+i, "description of my todo number "+i))
             }
         });
     }
@@ -47,15 +55,18 @@ export class HomePage {
     }
 
     delete(list: List): void {
-        this.presentListAlert(list)
-        //this.listService.delete(list)
+        if(this.deleteConfirmation)
+            if(list.todos.length > 0)
+                this.presentListAlert(list)
+        else
+           this.listService.delete(list)
     }
 
     async presentListAlert(list: List) {
         const alert = await this.alertController.create({
             cssClass: 'my-custom-class',
             header: 'Delete '+list.name,
-            message: 'Are you sure you want to delete this list?\nThis list will be permanently deleted',
+            message: 'This list will be permanently deleted.\nAre you sure you want to delete this list?',
             buttons: [
                 {
                     text: 'Cancel',

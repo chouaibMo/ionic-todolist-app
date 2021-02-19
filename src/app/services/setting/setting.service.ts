@@ -8,7 +8,7 @@ export class SettingService {
 
   darkMode : BehaviorSubject<boolean>;
   secureUnlock : BehaviorSubject<boolean>;
-  confirmDeletion : BehaviorSubject<boolean>;
+  deleteConfirm : BehaviorSubject<boolean>;
   pushNotification : BehaviorSubject<boolean>;
 
   constructor() {
@@ -19,7 +19,7 @@ export class SettingService {
     else if(theme == 'light')
       this.darkMode = new BehaviorSubject<boolean>(false);
 
-    this.confirmDeletion = new BehaviorSubject<boolean>(false);
+    this.deleteConfirm = new BehaviorSubject<boolean>(false);
     this.pushNotification = new BehaviorSubject<boolean>(false);
     this.secureUnlock = new BehaviorSubject<boolean>(false);
   }
@@ -34,8 +34,8 @@ export class SettingService {
       document.body.setAttribute('color-theme', 'light');
   }
 
-  setConfirmDeletionValue(newValue): void {
-    this.confirmDeletion.next(newValue);
+  setDeleteConfirmationValue(newValue): void {
+    this.deleteConfirm.next(newValue);
   }
 
   setPushNotificationValue(newValue): void {
@@ -52,8 +52,8 @@ export class SettingService {
     return this.darkMode.asObservable();
   }
 
-  getConfirmDeletionValue(): Observable<boolean> {
-    return this.confirmDeletion.asObservable();
+  getDeleteConfirmationValue(): Observable<boolean> {
+    return this.deleteConfirm.asObservable();
   }
 
   getPushNotificationValue(): Observable<boolean> {
