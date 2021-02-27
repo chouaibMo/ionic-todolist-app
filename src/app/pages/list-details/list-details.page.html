@@ -23,11 +23,17 @@
     <ion-list>
         <ion-item-sliding *ngFor="let todo of searchResult">
             <ion-item>
-                <ion-checkbox color='yellow-light' [(ngModel)]="todo.isDone" (ngModelChange)="changed(todo)"></ion-checkbox>
-                <ion-label class="text-padding">
-                    <h2>{{todo?.title}}</h2>
-                    <p>{{todo?.description}}</p>
-                </ion-label>
+                <ion-row>
+                    <ion-col>
+                        <ion-checkbox color='yellow-light' [(ngModel)]="todo.isDone" (ngModelChange)="changed(todo)"></ion-checkbox>
+                    </ion-col >
+                    <ion-col col-10 [routerLink]="['/', 'todo-details', this.list.id, todo.id]">
+                        <ion-label class="text-padding">
+                            <h2 [ngClass]="todo.isDone ? 'strikethrough' : 'null'">{{todo?.title}}</h2>
+                            <p  [ngClass]="todo.isDone ? 'strikethrough' : 'null'">{{todo?.description}}</p>
+                        </ion-label>
+                    </ion-col>
+                </ion-row>
             </ion-item>
 
             <ion-item-options side="end">

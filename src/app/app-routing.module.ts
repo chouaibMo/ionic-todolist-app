@@ -22,7 +22,7 @@ const routes: Routes = [
     canActivate: [AngularFireAuthGuard], data: {authGuardPipe: redirectUnauthorizedToLogin }
   },
   {
-    path: 'todo-details',
+    path: 'todo-details/:listId/:todoId',
     loadChildren: () => import('./pages/todo-details/todo-details.module').then( m => m.TodoDetailsPageModule),
     canActivate: [AngularFireAuthGuard], data: {authGuardPipe: redirectUnauthorizedToLogin }
   },

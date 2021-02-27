@@ -3,6 +3,8 @@ export class Todo {
     title: string;
     description?: string;
     isDone: boolean;
+    date: Date;
+    address: string;
 
     constructor(name: string, description: string){
         this.title = name;
@@ -38,4 +40,6 @@ export class Todo {
     public getId(): string {
         return this.id;
     }
+
+
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {ActionSheetController, AlertController} from "@ionic/angular";
-import { Plugins, CameraResultType, CameraPhoto, CameraSource } from '@capacitor/core';
+import {Plugins, CameraResultType, CameraPhoto, CameraSource} from '@capacitor/core';
 import {AngularFireStorage, AngularFireStorageReference} from "@angular/fire/storage";
 import firebase from "firebase";
 

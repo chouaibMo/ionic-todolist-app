@@ -1,28 +1,49 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>todo-details</ion-title>
+    <ion-title>{{todo?.title}} </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color='yellow-light'></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item-sliding *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]">
-      <ion-item>
-        <ion-badge slot="end">{{number+1}}</ion-badge>
-        <ion-label>List number {{number+1}}</ion-label>
-        <p>Description number {{number}}</p>
-      </ion-item>
+  <!-- TITLE -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Title</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{this.todo.title ? this.todo.title : 'not available'}}</ion-card-content>
+  </ion-card>
 
-      <ion-item-options side="end">
-        <ion-item-option color="primary">
-          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
+  <!-- DESCRIPTION -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Description</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{this.todo.description ? this.todo.description : 'not available'}}</ion-card-content>
+  </ion-card>
 
-    </ion-item-sliding>
+  <!-- DATE -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="card-title">Date</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>{{this.todo.date ? this.todo.date : 'not available'}}</ion-card-content>
+  </ion-card>
 
-  </ion-list>
+  <!-- MAP -->
+  <ion-card>
+      <div #map id="map"></div>
+  </ion-card>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button fixed style="font-size: 18px" expand="block"
+                class="ion-margin-start ion-margin-end"
+                [color]="this.todo.isDone ? 'danger' : 'success'"
+                (click)="onDoneClick()">{{ this.todo.isDone ? 'Mark as not done' : 'Mark as done'}}</ion-button>
+  </ion-toolbar>
+</ion-footer>

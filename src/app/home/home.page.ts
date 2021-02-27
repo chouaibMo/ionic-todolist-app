@@ -33,7 +33,7 @@ export class HomePage {
         this.lists = this.listService.getAll();
 
         this.lists.forEach(function (list) {
-            const nb = Math.floor(Math.random() * (11));
+            const nb = Math.floor(Math.random() * (20));
             for (let i=0; i<nb; i++){
                 list.addTodo(new Todo("my todo number "+i, "description of my todo number "+i))
             }
