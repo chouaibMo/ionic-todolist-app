@@ -3,6 +3,7 @@ import {Todo} from "../../models/todo";
 import {ActivatedRoute} from "@angular/router";
 import {ListService} from "../../services/list/list.service";
 import {Geolocation} from "@capacitor/core";
+import {List} from "../../models/list";
 
 declare var google;
 
@@ -14,6 +15,8 @@ declare var google;
 
 export class TodoDetailsPage implements OnInit {
   private todo : Todo
+  private list : List
+
   // Map related
   @ViewChild('map') mapElement: ElementRef;
   map: any;
@@ -29,12 +32,15 @@ export class TodoDetailsPage implements OnInit {
       const todo_id = params.get('todoId');
       if (list_id && todo_id) {
         this.todo = this.listService.getTodo(list_id, todo_id)
+        this.list = this.listService.getOne(list_id)
       }
     });
   }
 
-  onDoneClick() {
-    this.todo.isDone = !this.todo.isDone;
+  onDoneClick(todo : Todo) {
+    todo.isDone = !todo.isDone
+    todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
+    this.listService.updateProgress(this.list.id);
   }
 
   ionViewWillEnter(){

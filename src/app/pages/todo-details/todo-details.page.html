@@ -44,6 +44,6 @@
     <ion-button fixed style="font-size: 18px" expand="block"
                 class="ion-margin-start ion-margin-end"
                 [color]="this.todo.isDone ? 'danger' : 'success'"
-                (click)="onDoneClick()">{{ this.todo.isDone ? 'Mark as not done' : 'Mark as done'}}</ion-button>
+                (click)="onDoneClick(todo)">{{ this.todo.isDone ? 'Mark as not done' : 'Mark as done'}}</ion-button>
   </ion-toolbar>
 </ion-footer>

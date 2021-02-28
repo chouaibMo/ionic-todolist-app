@@ -47,6 +47,7 @@ export class ListDetailsPage implements OnInit {
     return await modal.present();
   }
 
+
   removeTodo(todo: Todo): void {
     if(this.deleteConfirmation)
       this.presentTodoAlert(todo)
@@ -54,11 +55,19 @@ export class ListDetailsPage implements OnInit {
     this.listService.deleteTodo(this.list.id, todo);
   }
 
+  /**
+   *  Triggered when a task's checkbox is checked/unchecked.
+   *  Update progress of the current list
+   */
   changed(todo: Todo) {
     todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
     this.listService.updateProgress(this.list.id);
   }
 
+  /**
+   *  Show an alert when delete button is clicked
+   *
+   */
   async presentTodoAlert(todo: Todo) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
@@ -80,10 +89,13 @@ export class ListDetailsPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
 
+  /**
+   *  Triggered when a keyword is typed in the searchbar,
+   *  and show tasks matching this keyword
+   */
   onSearchChange(event: any) {
     const keyword = event.detail.value
     this.searchResult = this.list.todos

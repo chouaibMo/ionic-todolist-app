@@ -58,18 +58,22 @@ export class HomePage {
     }
 
     delete(list: List): void {
-        if(this.deleteConfirmation)
+        if(this.deleteConfirmation){
             if(list.todos.length > 0)
                 this.presentListAlert(list)
-        else
-           this.listService.delete(list)
+            else
+                this.listService.delete(list)
+        }
+        else{
+            this.listService.delete(list)
+        }
     }
 
     async presentListAlert(list: List) {
         const alert = await this.alertController.create({
             cssClass: 'my-custom-class',
             header: 'Delete '+list.name,
-            message: 'This list will be permanently deleted.\nAre you sure you want to delete this list?',
+            message: 'This list contains one or more tasks.\nAre you sure you want to delete this list?',
             buttons: [
                 {
                     text: 'Cancel',
