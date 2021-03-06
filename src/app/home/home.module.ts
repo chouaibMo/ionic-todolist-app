@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import {CreateListComponent} from "../modals/create-list/create-list.component";
+import {ListSharingComponent} from "../modals/list-sharing/list-sharing.component";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import {CreateListComponent} from "../modals/create-list/create-list.component";
   declarations: [
       HomePage,
       CreateListComponent,
+      ListSharingComponent
   ]
 })
 export class HomePageModule {}

@@ -13,8 +13,9 @@ import {SettingService} from "../../services/setting/setting.service";
   styleUrls: ['./list-details.page.scss'],
 })
 export class ListDetailsPage implements OnInit {
-  private list: List;
-  private searchResult
+  public list: List
+  private todos: Todo[]
+  private searchResult: Todo[]
   private deleteConfirmation : boolean
 
   constructor(
@@ -33,8 +34,14 @@ export class ListDetailsPage implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('listId');
       if (id) {
-        this.list = this.listService.getOne(id);
-        this.searchResult = this.list.todos
+        this.listService.getOne(id).subscribe(values => {
+          this.list = values
+        });
+        this.listService.getAllTodos(id).subscribe(values => {
+          this.todos = values
+          this.searchResult = this.todos
+          console.log("list-details.ts")
+        })
       }
     });
   }
@@ -52,7 +59,7 @@ export class ListDetailsPage implements OnInit {
     if(this.deleteConfirmation)
       this.presentTodoAlert(todo)
     else
-    this.listService.deleteTodo(this.list.id, todo);
+    this.listService.deleteTodo(this.list, todo);
   }
 
   /**
@@ -61,7 +68,13 @@ export class ListDetailsPage implements OnInit {
    */
   changed(todo: Todo) {
     todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
-    this.listService.updateProgress(this.list.id);
+    this.listService.listsCollection.doc(this.list.id).update({
+      nbChecked: this.list.nbChecked
+    })
+    this.listService.listsCollection.doc(this.list.id).collection('todos').doc(todo.id).update({
+      isDone: todo.isDone
+    })
+    this.listService.updateProgress(this.list);
   }
 
   /**
@@ -84,7 +97,7 @@ export class ListDetailsPage implements OnInit {
           text: 'Delete',
           role: 'destructive',
           handler: () => {
-            this.listService.deleteTodo(this.list.id, todo);
+            this.listService.deleteTodo(this.list, todo);
           }
         }
       ]
@@ -98,7 +111,7 @@ export class ListDetailsPage implements OnInit {
    */
   onSearchChange(event: any) {
     const keyword = event.detail.value
-    this.searchResult = this.list.todos
+    this.searchResult = this.todos
     if(keyword == '')
       return this.list.todos
     if(keyword && keyword.trim() != ''){

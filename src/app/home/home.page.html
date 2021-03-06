@@ -2,7 +2,7 @@
   <ion-toolbar>
     <!-- ADD BUTTON -->
     <ion-buttons slot="primary">
-      <ion-button color='yellow-light' (click)="presentModal()">
+      <ion-button color='yellow-light' (click)="presentModal('create')">
         <ion-icon name="add-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -20,15 +20,18 @@
   <ion-list>
     <ion-item-sliding *ngFor="let list of searchResult">
       <ion-item detail routerLink="/list-details/{{list.id}}">
-        <ion-badge slot="end" color='yellow-light' >{{list.todos.length}}</ion-badge>
+        <ion-badge slot="end" color='yellow-light'
+                   [color]="list.size==list.nbChecked ? 'success' : 'warning'">
+            {{list.nbChecked}}/{{list.size}}
+        </ion-badge>
         <ion-label>
           <h2>{{ list?.name }}</h2>
         </ion-label>
       </ion-item>
       <!-- ITEM OPTIONS -->
       <ion-item-options side="end">
-        <ion-item-option color="primary">
-          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        <ion-item-option color="primary" (click)="presentModal('share', list.id)">
+          <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color="danger" (click)="delete(list)">
           <ion-icon slot="icon-only" name="trash"></ion-icon>

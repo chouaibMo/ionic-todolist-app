@@ -3,8 +3,8 @@ import {List} from "../models/list";
 import {ListService} from "../services/list/list.service";
 import {AlertController, IonRouterOutlet, ModalController} from "@ionic/angular";
 import {CreateListComponent} from "../modals/create-list/create-list.component";
-import {Todo} from "../models/todo";
 import {SettingService} from "../services/setting/setting.service";
+import {ListSharingComponent} from "../modals/list-sharing/list-sharing.component";
 
 @Component({
     selector: 'app-home',
@@ -13,7 +13,7 @@ import {SettingService} from "../services/setting/setting.service";
 })
 export class HomePage {
     private lists: List[]
-    private searchResult
+    private searchResult: List[]
     private deleteConfirmation : boolean
 
     constructor(private listService: ListService,
@@ -25,38 +25,40 @@ export class HomePage {
         this.settingService.getDeleteConfirmationValue().subscribe((value) => {
             this.deleteConfirmation = value;
         });
-
-        const nbLists = Math.floor(Math.random() * (40 - 20)) + 20;
-        for (let i=0; i<nbLists; i++){
-            this.listService.create("my list number"+ i);
-        }
-        this.lists = this.listService.getAll();
-
-        this.lists.forEach(function (list) {
-            const nb = Math.floor(Math.random() * (20));
-            for (let i=0; i<nb; i++){
-                list.addTodo(new Todo("my todo number "+i, "description of my todo number "+i))
-            }
-        });
-
-        this.searchResult = this.lists
     }
 
     ngOnInit(){
         this.routerOutlet.swipeGesture = false;
+        this.listService.getAll().subscribe(values => {
+            this.lists = values
+            this.searchResult = this.lists
+            console.log("home")
+        });
     }
 
     ionViewWillLeave() {
         this.routerOutlet.swipeGesture = true;
     }
 
-    async presentModal(){
-        const modal = await this.modalController.create({
-            component: CreateListComponent,
-        });
-        return await modal.present();
+    async presentModal(action: string, list_id?: string){
+        if(action == "create"){
+            const modal = await this.modalController.create({
+                component: CreateListComponent,
+            });
+            return await modal.present();
+        }
+        if(action == "share"){
+            const modal = await this.modalController.create({
+                component: ListSharingComponent,
+                componentProps: { list_id : list_id }
+            });
+            return await modal.present();
+        }
     }
 
+    /**
+     *  Triggered when delete option is clicked
+     */
     delete(list: List): void {
         if(this.deleteConfirmation){
             if(list.todos.length > 0)
@@ -68,6 +70,7 @@ export class HomePage {
             this.listService.delete(list)
         }
     }
+
 
     async presentListAlert(list: List) {
         const alert = await this.alertController.create({
@@ -94,6 +97,10 @@ export class HomePage {
         await alert.present();
     }
 
+    /**
+     *  Triggered when a keyword is typed in the searchbar,
+     *  and show tasks matching this keyword
+     */
     onSearchChange(event: any) {
         const keyword = event.detail.value
         this.searchResult = this.lists
@@ -104,5 +111,13 @@ export class HomePage {
                 return (item.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
             })
         }
+    }
+
+    /**
+     *  Triggered when share button's option is clicked
+     *  Show a modal for list sharing
+     */
+    share(list: List) {
+
     }
 }

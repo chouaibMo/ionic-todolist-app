@@ -31,8 +31,12 @@ export class TodoDetailsPage implements OnInit {
       const list_id = params.get('listId');
       const todo_id = params.get('todoId');
       if (list_id && todo_id) {
-        this.todo = this.listService.getTodo(list_id, todo_id)
-        this.list = this.listService.getOne(list_id)
+        this.listService.getOne(list_id).subscribe(list => {
+          this.list = list
+        });
+        this.listService.getTodo(list_id, todo_id).subscribe(todo => {
+          this.todo = todo
+        })
       }
     });
   }
@@ -40,11 +44,11 @@ export class TodoDetailsPage implements OnInit {
   onDoneClick(todo : Todo) {
     todo.isDone = !todo.isDone
     todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
-    this.listService.updateProgress(this.list.id);
+    this.listService.updateProgress(this.list);
   }
 
   ionViewWillEnter(){
-    this.loadMap()
+    //this.loadMap()
   }
 
   // Initialize a blank map

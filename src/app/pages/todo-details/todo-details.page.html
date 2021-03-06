@@ -14,7 +14,7 @@
     <ion-card-header>
       <ion-card-title class="card-title">Title</ion-card-title>
     </ion-card-header>
-    <ion-card-content>{{this.todo.title ? this.todo.title : 'not available'}}</ion-card-content>
+    <ion-card-content>{{this.todo?.title ? this.todo?.title : 'not available'}}</ion-card-content>
   </ion-card>
 
   <!-- DESCRIPTION -->
@@ -22,7 +22,7 @@
     <ion-card-header>
       <ion-card-title class="card-title">Description</ion-card-title>
     </ion-card-header>
-    <ion-card-content>{{this.todo.description ? this.todo.description : 'not available'}}</ion-card-content>
+    <ion-card-content>{{this.todo?.description ? this.todo?.description : 'not available'}}</ion-card-content>
   </ion-card>
 
   <!-- DATE -->
@@ -30,20 +30,21 @@
     <ion-card-header>
       <ion-card-title class="card-title">Date</ion-card-title>
     </ion-card-header>
-    <ion-card-content>{{this.todo.date ? this.todo.date : 'not available'}}</ion-card-content>
+    <ion-card-content>{{this.todo?.date ? this.todo?.date : 'not available'}}</ion-card-content>
   </ion-card>
 
-  <!-- MAP -->
+  <!-- MAP
   <ion-card>
       <div #map id="map"></div>
   </ion-card>
+  -->
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
     <ion-button fixed style="font-size: 18px" expand="block"
                 class="ion-margin-start ion-margin-end"
-                [color]="this.todo.isDone ? 'danger' : 'success'"
-                (click)="onDoneClick(todo)">{{ this.todo.isDone ? 'Mark as not done' : 'Mark as done'}}</ion-button>
+                [color]="this.todo?.isDone ? 'danger' : 'success'"
+                (click)="onDoneClick(todo)">{{ this.todo?.isDone ? 'Mark as not done' : 'Mark as done'}}</ion-button>
   </ion-toolbar>
 </ion-footer>

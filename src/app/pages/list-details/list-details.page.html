@@ -12,8 +12,8 @@
     </ion-toolbar>
     <ion-searchbar animated debounce="500" (ionChange)="onSearchChange($event)"></ion-searchbar>
     <div class="progress-wrapper">
-        <div class="progress-bar" [style.width]="this.list.progress + '%'">
-            {{this.list.progress}}%
+        <div class="progress-bar" [style.width]="this.list?.progress + '%'">
+            {{this.list?.progress}}%
         </div>
     </div>
 </ion-header>
