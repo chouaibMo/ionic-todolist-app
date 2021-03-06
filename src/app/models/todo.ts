@@ -10,7 +10,6 @@ export class Todo {
         this.title = name;
         this.description = description;
         this.isDone = false;
-        this.id = Math.random().toString(20).substr(2, 6)
     }
 
     public getName(): string {
