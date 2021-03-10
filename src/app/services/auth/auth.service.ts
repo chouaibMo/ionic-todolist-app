@@ -6,36 +6,48 @@ import {Router} from "@angular/router";
 import {Plugins} from "@capacitor/core";
 import '@codetrix-studio/capacitor-google-auth';
 import firebase from "firebase";
-import {BehaviorSubject, Observable} from "rxjs";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import User = firebase.User;
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
+    public usersCollection: AngularFirestoreCollection<any>
+    private user : User;
 
-    user : User;
-
-    constructor(private fireAuth: AngularFireAuth,
+    constructor(public afs: AngularFirestore,
+                public fireAuth: AngularFireAuth,
                 private modalController: ModalController,
                 private menuCtrl: MenuController,
                 private uiService: UiService,
                 private router: Router) {
 
-        this.fireAuth.authState.subscribe(user => {
-            if (user) {
-                this.user = user
-            }
-        })
+        this.usersCollection = this.afs.collection<any>('users');
+        this.authStatusListener()
     }
 
 
-    public createAccount(email: string, password: string) {
+    authStatusListener(){
+        this.fireAuth.onAuthStateChanged((credential)=>{
+            if(credential)
+                this.user = credential
+            else
+                this.user = null
+        })
+    }
+
+    public createAccount(username: string, email: string, password: string) {
         this.fireAuth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 userCredential.user.sendEmailVerification();
                 this.uiService.presentToast( " Account created successfully.", "success", 3000)
                 this.router.navigate(['/login'])
+                this.usersCollection.doc().set({
+                    username: username,
+                    email: email,
+                });
+
             })
             .catch((error) => {
                 this.uiService.presentToast( error.message, "danger", 3000)
@@ -56,6 +68,7 @@ export class AuthService {
                 this.uiService.presentToast( error.message, "danger", 3000)
             });
     }
+
 
     async signWithGoogle(){
         let googleUser = await Plugins.GoogleAuth.signIn() as any;
@@ -96,7 +109,7 @@ export class AuthService {
             });
     }
 
-    public getCurrentUser(): User{
+    public getCurrentUser(){
         return this.user
     }
 }
