@@ -22,10 +22,10 @@
   <div style="height: 98%" *ngIf="this.ownedResult?.length == 0 && this.sharedResult?.length == 0">
     <ion-grid>
       <ion-row>
-        <ion-icon style="margin-top: 40%" class="empty-icon" name="file-tray-full-outline"></ion-icon>
+        <ion-icon style="margin-top: 2.5em" class="empty-icon" name="file-tray-full-outline"></ion-icon>
       </ion-row>
       <ion-row>
-        <ion-label class="empty-msg">You don't have any todo list</ion-label>
+        <ion-label class="ion-text-center empty-msg">You don't have any todo list</ion-label>
       </ion-row>
       <ion-row class="ion-margin-top">
         <ion-button color="yellow-dark"
@@ -55,7 +55,7 @@
       </ion-item>
       <!-- ITEM OPTIONS -->
       <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="presentModal('share', list)">
+        <ion-item-option color="primary" (click)="share(list)">
           <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color="danger" (click)="delete(list)">

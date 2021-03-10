@@ -6,6 +6,8 @@ import {CreateListComponent} from "../modals/create-list/create-list.component";
 import {SettingService} from "../services/setting/setting.service";
 import {ListSharingComponent} from "../modals/list-sharing/list-sharing.component";
 import {AuthService} from "../services/auth/auth.service";
+import {takeUntil} from "rxjs/operators";
+import {UiService} from "../services/ui/ui.service";
 
 @Component({
     selector: 'app-home',
@@ -23,6 +25,7 @@ export class HomePage {
                 private routerOutlet: IonRouterOutlet,
                 private settingService : SettingService,
                 private authService: AuthService,
+                private uiService : UiService,
                 private alertController: AlertController,
                 private modalController: ModalController) {}
 
@@ -47,6 +50,11 @@ export class HomePage {
         this.routerOutlet.swipeGesture = true;
     }
 
+    /**
+     * Show a modal to create or share a list
+     * @param action: create or share
+     * @param list: the list to share in case of share action (optionnal param)
+     */
     async presentModal(action: string, list?: List){
         if(action == "create"){
             const modal = await this.modalController.create({
@@ -65,6 +73,7 @@ export class HomePage {
 
     /**
      *  Triggered when delete option is clicked
+     *  @param list: the list to be deleted
      */
     delete(list: List): void {
         if(this.deleteConfirmation){
@@ -78,36 +87,12 @@ export class HomePage {
         }
     }
 
-
-    async presentListAlert(list: List) {
-        const alert = await this.alertController.create({
-            cssClass: 'my-custom-class',
-            header: 'Delete '+list.name,
-            message: 'This list contains one or more tasks.\nAre you sure you want to delete this list?',
-            buttons: [
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: () => {}
-                },
-                {
-                    text: 'Delete',
-                    role: 'destructive',
-                    handler: () => {
-                        this.listService.delete(list)
-                    }
-                }
-            ]
-        });
-
-        await alert.present();
-    }
-
     /**
      *  Triggered when a keyword is typed in the searchbar,
      *  and show tasks matching this keyword
+     *  @param event
      */
+
     onSearchChange(event: any) {
         const keyword = event.detail.value
         this.ownedResult = this.ownedLists
@@ -129,8 +114,38 @@ export class HomePage {
     /**
      *  Triggered when share button's option is clicked
      *  Show a modal for list sharing
+     *  @param list: the list to be shared
      */
     share(list: List) {
+        this.presentModal('share', list)
+    }
 
+    /**
+     * Show an alert when delete button is clicked
+     * @param list: the list to be deleted
+     */
+    async presentListAlert(list: List) {
+        this.uiService.vibration()
+        const alert = await this.alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Delete '+list.name,
+            message: 'This list contains one or more tasks.\nAre you sure you want to delete this list?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {}
+                },
+                {
+                    text: 'Delete',
+                    role: 'destructive',
+                    handler: () => {
+                        this.listService.delete(list)
+                    }
+                }
+            ]
+        });
+        await alert.present();
     }
 }

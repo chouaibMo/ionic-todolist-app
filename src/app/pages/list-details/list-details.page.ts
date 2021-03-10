@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {CreateTodoComponent} from "../../modals/create-todo/create-todo.component";
 import {Todo} from "../../models/todo";
 import {SettingService} from "../../services/setting/setting.service";
+import {UiService} from "../../services/ui/ui.service";
 
 @Component({
   selector: 'app-list-details',
@@ -20,6 +21,7 @@ export class ListDetailsPage implements OnInit {
 
   constructor(
       private listService: ListService,
+      private uiService : UiService,
       private settingService : SettingService,
       private alertController : AlertController,
       private activatedRoute: ActivatedRoute,
@@ -81,6 +83,7 @@ export class ListDetailsPage implements OnInit {
    *
    */
   async presentTodoAlert(todo: Todo) {
+    this.uiService.vibration()
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Delete '+todo.title + " ?",

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import {ToastController} from "@ionic/angular";
+import { Plugins, HapticsImpactStyle } from '@capacitor/core';
+
+const { Haptics } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +18,10 @@ export class UiService {
     });
     toast.color = color
     await toast.present();
+  }
+
+  public vibration(){
+    Haptics.vibrate()
   }
 
 }
