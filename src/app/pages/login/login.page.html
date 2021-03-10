@@ -2,32 +2,29 @@
   <div class="padding">
 
     <div class="logo">
-      <!-- <ion-icon  name="contact"></ion-icon> -->
-      <!-- <ion-icon  name="cloudy-night"></ion-icon> -->
       <img src="../../assets/icon/todo-icon.png" alt="app logo">
     </div>
+    <form [formGroup]="dataForm" (ngSubmit)="signWithEmail()">
+        <ion-item >
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input class="ion-margin-start" inputmode="email" type="email" placeholder="Email" formControlName="email" required></ion-input>
+        </ion-item>
 
-    <ion-item >
-      <ion-icon name="mail-outline"></ion-icon>
-      <ion-input class="ion-margin-start" inputmode="email" type="email" placeholder="Email" [(ngModel)]=this.dataUser.email required></ion-input>
-    </ion-item>
+        <ion-item>
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password" required></ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-icon name="lock-closed-outline"></ion-icon>
-      <ion-input class="ion-margin-start" type="password" placeholder="Password" [(ngModel)]=this.dataUser.password required></ion-input>
-    </ion-item>
+        <ion-item lines="none">
+          <ion-button class="text-color" slot="end" fill="clear" (click)="passwordRecoveryModal()">Forgot password ?</ion-button>
+        </ion-item>
 
-    <ion-item lines="none">
-      <ion-button class="text-color" slot="end" fill="clear" (click)="passwordRecoveryModal()">Forgot password ?</ion-button>
-    </ion-item>
-
-    <ion-button class="ion-margin-top" color="yellow-dark"
-                expand="block" shape=""
-                [disabled]="!this.dataUser.email || !this.dataUser.password"
-                (click)="signWithEmail()">
-      Login
-    </ion-button>
-
+        <ion-button class="ion-margin-top" color="yellow-dark"
+                    expand="block" type="submit"
+                    [disabled]="!dataForm.valid">
+          Login
+        </ion-button>
+    </form>
     <ion-button class="text-color register-btn" expand="block" fill="clear" routerLink="/register">Register now</ion-button>
 
     <div class="margin-30">

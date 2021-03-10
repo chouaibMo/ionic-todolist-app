@@ -3,6 +3,7 @@ import {IonRouterOutlet, MenuController, ModalController} from "@ionic/angular";
 import {PasswordRecoveryComponent} from "../../modals/password-recovery/password-recovery.component";
 import {AuthService} from "../../services/auth/auth.service";
 import '@codetrix-studio/capacitor-google-auth';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -11,16 +12,21 @@ import '@codetrix-studio/capacitor-google-auth';
 })
 
 export class LoginPage implements OnInit {
-  dataUser = {
-    email: '',
-    password: '',
-  }
+  dataForm: FormGroup;
   
   constructor(private routerOutlet: IonRouterOutlet,
               private modalController: ModalController,
               private menuCtrl: MenuController,
+              private formBuilder: FormBuilder,
               public authService: AuthService) {
 
+    this.dataForm = this.formBuilder.group({
+      password: new FormControl('', Validators.required),
+      email: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
+      ]))
+    });
   }
 
   ngOnInit() {  this.routerOutlet.swipeGesture = false; }
@@ -28,9 +34,8 @@ export class LoginPage implements OnInit {
   ionViewWillLeave() { this.menuCtrl.enable(true); }
 
   signWithEmail(){
-    this.authService.signWithEmail(this.dataUser.email, this.dataUser.password)
-    this.dataUser.email = ''
-    this.dataUser.password = ''
+    this.authService.signWithEmail(this.dataForm.get('email').value, this.dataForm.get('password').value)
+    this.dataForm.reset()
   }
 
   async passwordRecoveryModal() {
