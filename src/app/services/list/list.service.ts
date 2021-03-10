@@ -2,30 +2,69 @@ import {Injectable} from '@angular/core';
 import {List} from "../../models/list";
 import {Todo} from "../../models/todo";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
-import {Observable} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {map} from "rxjs/operators";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ListService {
   public listsCollection: AngularFirestoreCollection<List>
-  private lists: List[]
+  public sharedLists: Array<List>;
 
-
-  constructor(public afs: AngularFirestore) {
+  constructor(public afs: AngularFirestore,
+              public authService : AuthService) {
     this.listsCollection = this.afs.collection<List>('lists');
-
-    this.lists = []
   }
 
   /**
    *  Get all lists
    */
   public getAll() : Observable<List[]>{
-    return this.listsCollection.snapshotChanges().pipe(
+    const lists = this.afs.collection('lists',ref => ref.where('owner', '==', this.authService.getCurrentUser()?.email));
+
+    return lists.snapshotChanges().pipe(
         map(value => this.multipleMapper<List>(value))
     );
+  }
+
+  /**
+   *  Get all shared lists
+   */
+  public getAllShared() : Observable<List[]>{
+    const readers = this.afs.collection('lists',
+            ref => ref.where('readers', 'array-contains', this.authService.getCurrentUser()?.email))
+
+    const writers = this.afs.collection('lists',
+            ref => ref.where('writers', 'array-contains', this.authService.getCurrentUser()?.email))
+
+    const readersObs =  readers.snapshotChanges().pipe(
+        map(value => this.multipleMapper<List>(value))
+    );
+    const writersObs = writers.snapshotChanges().pipe(
+        map(value => this.multipleMapper<List>(value))
+    );
+
+    return combineLatest(readersObs,writersObs).pipe(
+        map(([list1, list2]) =>{
+          let array = [...list1, ...list2]
+          return this.removeDuplicate(array)
+        })
+    )
+
+  }
+
+  private removeDuplicate(data){
+    let array = data.reduce((arr, item) => {
+      let exists = !!arr.find(x => x.id === item.id);
+      if(!exists){
+        arr.push(item);
+      }
+      return arr;
+    }, []);
+
+    return array
   }
 
   /**
@@ -38,35 +77,27 @@ export class ListService {
   }
 
   /**
-   *  Add a  list of todos (already created)
-   */
-  public add(list : List) : void {
-    this.lists.push(list);
-  }
-
-  /**
    *  Create a new list of todos
    */
   public create(name: string, owner : string): void {
     const id = this.afs.createId();
     const list = new List(id, name, owner)
     this.listsCollection.doc(id).set(Object.assign({}, list));
-    this.listsCollection.doc(list.id).collection('writers').doc().set({
-      email: owner
-    });
-    this.listsCollection.doc(list.id).collection('readers').doc().set({
-      email: owner
-    });
   }
 
   /**
    *  Delete a list of todos
    */
   public delete(list : List) : void{
-    this.listsCollection.doc(list.id).collection('todos').get()
-    this.listsCollection.doc(list.id).collection('readers').snapshotChanges().pipe(
-        map(value => this.multipleMapper<List>(value))
-    );
+    console.log("deleting : "+list.id)
+    this.listsCollection.doc(list.id).delete()
+  }
+
+  /**
+   *  update a list
+   */
+  public update(list : List) : void{
+    this.listsCollection.doc(list.id).update(list)
   }
 
 
