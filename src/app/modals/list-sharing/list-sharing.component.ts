@@ -12,9 +12,9 @@ import {Todo} from "../../models/todo";
   styleUrls: ['./list-sharing.component.scss'],
 })
 export class ListSharingComponent implements OnInit {
-  @Input() list_id : string
-  writePerm: boolean;
-  deletePerm: boolean;
+  @Input() list : List
+  writePerm: boolean = false;
+  deletePerm: boolean = false;
 
   shareForm: FormGroup;
 
@@ -27,20 +27,20 @@ export class ListSharingComponent implements OnInit {
       username: ['', Validators.required],
     });
 
-    console.log(navParams.get('list_id'));
+    this.list = this.navParams.get('list')
+
   }
 
   ngOnInit() {}
 
   onSubmit(){
-    this.listService.listsCollection.doc(this.list_id).collection('readers').doc().set({
-      email: this.shareForm.get('username').value
-    })
-    if(this.writePerm){
-      this.listService.listsCollection.doc(this.list_id).collection('writers').doc().set({
-        email: this.shareForm.get('username').value
-      })
-    }
+    this.list.readers.push(this.shareForm.get('username').value)
+    if(this.writePerm)
+      this.list.writers.push(this.shareForm.get('username').value)
+    if(this.deletePerm)
+      this.list.deleters.push(this.shareForm.get('username').value)
+
+    this.listService.update(this.list)
     this.dismissModal()
   }
 
