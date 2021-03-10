@@ -40,7 +40,6 @@ export class ListDetailsPage implements OnInit {
         this.listService.getAllTodos(id).subscribe(values => {
           this.todos = values
           this.searchResult = this.todos
-          console.log("list-details.ts")
         })
       }
     });

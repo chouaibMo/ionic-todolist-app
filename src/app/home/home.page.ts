@@ -5,6 +5,7 @@ import {AlertController, IonRouterOutlet, ModalController} from "@ionic/angular"
 import {CreateListComponent} from "../modals/create-list/create-list.component";
 import {SettingService} from "../services/setting/setting.service";
 import {ListSharingComponent} from "../modals/list-sharing/list-sharing.component";
+import {AuthService} from "../services/auth/auth.service";
 
 @Component({
     selector: 'app-home',
@@ -12,35 +13,41 @@ import {ListSharingComponent} from "../modals/list-sharing/list-sharing.componen
     styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-    private lists: List[]
-    private searchResult: List[]
+    private ownedLists: List[]
+    private sharedLists: List[]
+    private ownedResult: List[]
+    private sharedResult: List[]
     private deleteConfirmation : boolean
 
     constructor(private listService: ListService,
                 private routerOutlet: IonRouterOutlet,
                 private settingService : SettingService,
+                private authService: AuthService,
                 private alertController: AlertController,
-                private modalController: ModalController) {
-
-        this.settingService.getDeleteConfirmationValue().subscribe((value) => {
-            this.deleteConfirmation = value;
-        });
-    }
+                private modalController: ModalController) {}
 
     ngOnInit(){
         this.routerOutlet.swipeGesture = false;
-        this.listService.getAll().subscribe(values => {
-            this.lists = values
-            this.searchResult = this.lists
-            console.log("home")
+        this.settingService.getDeleteConfirmationValue().subscribe((value) => {
+            this.deleteConfirmation = value;
         });
+
+        this.listService.getAll().subscribe(values => {
+            this.ownedLists = values
+            this.ownedResult = this.ownedLists
+        });
+        this.listService.getAllShared().subscribe(values => {
+            this.sharedLists = values
+            this.sharedResult = this.sharedLists
+        });
+
     }
 
     ionViewWillLeave() {
         this.routerOutlet.swipeGesture = true;
     }
 
-    async presentModal(action: string, list_id?: string){
+    async presentModal(action: string, list?: List){
         if(action == "create"){
             const modal = await this.modalController.create({
                 component: CreateListComponent,
@@ -50,7 +57,7 @@ export class HomePage {
         if(action == "share"){
             const modal = await this.modalController.create({
                 component: ListSharingComponent,
-                componentProps: { list_id : list_id }
+                componentProps: { list : list }
             });
             return await modal.present();
         }
@@ -103,11 +110,17 @@ export class HomePage {
      */
     onSearchChange(event: any) {
         const keyword = event.detail.value
-        this.searchResult = this.lists
-        if(keyword == '')
-            return this.lists
+        this.ownedResult = this.ownedLists
+        this.sharedResult = this.sharedLists
+        if(keyword == ''){
+            this.ownedResult = this.ownedLists
+            this.sharedResult = this.sharedLists
+        }
         if(keyword && keyword.trim() != ''){
-            this.searchResult = this.searchResult.filter((item) => {
+            this.ownedResult = this.ownedResult.filter((item) => {
+                return (item.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
+            })
+            this.sharedResult = this.sharedResult.filter((item) => {
                 return (item.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
             })
         }

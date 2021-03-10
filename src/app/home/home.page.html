@@ -17,11 +17,36 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
+  <!-- NO LIST MESSAGE-->
+  <div style="height: 98%" *ngIf="this.ownedResult?.length == 0 && this.sharedResult?.length == 0">
+    <ion-grid>
+      <ion-row>
+        <ion-icon style="margin-top: 40%" class="empty-icon" name="file-tray-full-outline"></ion-icon>
+      </ion-row>
+      <ion-row>
+        <ion-label class="empty-msg">You don't have any todo list</ion-label>
+      </ion-row>
+      <ion-row class="ion-margin-top">
+        <ion-button color="yellow-dark"
+                    style="margin: auto;width: 150px;  font-weight: bold"
+                    (click)="presentModal('create')">Add a new list</ion-button>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!--------- OWNER LISTS --------->
+  <ion-item-divider *ngIf="this.ownedResult?.length > 0">
+    <ion-label>
+      Owned lists
+    </ion-label>
+  </ion-item-divider>
+
   <ion-list>
-    <ion-item-sliding *ngFor="let list of searchResult">
+    <ion-item-sliding *ngFor="let list of ownedResult">
       <ion-item detail routerLink="/list-details/{{list.id}}">
         <ion-badge slot="end" color='yellow-light'
-                   [color]="list.size==list.nbChecked ? 'success' : 'warning'">
+                   [color]="(list.size==list.nbChecked && list.size >0) ? 'success' : 'warning'">
             {{list.nbChecked}}/{{list.size}}
         </ion-badge>
         <ion-label>
@@ -30,7 +55,7 @@
       </ion-item>
       <!-- ITEM OPTIONS -->
       <ion-item-options side="end">
-        <ion-item-option color="primary" (click)="presentModal('share', list.id)">
+        <ion-item-option color="primary" (click)="presentModal('share', list)">
           <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
         </ion-item-option>
         <ion-item-option color="danger" (click)="delete(list)">
@@ -38,5 +63,34 @@
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
+
+    <!--------- SHARED LISTS --------->
+    <ion-item-divider *ngIf="this.sharedResult?.length > 0">
+      <ion-label>
+        Others
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item-sliding *ngFor="let list of sharedResult">
+      <ion-item detail routerLink="/list-details/{{list.id}}">
+        <ion-badge slot="end" color='yellow-light'
+                   [color]="(list.size==list.nbChecked && list.size >0) ? 'success' : 'warning'">
+          {{list.nbChecked}}/{{list.size}}
+        </ion-badge>
+        <ion-label>
+          <h2>{{ list?.name }}</h2>
+        </ion-label>
+      </ion-item>
+      <!-- ITEM OPTIONS -->
+      <ion-item-options side="end">
+        <ion-item-option color="primary" (click)="presentModal('share', list)">
+          <ion-icon slot="icon-only" name="share-social-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="delete(list)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
   </ion-list>
 </ion-content>
