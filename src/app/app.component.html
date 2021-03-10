@@ -5,10 +5,10 @@
         <div class="logo-section__wrapper">
           <ion-menu-toggle>
             <img class="logo-section__img"
-                 [src]="this.authService.user?.photoURL ? this.authService.user?.photoURL : 'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"
+                 [src]="this.authService.getCurrentUser()?.photoURL ? this.authService.getCurrentUser()?.photoURL : 'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"
                  [routerLink]="['/profil']"/>
           </ion-menu-toggle>
-          <ion-title class="logo-section__name">{{this.authService.user?.displayName ? this.authService.user?.displayName.split(' ')[0] : "N/A" }}</ion-title>
+          <ion-title class="logo-section__name">{{this.authService.getCurrentUser()?.displayName ? this.authService.getCurrentUser()?.displayName.split(' ')[0] : "N/A" }}</ion-title>
 
         </div>
         <div>
@@ -41,11 +41,18 @@
       </ion-list>
     </ion-content>
     <!------ LOGOUT ------>
-    <ion-footer>
+    <ion-footer style="margin-bottom: 35px">
       <ion-button class="logout" color="danger" expand="block" (click)=this.authService.logout()>
         <ion-icon class="ion-margin-start" name="log-out-outline"></ion-icon>
         <ion-label class="text">Logout</ion-label>
       </ion-button>
+      <ion-label class="github-ref" color="medium" (click)="openBrowser()">
+        <ion-icon style="font-size: x-large;margin-bottom: -5px" name="logo-github"></ion-icon>
+        chouaib mounaime
+      </ion-label>
+      <ion-label style="margin-left: 40%" color="medium">
+        v1.0.0
+      </ion-label>
     </ion-footer>
   </ion-menu>
   <ion-router-outlet id='main'></ion-router-outlet>

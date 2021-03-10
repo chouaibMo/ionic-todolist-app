@@ -4,6 +4,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./services/auth/auth.service";
+import { Plugins } from '@capacitor/core';
+const { Browser } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -30,5 +32,9 @@ export class AppComponent {
 
   logout(){
     this.authService.logout();
+  }
+
+  async openBrowser() {
+    await Browser.open({ url: "https://github.com/chouaibMo" });
   }
 }
