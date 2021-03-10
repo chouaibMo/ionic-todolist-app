@@ -21,17 +21,21 @@
       <ion-card-header>
         <ion-card-title class="card-title">Permissions</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-content class="padding-card">
+        <ion-item lines="none" color="transparent">
           <ion-label>
             <h2>Write</h2>
-            <p>Allow the user to add and update tasks</p>
+            <p class="dark-color">Allow to add and update tasks</p>
           </ion-label>
           <ion-toggle [(ngModel)]="writePerm" [ngModelOptions]="{standalone: true}" color="warning"></ion-toggle>
+        </ion-item>
+        <ion-item lines="none" color="transparent">
           <ion-label>
             <h2>Delete</h2>
-            <p>Allow the user to delete this list or its tasks</p>
+            <p class="dark-color">Allow to delete this list or its tasks</p>
           </ion-label>
           <ion-toggle [(ngModel)]="deletePerm" [ngModelOptions]="{standalone: true}" color="warning"></ion-toggle>
+        </ion-item>
       </ion-card-content>
     </ion-card>
 
