@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SettingService} from "../../services/setting/setting.service";
+import {PickerController} from "@ionic/angular";
+import {Settings} from "../../models/settings";
 
 @Component({
   selector: 'app-settings',
@@ -8,57 +10,117 @@ import {SettingService} from "../../services/setting/setting.service";
 })
 export class SettingsPage implements OnInit {
 
-  isDarkMode : boolean
-  pushNotification : boolean
-  confirmDeletion : boolean
-  secureUnlock : boolean
+  settings : Settings
+  language = 'english (UK)';
 
-  constructor(private settingService : SettingService) {
-    this.settingService.getDarkModeValue().subscribe((value) => {
-      this.isDarkMode = value;
+  constructor(private settingService : SettingService,
+              private pickerController: PickerController) {
+
+
+    this.settingService.getSettings().subscribe((value) => {
+      this.settings = value;
+      console.log("settings page :")
+      console.log(this.settings)
     });
-
-    this.settingService.getPushNotificationValue().subscribe((value) => {
-      this.pushNotification = value;
-    });
-
-    this.settingService.getDeleteConfirmationValue().subscribe((value) => {
-      this.confirmDeletion = value;
-    });
-
-    this.settingService.getSecureUnlockValue().subscribe((value) => {
-      this.secureUnlock = value;
-    });
-
   }
 
   ngOnInit() { }
 
+
+  async showPicker() {
+    let options = {
+      buttons: [
+        {
+          text:'ok',
+          handler:(value:any) => {
+            console.log(value);
+            this.language = value.languages.text
+          }
+        }
+      ],
+      columns:[{
+        name:'languages',
+        options: [  {text: "arabic (AR)", value: 'AR'},
+                    {text: "english (UK)", value: 'UK'},
+                    {text: "english (USA)", value: 'USA'},
+                    {text: "french (FR)", value: 'FR'},
+                 ]
+      }]
+    };
+
+    let picker = await this.pickerController.create(options);
+    picker.present()
+  }
+
+  /**
+   * Enable/disable dark mode
+   * @param event
+   */
   onDarkModeToggle(event) {
-    if(event.detail.checked)
-      this.settingService.setDarkModeValue(true);
-    else
-      this.settingService.setDarkModeValue(false);
+    this.settings.darkMode = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
+
   }
 
+  /**
+   * Enable/disable push notif
+   * @param event
+   */
   onNotificationToggle(event) {
-    if(event.detail.checked)
-      this.settingService.setPushNotificationValue(true);
-    else
-      this.settingService.setPushNotificationValue(false);
+    this.settings.notification = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
   }
 
+  /**
+   * Enable/disable delete confirmation
+   * @param event
+   */
   onConfirmDeleteToggle(event) {
-    if(event.detail.checked)
-      this.settingService.setDeleteConfirmationValue(true);
-    else
-      this.settingService.setDeleteConfirmationValue(false);
+    this.settings.confirmation = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
   }
 
+  /**
+   * Enable/disable secure unlock
+   * @param event
+   */
   onSecureUnlockToggle(event) {
-    if(event.detail.checked)
-      this.settingService.setSecureUnlockValue(true);
-    else
-      this.settingService.setSecureUnlockValue(false);
+    this.settings.passcode = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
   }
+
+  /**
+   * Enable/disable haptics
+   * @param event
+   */
+  onHapticsToggle(event) {
+    this.settings.haptics = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
+  }
+
+  /**
+   * Enable/disable vibrations
+   * @param event
+   */
+  onVibrationsToggle(event) {
+    this.settings.vibrations = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
+  }
+
+  /**
+   * Change speech language
+   * @param event
+   */
+  onSpeechLanguageChange(event) {
+  }
+
+  /**
+   * Enable/disable text to speech
+   * @param event
+   */
+  onSpeechToggle(event) {
+    this.settings.textToSpeech = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
+  }
+
 }

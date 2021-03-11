@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
+import {Settings} from "../../models/settings";
+
+import { Plugins } from '@capacitor/core';
+import {newArray} from "@angular/compiler/src/util";
+const { Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -11,56 +16,69 @@ export class SettingService {
   deleteConfirm : BehaviorSubject<boolean>;
   pushNotification : BehaviorSubject<boolean>;
 
-  constructor() {
-    const theme = document.body.getAttribute('color-theme')
-    if(theme == 'dark')
-      this.darkMode = new BehaviorSubject<boolean>(true);
-    else if(theme == 'light')
-      this.darkMode = new BehaviorSubject<boolean>(false);
+  object : BehaviorSubject<Settings>
 
-    this.deleteConfirm = new BehaviorSubject<boolean>(false);
-    this.pushNotification = new BehaviorSubject<boolean>(false);
-    this.secureUnlock = new BehaviorSubject<boolean>(false);
+  constructor() {
+    this.object = new BehaviorSubject<Settings>(new Settings());
+    this.userSettings('settings')
   }
 
-  // SETTERS :
+  userSettings(key : string){
+    this.getObject(key).then(value => {
+      if(value){
+        this.object.next(value)
+        if (this.object.getValue().darkMode)
+          document.body.setAttribute('color-theme', 'dark');
+        else
+          document.body.setAttribute('color-theme', 'light');
+      }
+      else{
+        this.setObject(key, new Settings())
+        this.object.next(new Settings())
+      }
+    })
+  }
 
-  setDarkModeValue(newValue): void {
-    this.darkMode.next(newValue);
-    if (newValue)
+  /**
+   * Store an object in local storage
+   * @param key
+   * @param value
+   */
+  async setObject(key : string, value: any){
+    await Storage.set({
+      key: key,
+      value: JSON.stringify(value)
+    });
+  }
+
+  /**
+   * Retreive an object from local storage by key
+   * @param key
+   */
+  async getObject(key: string){
+    const item = await Storage.get({ key: key });
+    return JSON.parse(item.value);
+  }
+
+
+  // SETTERS :
+  setSettings(newValue): void {
+    this.setObject('settings', newValue)
+    this.object.next(newValue);
+    console.log(this.object.getValue())
+    if (newValue.darkMode)
       document.body.setAttribute('color-theme', 'dark');
     else
       document.body.setAttribute('color-theme', 'light');
   }
 
-  setDeleteConfirmationValue(newValue): void {
-    this.deleteConfirm.next(newValue);
-  }
-
-  setPushNotificationValue(newValue): void {
-    this.pushNotification.next(newValue);
-  }
-
-  setSecureUnlockValue(newValue): void {
-    this.secureUnlock.next(newValue);
-  }
 
   // GETTERS :
-
-  getDarkModeValue(): Observable<boolean> {
-    return this.darkMode.asObservable();
+  getValues(){
+    return this.object.getValue()
   }
 
-  getDeleteConfirmationValue(): Observable<boolean> {
-    return this.deleteConfirm.asObservable();
+  getSettings(): Observable<Settings> {
+    return this.object.asObservable();
   }
-
-  getPushNotificationValue(): Observable<boolean> {
-    return this.pushNotification.asObservable();
-  }
-
-  getSecureUnlockValue(): Observable<boolean> {
-    return this.secureUnlock.asObservable();
-  }
-
 }
