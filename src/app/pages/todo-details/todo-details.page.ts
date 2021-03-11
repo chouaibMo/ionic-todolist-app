@@ -5,6 +5,10 @@ import {ListService} from "../../services/list/list.service";
 import {Geolocation} from "@capacitor/core";
 import {List} from "../../models/list";
 
+import '@capacitor-community/text-to-speech';
+import { Plugins } from '@capacitor/core';
+const { TextToSpeech } = Plugins;
+
 declare var google;
 
 @Component({
@@ -24,7 +28,17 @@ export class TodoDetailsPage implements OnInit {
   coordinates;
 
   constructor(private listService: ListService,
-              private activatedRoute: ActivatedRoute) { }
+              //private tts: TextToSpeech,
+              private activatedRoute: ActivatedRoute) {
+
+    TextToSpeech.getSupportedVoices().then(data => {
+      console.log(data)
+    })
+    TextToSpeech.getSupportedLanguages().then(data => {
+      console.log(data)
+    })
+
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -46,6 +60,48 @@ export class TodoDetailsPage implements OnInit {
     todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
     this.listService.updateProgress(this.list);
   }
+/*
+  speak(text: string){
+    switch (text) {
+      case 'title':
+        this.todo?.title ? this.tts.speak(this.todo?.title) : this.tts.speak('title not available')
+        break;
+      case 'description':
+        this.todo?.description ? this.tts.speak(this.todo?.description) : this.tts.speak('description not available')
+        break;
+      case 'date':
+        this.todo?.date ? this.tts.speak(this.todo?.date.toString()) : this.tts.speak('date not available')
+        break;
+    }
+  }
+ */
+
+  speak(text: string){
+    let speak = ''
+    switch (text) {
+      case 'title':
+        this.todo?.title ? speak = this.todo?.title : speak = 'title not available'
+        break;
+      case 'description':
+        this.todo?.description ? speak = this.todo?.description : speak = 'title not available'
+        break;
+      case 'date':
+        this.todo?.date ? speak = this.todo?.date.toString() : speak = 'title not available'
+        break;
+    }
+
+    TextToSpeech.speak({
+      text: speak ,
+      locale: 'en_US',
+      speechRate: 0.8,
+      pitchRate: 0.9,
+      volume: 1.0,
+      voice: 33,
+      category: 'ambient',
+    });
+
+  }
+
 
   ionViewWillEnter(){
     //this.loadMap()

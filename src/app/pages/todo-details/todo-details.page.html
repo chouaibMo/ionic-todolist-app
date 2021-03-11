@@ -12,7 +12,9 @@
   <!-- TITLE -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title class="card-title">Title</ion-card-title>
+      <ion-card-title class="card-title">Title
+        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('title')"></ion-icon>
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>{{this.todo?.title ? this.todo?.title : 'not available'}}</ion-card-content>
   </ion-card>
@@ -20,7 +22,9 @@
   <!-- DESCRIPTION -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title class="card-title">Description</ion-card-title>
+      <ion-card-title class="card-title">Description
+        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('description')"></ion-icon>
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>{{this.todo?.description ? this.todo?.description : 'not available'}}</ion-card-content>
   </ion-card>
@@ -28,7 +32,10 @@
   <!-- DATE -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title class="card-title">Date</ion-card-title>
+
+      <ion-card-title class="card-title">Date
+        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('date')"></ion-icon>
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>{{this.todo?.date ? this.todo?.date : 'not available'}}</ion-card-content>
   </ion-card>
