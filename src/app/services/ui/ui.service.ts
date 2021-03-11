@@ -13,8 +13,12 @@ export class UiService {
 
   async presentToast(message : string, color: string, duration : number) {
     const toast = await this.toastController.create({
+      animated: true,
+      //enterAnimation:,
+      //leaveAnimation:,
+      keyboardClose: true,
       message: message,
-      duration: duration
+      duration: duration,
     });
     toast.color = color
     await toast.present();
