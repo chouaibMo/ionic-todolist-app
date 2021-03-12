@@ -29,8 +29,8 @@
                     </ion-col >
                     <ion-col col-10 [routerLink]="['/', 'todo-details', this.list.id, todo.id]">
                         <ion-label class="text-padding">
-                            <h2 [ngClass]="todo.isDone ? 'strikethrough' : 'null'">{{todo?.title}}</h2>
-                            <p  [ngClass]="todo.isDone ? 'strikethrough' : 'null'">{{todo?.description}}</p>
+                            <h2 class="elipsis" [ngClass]="todo.isDone ? 'strikethrough' : 'null'">{{todo?.title}}</h2>
+                            <p class="elipsis" [ngClass]="todo.isDone ? 'strikethrough' : 'null'">{{todo?.description}}</p>
                         </ion-label>
                     </ion-col>
                 </ion-row>

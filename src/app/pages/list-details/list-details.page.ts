@@ -8,6 +8,8 @@ import {Todo} from "../../models/todo";
 import {SettingService} from "../../services/setting/setting.service";
 import {UiService} from "../../services/ui/ui.service";
 
+
+
 @Component({
   selector: 'app-list-details',
   templateUrl: './list-details.page.html',
@@ -27,8 +29,8 @@ export class ListDetailsPage implements OnInit {
       private activatedRoute: ActivatedRoute,
       private modalController: ModalController
   ) {
-    this.settingService.getDeleteConfirmationValue().subscribe((value) => {
-      this.deleteConfirmation = value;
+    this.settingService.getSettings().subscribe((value) => {
+      this.deleteConfirmation = value.confirmation;
     });
   }
 

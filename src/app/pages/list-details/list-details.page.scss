@@ -30,5 +30,12 @@
 .strikethrough {
   text-decoration: line-through;
   text-decoration-thickness : 2px;
-  text-decoration-color: white;
+}
+
+
+.elipsis{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 70vw
 }
