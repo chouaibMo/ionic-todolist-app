@@ -19,22 +19,20 @@ export class SettingsPage implements OnInit {
 
     this.settingService.getSettings().subscribe((value) => {
       this.settings = value;
-      console.log("settings page :")
-      console.log(this.settings)
     });
   }
 
   ngOnInit() { }
 
 
-  async showPicker() {
+  async onLanguageChange() {
     let options = {
       buttons: [
         {
           text:'ok',
           handler:(value:any) => {
-            console.log(value);
-            this.language = value.languages.text
+            this.settings.speechLang = value.languages.text
+            this.settingService.setSettings(this.settings);
           }
         }
       ],
@@ -120,6 +118,15 @@ export class SettingsPage implements OnInit {
    */
   onSpeechToggle(event) {
     this.settings.textToSpeech = !!event.detail.checked
+    this.settingService.setSettings(this.settings);
+  }
+
+  /**
+   * Change speech speed
+   * @param event
+   */
+  onRangeChange(event) {
+    this.settings.speechVolume = event.detail.value
     this.settingService.setSettings(this.settings);
   }
 

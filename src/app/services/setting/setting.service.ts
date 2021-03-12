@@ -65,7 +65,6 @@ export class SettingService {
   setSettings(newValue): void {
     this.setObject('settings', newValue)
     this.object.next(newValue);
-    console.log(this.object.getValue())
     if (newValue.darkMode)
       document.body.setAttribute('color-theme', 'dark');
     else
