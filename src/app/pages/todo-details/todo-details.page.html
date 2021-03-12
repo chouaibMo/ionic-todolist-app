@@ -13,7 +13,7 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title class="card-title">Title
-        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('title')"></ion-icon>
+        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('title')" aria-disabled="true"></ion-icon>
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>{{this.todo?.title ? this.todo?.title : 'not available'}}</ion-card-content>

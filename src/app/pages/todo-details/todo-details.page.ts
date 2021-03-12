@@ -4,9 +4,10 @@ import {ActivatedRoute} from "@angular/router";
 import {ListService} from "../../services/list/list.service";
 import {Geolocation} from "@capacitor/core";
 import {List} from "../../models/list";
-
+import {Settings} from "../../models/settings";
 import '@capacitor-community/text-to-speech';
 import { Plugins } from '@capacitor/core';
+import {SettingService} from "../../services/setting/setting.service";
 const { TextToSpeech } = Plugins;
 
 declare var google;
@@ -20,7 +21,8 @@ declare var google;
 export class TodoDetailsPage implements OnInit {
   private todo : Todo
   private list : List
-
+  private settings : Settings
+  
   // Map related
   @ViewChild('map') mapElement: ElementRef;
   map: any;
@@ -29,77 +31,54 @@ export class TodoDetailsPage implements OnInit {
 
   constructor(private listService: ListService,
               //private tts: TextToSpeech,
+              private settingService: SettingService,
               private activatedRoute: ActivatedRoute) {
 
     TextToSpeech.getSupportedVoices().then(data => {
       console.log(data)
     })
-    TextToSpeech.getSupportedLanguages().then(data => {
-      console.log(data)
-    })
-
   }
 
   ngOnInit() {
+    this.settingService.getSettings().subscribe(value => this.settings = value)
     this.activatedRoute.paramMap.subscribe(params => {
-      const list_id = params.get('listId');
-      const todo_id = params.get('todoId');
-      if (list_id && todo_id) {
-        this.listService.getOne(list_id).subscribe(list => {
-          this.list = list
-        });
-        this.listService.getTodo(list_id, todo_id).subscribe(todo => {
-          this.todo = todo
-        })
-      }
+       const list_id = params.get('listId');
+       const todo_id = params.get('todoId');
+       if (list_id && todo_id) {
+          this.listService.getOne(list_id).subscribe(list => this.list = list);
+          this.listService.getTodo(list_id, todo_id).subscribe(todo => this.todo = todo)
+       }
     });
   }
 
   onDoneClick(todo : Todo) {
-    todo.isDone = !todo.isDone
-    todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
-    this.listService.updateProgress(this.list);
   }
-/*
-  speak(text: string){
-    switch (text) {
-      case 'title':
-        this.todo?.title ? this.tts.speak(this.todo?.title) : this.tts.speak('title not available')
-        break;
-      case 'description':
-        this.todo?.description ? this.tts.speak(this.todo?.description) : this.tts.speak('description not available')
-        break;
-      case 'date':
-        this.todo?.date ? this.tts.speak(this.todo?.date.toString()) : this.tts.speak('date not available')
-        break;
-    }
-  }
- */
+
 
   speak(text: string){
-    let speak = ''
-    switch (text) {
-      case 'title':
-        this.todo?.title ? speak = this.todo?.title : speak = 'title not available'
-        break;
-      case 'description':
-        this.todo?.description ? speak = this.todo?.description : speak = 'title not available'
-        break;
-      case 'date':
-        this.todo?.date ? speak = this.todo?.date.toString() : speak = 'title not available'
-        break;
+    if(this.settings.textToSpeech){
+      let speak = ''
+      switch (text) {
+        case 'title':
+          this.todo?.title ? speak = this.todo?.title : speak = 'title not available'
+          break;
+        case 'description':
+          this.todo?.description ? speak = this.todo?.description : speak = 'title not available'
+          break;
+        case 'date':
+          this.todo?.date ? speak = this.todo?.date.toString() : speak = 'title not available'
+          break;
+      }
+      TextToSpeech.speak({
+        text: speak ,
+        locale: 'en_US',
+        speechRate: this.settings.speechVolume,
+        pitchRate: 0.9,
+        volume: 1.0,
+        voice: TextToSpeech.getSupportedVoices()[Math.floor(Math.random() * Math.floor(67))],
+        category: 'ambient',
+      });
     }
-
-    TextToSpeech.speak({
-      text: speak ,
-      locale: 'en_US',
-      speechRate: 0.8,
-      pitchRate: 0.9,
-      volume: 1.0,
-      voice: 33,
-      category: 'ambient',
-    });
-
   }
 
 
