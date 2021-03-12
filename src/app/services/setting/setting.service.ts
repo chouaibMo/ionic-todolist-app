@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Settings} from "../../models/settings";
-
-import { Plugins } from '@capacitor/core';
-import {newArray} from "@angular/compiler/src/util";
-const { Storage } = Plugins;
+import {StorageService} from "../storage/storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +15,13 @@ export class SettingService {
 
   object : BehaviorSubject<Settings>
 
-  constructor() {
-    this.object = new BehaviorSubject<Settings>(new Settings());
-    this.userSettings('settings')
+  constructor(private storageService: StorageService) {
+     this.object = new BehaviorSubject<Settings>(new Settings());
+     this.userSettings('settings')
   }
 
   userSettings(key : string){
-    this.getObject(key).then(value => {
+    this.storageService.getObject(key).then(value => {
       if(value){
         this.object.next(value)
         if (this.object.getValue().darkMode)
@@ -33,37 +30,19 @@ export class SettingService {
           document.body.setAttribute('color-theme', 'light');
       }
       else{
-        this.setObject(key, new Settings())
+        this.storageService.setObject(key, new Settings())
         this.object.next(new Settings())
       }
     })
   }
 
-  /**
-   * Store an object in local storage
-   * @param key
-   * @param value
-   */
-  async setObject(key : string, value: any){
-    await Storage.set({
-      key: key,
-      value: JSON.stringify(value)
-    });
-  }
 
   /**
-   * Retreive an object from local storage by key
-   * @param key
+   * Setter for settings object
+   * @param newValue : object of type settings
    */
-  async getObject(key: string){
-    const item = await Storage.get({ key: key });
-    return JSON.parse(item.value);
-  }
-
-
-  // SETTERS :
   setSettings(newValue): void {
-    this.setObject('settings', newValue)
+    this.storageService.setObject('settings', newValue)
     this.object.next(newValue);
     if (newValue.darkMode)
       document.body.setAttribute('color-theme', 'dark');
@@ -72,11 +51,16 @@ export class SettingService {
   }
 
 
-  // GETTERS :
+  /**
+   * Get settings values as an object
+   */
   getValues(){
     return this.object.getValue()
   }
 
+  /**
+   * Get settings as an observable of object
+   */
   getSettings(): Observable<Settings> {
     return this.object.asObservable();
   }
