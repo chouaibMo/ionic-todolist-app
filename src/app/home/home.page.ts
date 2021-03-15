@@ -31,8 +31,9 @@ export class HomePage {
 
     ngOnInit(){
         this.routerOutlet.swipeGesture = false;
-        this.settingService.getDeleteConfirmationValue().subscribe((value) => {
-            this.deleteConfirmation = value;
+
+        this.settingService.getSettings().subscribe((value) => {
+            this.deleteConfirmation = value.confirmation;
         });
 
         this.listService.getAll().subscribe(values => {
@@ -77,7 +78,7 @@ export class HomePage {
      */
     delete(list: List): void {
         if(this.deleteConfirmation){
-            if(list.todos.length > 0)
+            if(list.todos?.length > 0)
                 this.presentListAlert(list)
             else
                 this.listService.delete(list)

@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./services/auth/auth.service";
 import { Plugins } from '@capacitor/core';
 import {UiService} from "./services/ui/ui.service";
+import {StorageService} from "./services/storage/storage.service";
 const { Browser, Network } = Plugins;
 
 @Component({
@@ -30,7 +31,11 @@ export class AppComponent {
   }
 
   initializeApp() {
-    document.body.setAttribute('color-theme', 'dark');
+    if(document.body.getAttribute('color-theme') === 'dark')
+      document.body.setAttribute('color-theme', 'dark');
+    else
+      document.body.setAttribute('color-theme', 'light');
+
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();

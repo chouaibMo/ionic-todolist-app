@@ -12,6 +12,10 @@ const { TextToSpeech } = Plugins;
 
 declare var google;
 
+
+import * as mapboxgl from 'mapbox-gl';
+import {environment} from "../../../environments/environment";
+
 @Component({
   selector: 'app-todo-details',
   templateUrl: './todo-details.page.html',
@@ -22,15 +26,12 @@ export class TodoDetailsPage implements OnInit {
   private todo : Todo
   private list : List
   private settings : Settings
-  
-  // Map related
-  @ViewChild('map') mapElement: ElementRef;
-  map: any;
-  markers = [];
+
+  map: mapboxgl.Map;
   coordinates;
+  
 
   constructor(private listService: ListService,
-              //private tts: TextToSpeech,
               private settingService: SettingService,
               private activatedRoute: ActivatedRoute) {
 
@@ -40,6 +41,7 @@ export class TodoDetailsPage implements OnInit {
   }
 
   ngOnInit() {
+    mapboxgl.accessToken = environment.mapbox.accessToken;
     this.settingService.getSettings().subscribe(value => this.settings = value)
     this.activatedRoute.paramMap.subscribe(params => {
        const list_id = params.get('listId');
@@ -83,20 +85,26 @@ export class TodoDetailsPage implements OnInit {
 
 
   ionViewWillEnter(){
-    //this.loadMap()
+    this.initializeMap()
   }
 
-  // Initialize a blank map
-  async loadMap() {
-    this.coordinates = await Geolocation.getCurrentPosition();
-    console.log(this.coordinates)
-    let latLng = new google.maps.LatLng(this.coordinates.coords.latitude, this.coordinates.coords.longitude);
 
-    let mapOptions = {
-      center: latLng,
+  async initializeMap() {
+    //this.coordinates = await Geolocation.getCurrentPosition();
+    //console.log(this.coordinates)
+    this.map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/koppzer/ckm9xjp0r79m717pg93ozcp48',
       zoom: 12,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+      center: [5.7167, 45.1667]
+    });
+    this.map.addControl(new mapboxgl.NavigationControl());
+
+    var marker = new mapboxgl.Marker({
+      color: "#ED0000",
+    }).setLngLat([5.7167, 45.1667])
+        .addTo(this.map);
   }
+
+    
 }
