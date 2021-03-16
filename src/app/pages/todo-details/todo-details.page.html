@@ -13,40 +13,50 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title class="card-title">Title
-        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('title')" aria-disabled="true"></ion-icon>
+        <ion-icon class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
+                  (click)="speech(this.todo?.title)" aria-disabled="true"></ion-icon>
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>{{this.todo?.title ? this.todo?.title : 'not available'}}</ion-card-content>
+    <ion-card-content>
+      <ion-card-subtitle>{{this.todo?.title ? this.todo?.title : 'not available'}}</ion-card-subtitle>
+    </ion-card-content>
   </ion-card>
 
   <!-- DESCRIPTION -->
   <ion-card>
     <ion-card-header>
       <ion-card-title class="card-title">Description
-        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('description')"></ion-icon>
+        <ion-icon async class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
+                  (click)="speech(this.todo?.description)" aria-disabled="true"></ion-icon>
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>{{this.todo?.description ? this.todo?.description : 'not available'}}</ion-card-content>
-  </ion-card>
-
-  <!-- DATE -->
-  <ion-card>
-    <ion-card-header>
-
-      <ion-card-title class="card-title">Date
-        <ion-icon class="speaker" name="volume-high-outline" (click)="speak('date')"></ion-icon>
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>{{this.todo?.date ? this.todo?.date : 'not available'}}</ion-card-content>
+    <ion-card-content>
+      <ion-card-subtitle>{{this.todo?.description ? this.todo?.description : 'not available'}}</ion-card-subtitle>
+    </ion-card-content>
   </ion-card>
 
   <!-- MAP -->
-  <ion-card>
-      <div #map id="map"></div>
+  <ion-card *ngIf="this.todo?.address">
+    <ion-card-header style="margin-bottom: 0">
+      <ion-card-title class="card-title">Address
+        <ion-icon class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
+                  (click)="speech(this.todo?.address)" aria-disabled="true"></ion-icon>
+      </ion-card-title>
+      <ion-card-subtitle style="margin-top: 18px">{{this.todo?.address}}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content style="padding: 0px;">
+      <ion-chip id="zoomto" class="ion-margin-bottom ion-margin-horizontal" color="warning"
+                style="font-size: medium; font-weight: bold">
+        <ion-icon name="pin"></ion-icon>
+        <ion-label >1.2km (55min)</ion-label>
+      </ion-chip>
+      <div style="border-radius: 10px" #map id="map"></div>
+    </ion-card-content>
   </ion-card>
 
 </ion-content>
 
+<!--
 <ion-footer>
   <ion-toolbar>
     <ion-button fixed style="font-size: 18px" expand="block"
@@ -55,3 +65,4 @@
                 (click)="onDoneClick(todo)">{{ this.todo?.isDone ? 'Mark as not done' : 'Mark as done'}}</ion-button>
   </ion-toolbar>
 </ion-footer>
+-->

@@ -1,20 +1,19 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Todo} from "../../models/todo";
 import {ActivatedRoute} from "@angular/router";
 import {ListService} from "../../services/list/list.service";
-import {Geolocation} from "@capacitor/core";
 import {List} from "../../models/list";
 import {Settings} from "../../models/settings";
 import '@capacitor-community/text-to-speech';
-import { Plugins } from '@capacitor/core';
+import { TTSOptions } from '@capacitor-community/text-to-speech';
+import {Geolocation, Plugins} from '@capacitor/core';
 import {SettingService} from "../../services/setting/setting.service";
 const { TextToSpeech } = Plugins;
-
-declare var google;
 
 
 import * as mapboxgl from 'mapbox-gl';
 import {environment} from "../../../environments/environment";
+import {MapService} from "../../services/map/map.service";
 
 @Component({
   selector: 'app-todo-details',
@@ -23,88 +22,177 @@ import {environment} from "../../../environments/environment";
 })
 
 export class TodoDetailsPage implements OnInit {
+  /* Todolist fields*/
   private todo : Todo
   private list : List
   private settings : Settings
 
-  map: mapboxgl.Map;
-  coordinates;
-  
+  /* Text to speech fields */
+  private supportedVoices: SpeechSynthesisVoice[] = [];
+  private supportedLanguages: string[] = [];
+  private currentlySpeaking = false
+  private voice = 0;
+
+  /* Mapbox fields */
+  private map: mapboxgl.Map;
+  private userCoords
+  private latitude
+  private longitude
+
 
   constructor(private listService: ListService,
+              private mapService : MapService,
               private settingService: SettingService,
               private activatedRoute: ActivatedRoute) {
 
-    TextToSpeech.getSupportedVoices().then(data => {
-      console.log(data)
-    })
+    TextToSpeech.getSupportedVoices().then(result => {
+      console.log(result.voices)
+      this.supportedVoices = result.voices;
+    });
   }
 
   ngOnInit() {
     mapboxgl.accessToken = environment.mapbox.accessToken;
     this.settingService.getSettings().subscribe(value => this.settings = value)
     this.activatedRoute.paramMap.subscribe(params => {
-       const list_id = params.get('listId');
-       const todo_id = params.get('todoId');
-       if (list_id && todo_id) {
-          this.listService.getOne(list_id).subscribe(list => this.list = list);
-          this.listService.getTodo(list_id, todo_id).subscribe(todo => this.todo = todo)
-       }
-    });
-  }
-
-  onDoneClick(todo : Todo) {
-  }
-
-
-  speak(text: string){
-    if(this.settings.textToSpeech){
-      let speak = ''
-      switch (text) {
-        case 'title':
-          this.todo?.title ? speak = this.todo?.title : speak = 'title not available'
-          break;
-        case 'description':
-          this.todo?.description ? speak = this.todo?.description : speak = 'title not available'
-          break;
-        case 'date':
-          this.todo?.date ? speak = this.todo?.date.toString() : speak = 'title not available'
-          break;
+      const list_id = params.get('listId');
+      const todo_id = params.get('todoId');
+      if (list_id && todo_id) {
+        this.listService.getOne(list_id).subscribe(list => this.list = list);
+        this.listService.getTodo(list_id, todo_id).subscribe(todo => {
+          this.todo = todo
+          if(this.todo.address){
+            this.latitude = this.todo?.latitude ? this.todo.latitude : ''
+            this.longitude = this.todo?.longitude ? this.todo.longitude : ''
+            this.initializeMap()
+          }
+        })
       }
-      TextToSpeech.speak({
-        text: speak ,
-        locale: 'en_US',
+    })
+  }
+
+
+  speech(text) {
+    if(this.currentlySpeaking){
+      this.stop()
+    }
+    else {
+      this.speak(text)
+    }
+  }
+  async stop(): Promise<void> {
+    await TextToSpeech.stop();
+  }
+  async speak(text: string){
+    if(this.settings.textToSpeech){
+      const options: TTSOptions = {
+        text: text,
         speechRate: this.settings.speechVolume,
         pitchRate: 0.9,
         volume: 1.0,
-        voice: TextToSpeech.getSupportedVoices()[Math.floor(Math.random() * Math.floor(67))],
+        voice: this.supportedVoices[9],
         category: 'ambient',
+      };
+
+      this.currentlySpeaking = true;
+      await TextToSpeech.speak(options).then(() => {
+        this.currentlySpeaking = false;
       });
     }
   }
 
-
-  ionViewWillEnter(){
-    this.initializeMap()
-  }
-
-
   async initializeMap() {
-    //this.coordinates = await Geolocation.getCurrentPosition();
-    //console.log(this.coordinates)
     this.map = new mapboxgl.Map({
       container: 'map',
+      anchor: 'bottom',
       style: 'mapbox://styles/koppzer/ckm9xjp0r79m717pg93ozcp48',
-      zoom: 12,
-      center: [5.7167, 45.1667]
+      zoom: 13,
+      center: [this.todo.longitude, this.todo.latitude]
     });
     this.map.addControl(new mapboxgl.NavigationControl());
-
-    var marker = new mapboxgl.Marker({
-      color: "#ED0000",
-    }).setLngLat([5.7167, 45.1667])
+    //Task coords
+    new mapboxgl.Marker({  color: "#363636"  })
+        .setLngLat([this.longitude, this.latitude])
+        .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setHTML('<h3>' + this.todo.address+ '</h3>'))
         .addTo(this.map);
+
+    //user coords
+    this.userCoords = await Geolocation.getCurrentPosition();
+    if(this.userCoords){
+      new mapboxgl.Marker({  color: "#C40000"  })
+          .setLngLat([this.userCoords.coords.longitude, this.userCoords.coords.latitude])
+          .addTo(this.map);
+    }
   }
 
-    
+/*
+  async lines(){
+    this.userCoords = await Geolocation.getCurrentPosition();
+    //console.log(this.userCoords.coords.longitude, this.userCoords.coords.latitude, this.longitude, this.latitude)
+    this.mapService.search_directions(this.userCoords.coords.longitude, this.userCoords.coords.latitude, this.longitude, this.latitude)
+        .subscribe(value => {
+          console.log(value)
+          var json = JSON.parse(JSON.stringify(value));
+          var data = json.routes[0];
+          var route = data.geometry.coordinates;
+
+          var geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+              {
+                'type': 'Feature',
+                'geometry': {
+                  'type': 'LineString',
+                  'properties': {},
+                  'coordinates': route
+                }
+              }
+            ]
+          };
+
+          var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [(this.userCoords.coords.longitude+this.longitude)/2, (this.userCoords.coords.latitude+this.latitude)/2],
+            zoom: 12
+          });
+
+          map.on('load', function () {
+            map.addSource('LineString', {
+              'type': 'geojson',
+              'data': geojson
+            });
+            map.addLayer({
+              'id': 'LineString',
+              'type': 'line',
+              'source': 'LineString',
+              'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+              },
+              'paint': {
+                'line-color': '#BF93E4',
+                'line-width': 5
+              }
+            });
+
+            document
+                .getElementById('zoomto')
+                .addEventListener('click', function () {
+                  var coordinates = geojson.features[0].geometry.coordinates;
+                  var bounds = coordinates.reduce(function (bounds, coord) {
+                    return bounds.extend(coord);
+                  }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+
+                  map.fitBounds(bounds, {
+                    padding: 20
+                  });
+                });
+          });
+        })
+  }
+
+
+ */
 }

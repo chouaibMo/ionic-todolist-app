@@ -13,3 +13,13 @@
   font-size: x-large;
   margin-bottom: -7px
 }
+
+.marker {
+  background-image: url('../../../assets/map/mapbox-icon.png');
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transform: rotate(45deg);
+}
