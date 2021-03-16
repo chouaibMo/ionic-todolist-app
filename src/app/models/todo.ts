@@ -3,8 +3,11 @@ export class Todo {
     title: string;
     description?: string;
     isDone: boolean;
-    date: Date;
-    address: string;
+    longitude?: string
+    latitude?: string
+    address?: string;
+    date?: Date;
+
 
     constructor(name: string, description: string){
         this.title = name;

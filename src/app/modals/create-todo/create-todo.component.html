@@ -25,13 +25,31 @@
         <ion-input placeholder="Todo Description" type="text" formControlName="description"></ion-input>
       </ion-card-content>
     </ion-card>
-
+<!--
     <ion-card>
       <ion-card-header>
         <ion-card-title class="card-title">End Date</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-datetime displayFormat="DDDD MMM D, YYYY" placeholder=""></ion-datetime>
+      </ion-card-content>
+    </ion-card>
+-->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="card-title">Address</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-searchbar style="padding: 0" debounce=500
+                       (ionChange)="search($event)"
+                       [value]="selectedAddress?.place_name"></ion-searchbar>
+
+          <ion-item style="padding: 0; margin-bottom: 4px"
+                    lines="none" color="transparent" button
+                    *ngFor="let address of addresses"
+                    (click)="onAdressSelect(address)">
+            {{ address.place_name }}
+          </ion-item>
       </ion-card-content>
     </ion-card>
 
