@@ -9,6 +9,8 @@ import firebase from "firebase";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import User = firebase.User;
 
+import { AlertController } from '@ionic/angular';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -21,6 +23,7 @@ export class AuthService {
                 private modalController: ModalController,
                 private menuCtrl: MenuController,
                 private uiService: UiService,
+                private alertCtrl : AlertController,
                 private router: Router) {
 
         this.usersCollection = this.afs.collection<any>('users');
@@ -78,13 +81,22 @@ export class AuthService {
         this.router.navigate(['/home'])
     }
 
-    public signWithApple(){
-        this.router.navigate(['/home'])
-        console.log('sign with Apple')
+    public async signWithApple(){
+        const alert = await this.alertCtrl.create({
+            header: 'Coming soon 🚧',
+            message: 'This feature will be provided soon',
+            buttons: ['OK']
+          });
+          await alert.present();
     }
 
-    public signWithFacebook(){
-        console.log('sign with Facebook')
+    public async signWithFacebook(){
+        const alert = await this.alertCtrl.create({
+            header: 'Coming soon 🚧',
+            message: 'This feature will be provided soon',
+            buttons: ['OK']
+          });
+          await alert.present();
     }
 
     public resetPassword(email: string){
