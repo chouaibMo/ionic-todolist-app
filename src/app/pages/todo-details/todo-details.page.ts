@@ -31,7 +31,7 @@ export class TodoDetailsPage implements OnInit {
   private supportedVoices: SpeechSynthesisVoice[] = [];
   private supportedLanguages: string[] = [];
   private currentlySpeaking = false
-  private voice = 0;
+  private voice = 0
 
   /* Mapbox fields */
   private map: mapboxgl.Map;
@@ -85,12 +85,13 @@ export class TodoDetailsPage implements OnInit {
   }
   async speak(text: string){
     if(this.settings.textToSpeech){
+      this.voice++
       const options: TTSOptions = {
         text: text,
         speechRate: this.settings.speechVolume,
         pitchRate: 0.9,
         volume: 1.0,
-        voice: this.supportedVoices[9],
+        voice: this.supportedVoices[this.settings.speechLangId],
         category: 'ambient',
       };
 

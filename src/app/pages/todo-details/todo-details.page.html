@@ -13,6 +13,12 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title class="card-title">Title
+        <!--
+        <ion-chip color="primary" [disabled]="this.settings?.textToSpeech == 'false'"   (click)="speech(this.todo?.title)">
+        <ion-icon style="margin:0" name="{{this.settings?.textToSpeech? 'volume-high-outline' : 'volume-mute-outline'}}"></ion-icon>
+      </ion-chip>
+      -->
+      
         <ion-icon class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
                   (click)="speech(this.todo?.title)" aria-disabled="true"></ion-icon>
       </ion-card-title>
@@ -26,6 +32,11 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title class="card-title">Description
+        <!--
+        <ion-chip color="primary" [disabled]="this.settings?.textToSpeech == 'false'"   (click)="speech(this.todo?.description)">
+          <ion-icon style="margin:0" name="{{this.settings?.textToSpeech? 'volume-high-outline' : 'volume-mute-outline'}}"></ion-icon>
+        </ion-chip>
+        -->
         <ion-icon async class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
                   (click)="speech(this.todo?.description)" aria-disabled="true"></ion-icon>
       </ion-card-title>
@@ -39,17 +50,24 @@
   <ion-card *ngIf="this.todo?.address">
     <ion-card-header style="margin-bottom: 0">
       <ion-card-title class="card-title">Address
+        <!--
+        <ion-chip color="primary" [disabled]="this.settings?.textToSpeech == 'false'"   (click)="speech(this.todo?.address)">
+          <ion-icon style="margin:0" name="{{this.settings?.textToSpeech? 'volume-high-outline' : 'volume-mute-outline'}}"></ion-icon>
+        </ion-chip>
+        -->
         <ion-icon class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
                   (click)="speech(this.todo?.address)" aria-disabled="true"></ion-icon>
       </ion-card-title>
       <ion-card-subtitle style="margin-top: 18px">{{this.todo?.address}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content style="padding: 0px;">
+      <!--
       <ion-chip id="zoomto" class="ion-margin-bottom ion-margin-horizontal" color="warning"
                 style="font-size: medium; font-weight: bold">
         <ion-icon name="pin"></ion-icon>
         <ion-label >1.2km (55min)</ion-label>
       </ion-chip>
+    -->
       <div style="border-radius: 10px" #map id="map"></div>
     </ion-card-content>
   </ion-card>

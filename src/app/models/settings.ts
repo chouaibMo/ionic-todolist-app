@@ -7,6 +7,7 @@ export class Settings {
      confirmation: boolean
      passcode : boolean
      textToSpeech: boolean
+     speechLangId: number
      speechLang: string
      speechVolume: number
 
@@ -18,7 +19,8 @@ export class Settings {
          this.confirmation = false
          this.textToSpeech = false
          this.passcode = false
-         this.speechLang = 'english (UK)'
+         this.speechLangId = 0
+         this.speechLang = ''
          this.speechVolume = 1
     }
 

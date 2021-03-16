@@ -1,7 +1,11 @@
+import { map } from 'rxjs/operators';
 import {Component, OnInit} from '@angular/core';
 import {SettingService} from "../../services/setting/setting.service";
 import {PickerController} from "@ionic/angular";
 import {Settings} from "../../models/settings";
+import '@capacitor-community/text-to-speech';
+import {Plugins} from '@capacitor/core';
+const { TextToSpeech } = Plugins;
 
 @Component({
   selector: 'app-settings',
@@ -10,19 +14,25 @@ import {Settings} from "../../models/settings";
 })
 export class SettingsPage implements OnInit {
 
-  settings : Settings
-  language = 'english (UK)';
-
+  private settings : Settings
+  private supportedVoices;
+  private languages = []
+  
   constructor(private settingService : SettingService,
               private pickerController: PickerController) {
-
-
-    this.settingService.getSettings().subscribe((value) => {
-      this.settings = value;
-    });
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.settingService.getSettings().subscribe(value => this.settings = value)
+    TextToSpeech.getSupportedVoices().then(async result => {
+      this.supportedVoices = result.voices
+      await this.supportedVoices.map((voice,index) => {
+        const text = voice.name+" ("+ voice.lang.split('-')[0].toUpperCase()+')'
+        this.languages.push({text: text, value: index})
+      })
+    });
+    
+  }
 
 
   async onLanguageChange() {
@@ -32,17 +42,15 @@ export class SettingsPage implements OnInit {
           text:'ok',
           handler:(value:any) => {
             this.settings.speechLang = value.languages.text
-            this.settingService.setSettings(this.settings);
+            this.settings.speechLangId = value.languages.value
+            this.settingService.setSettings(this.settings)
+
           }
         }
       ],
       columns:[{
         name:'languages',
-        options: [  {text: "arabic (AR)", value: 'AR'},
-                    {text: "english (UK)", value: 'UK'},
-                    {text: "english (USA)", value: 'USA'},
-                    {text: "french (FR)", value: 'FR'},
-                 ]
+        options: this.languages
       }]
     };
 
