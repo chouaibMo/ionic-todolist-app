@@ -6,8 +6,6 @@
   "webDir": "www",
   "plugins": {
     "SplashScreen": {
-      "launchAutoHide": true,
-      "launchShowDuration": 0
     },
     "GoogleAuth": {
       "scopes": [
