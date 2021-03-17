@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {Todo} from "../../models/todo";
 import {ActivatedRoute} from "@angular/router";
 import {ListService} from "../../services/list/list.service";
@@ -9,7 +9,6 @@ import { TTSOptions } from '@capacitor-community/text-to-speech';
 import {Geolocation, Plugins} from '@capacitor/core';
 import {SettingService} from "../../services/setting/setting.service";
 const { TextToSpeech } = Plugins;
-
 
 import * as mapboxgl from 'mapbox-gl';
 import {environment} from "../../../environments/environment";
@@ -29,11 +28,10 @@ export class TodoDetailsPage implements OnInit {
 
   /* Text to speech fields */
   private supportedVoices: SpeechSynthesisVoice[] = [];
-  private supportedLanguages: string[] = [];
   private currentlySpeaking = false
-  private voice = 0
 
   /* Mapbox fields */
+  @ViewChild('map') mapElement: ElementRef;
   private map: mapboxgl.Map;
   private userCoords
   private latitude
@@ -46,7 +44,6 @@ export class TodoDetailsPage implements OnInit {
               private activatedRoute: ActivatedRoute) {
 
     TextToSpeech.getSupportedVoices().then(result => {
-      console.log(result.voices)
       this.supportedVoices = result.voices;
     });
   }
@@ -54,6 +51,9 @@ export class TodoDetailsPage implements OnInit {
   ngOnInit() {
     mapboxgl.accessToken = environment.mapbox.accessToken;
     this.settingService.getSettings().subscribe(value => this.settings = value)
+  }
+
+  ngAfterViewInit(){
     this.activatedRoute.paramMap.subscribe(params => {
       const list_id = params.get('listId');
       const todo_id = params.get('todoId');
@@ -64,11 +64,16 @@ export class TodoDetailsPage implements OnInit {
           if(this.todo.address){
             this.latitude = this.todo?.latitude ? this.todo.latitude : ''
             this.longitude = this.todo?.longitude ? this.todo.longitude : ''
-            this.initializeMap()
+            setTimeout(() => this.initializeMap(), 10) 
+            
           }
         })
       }
     })
+  }
+
+  ngAfterViewChecked() {
+    //console.log('after View Checked')
   }
 
 
@@ -83,15 +88,16 @@ export class TodoDetailsPage implements OnInit {
   async stop(): Promise<void> {
     await TextToSpeech.stop();
   }
+
   async speak(text: string){
     if(this.settings.textToSpeech){
-      this.voice++
       const options: TTSOptions = {
         text: text,
         speechRate: this.settings.speechVolume,
         pitchRate: 0.9,
         volume: 1.0,
-        voice: this.supportedVoices[this.settings.speechLangId],
+        voice: this.supportedVoices[this.settings.speechLangId],  // supported only for WEB platforms
+        //voice: this.settings.speechLangId,
         category: 'ambient',
       };
 
