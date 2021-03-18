@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./services/auth/auth.service";
 import { Plugins } from '@capacitor/core';
 import {UiService} from "./services/ui/ui.service";
-import {StorageService} from "./services/storage/storage.service";
-const { Browser, Network } = Plugins;
+const { Share, Browser, Network } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -48,5 +46,14 @@ export class AppComponent {
 
   async openBrowser(url : string) {
     await Browser.open({ url: url });
+  }
+
+  async shareToApps(){
+    let share = await Share.share({
+      title: 'Firetask : a shared todolist app',
+      text: 'Really awesome app you need to see right now',
+      url: 'https://github.com/chouaibMo/ionic-todolist-app',
+      dialogTitle: 'Share with buddies'
+    });
   }
 }
