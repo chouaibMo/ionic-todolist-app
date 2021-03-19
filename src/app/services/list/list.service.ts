@@ -88,7 +88,6 @@ export class ListService {
    *  Delete a list of todos
    */
   public delete(list : List) : void{
-    console.log("deleting : "+list.id)
     this.listsCollection.doc(list.id).delete()
   }
 
@@ -189,4 +188,35 @@ export class ListService {
       return { id, ...d.payload.doc.data() } as T;
     })
   }
+
+  // ----------------------------------------------------------------------
+  // ----------------------------  UTILS   --------------------------------
+  // ----------------------------------------------------------------------
+
+  /**
+   * Check whether a user has write permission on a list 
+   * @param list a list object
+   * @param email 
+   * @returns true if the user had write permission, false otherwire
+   */
+  public hasWritePermission(list: List, email: string){
+      if(list.owner == email || list.writers.includes(email))
+        return true;
+      else
+        return false;
+  }
+
+  /**
+   * Check whether a user has share permission on a list 
+   * @param list a list object
+   * @param email 
+   * @returns true if the user had share permission, false otherwire
+   */
+  public hasSharePermission(list: List, email: string){
+    if(list.owner == email || list.sharers.includes(email))
+      return true;
+    else
+      return false;
+  }
+
 }

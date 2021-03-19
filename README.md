@@ -52,10 +52,10 @@ ionic serve
 
 <span id="basic"></span>
 ## 3 - Basic features 
-    - Email signIn and registration
+    - Email sign in and registration
     - Email verification
     - Password recovery
-    - Google signIn
+    - Google authentication
     - Form errors handling
     - Create/Delete a list
     - Create/Delete a task
@@ -74,6 +74,8 @@ ionic serve
     - Custom application icon
     - Custom plashScreen **(splash-screen plugin)**
     - Show toast when network status changes **(network plugin)**
+    - Loading indicator (spinner) during auth operations 
+
 
 <span id="settings"></span>
 ### Settings :

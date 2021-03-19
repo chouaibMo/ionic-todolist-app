@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import {List} from "../../models/list";
 import {ListService} from "../../services/list/list.service";
@@ -24,6 +25,7 @@ export class ListDetailsPage implements OnInit {
   constructor(
       private listService: ListService,
       private uiService : UiService,
+      private AuthService: AuthService,
       private settingService : SettingService,
       private alertController : AlertController,
       private activatedRoute: ActivatedRoute,
@@ -59,10 +61,18 @@ export class ListDetailsPage implements OnInit {
 
 
   removeTodo(todo: Todo): void {
-    if(this.deleteConfirmation)
-      this.presentTodoAlert(todo)
-    else
-    this.listService.deleteTodo(this.list, todo);
+    if(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email)){
+      console.log(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email))
+      if(this.deleteConfirmation){
+        this.presentTodoAlert(todo)
+      }  
+      else{
+        this.listService.deleteTodo(this.list, todo);
+      } 
+    }
+    else{
+        this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
+    }
   }
 
   /**
@@ -70,14 +80,19 @@ export class ListDetailsPage implements OnInit {
    *  Update progress of the current list
    */
   changed(todo: Todo) {
-    todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
-    this.listService.listsCollection.doc(this.list.id).update({
-      nbChecked: this.list.nbChecked
-    })
-    this.listService.listsCollection.doc(this.list.id).collection('todos').doc(todo.id).update({
-      isDone: todo.isDone
-    })
-    this.listService.updateProgress(this.list);
+    if(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email)){
+      todo.isDone ? this.list.nbChecked++ : this.list.nbChecked--;
+      this.listService.listsCollection.doc(this.list.id).update({
+        nbChecked: this.list.nbChecked
+      })
+      this.listService.listsCollection.doc(this.list.id).collection('todos').doc(todo.id).update({
+        isDone: todo.isDone
+      })
+      this.listService.updateProgress(this.list);
+    }    
+    else{
+      this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
+    }
   }
 
   /**

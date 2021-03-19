@@ -53,6 +53,9 @@ export class HomePage {
         this.menuCtrl.enable(true);
     }
 
+    /**
+     * Clear the content of all the lists
+     */
     clearLists(){
         this.ownedLists = []
         this.ownedResult = []
@@ -86,14 +89,19 @@ export class HomePage {
      *  @param list: the list to be deleted
      */
     delete(list: List): void {
-        if(this.deleteConfirmation){
-            if(list.todos?.length > 0)
-                this.presentListAlert(list)
-            else
+        if(this.listService.hasWritePermission(list, this.AuthService.getCurrentUser().email)){
+            if(this.deleteConfirmation){
+                if(list.todos?.length > 0)
+                    this.presentListAlert(list)
+                else
+                    this.listService.delete(list)
+            }
+            else{
                 this.listService.delete(list)
+            }
         }
         else{
-            this.listService.delete(list)
+            this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
         }
     }
 
@@ -102,7 +110,6 @@ export class HomePage {
      *  and show tasks matching this keyword
      *  @param event
      */
-
     onSearchChange(event: any) {
         const keyword = event.detail.value
         this.ownedResult = this.ownedLists
@@ -127,7 +134,10 @@ export class HomePage {
      *  @param list: the list to be shared
      */
     share(list: List) {
-        this.presentModal('share', list)
+        if(this.listService.hasSharePermission(list, this.AuthService.getCurrentUser().email))
+            this.presentModal('share', list)
+        else
+            this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
     }
 
     /**

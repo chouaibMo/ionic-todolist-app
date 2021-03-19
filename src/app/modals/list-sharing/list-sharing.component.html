@@ -10,35 +10,36 @@
   <form [formGroup]="shareForm" (ngSubmit)="onSubmit()">
     <ion-card>
       <ion-card-header>
-        <ion-card-title class="card-title">Username</ion-card-title>
+        <ion-card-title class="card-title">User email</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-input placeholder="enter username" type="text" formControlName="username"></ion-input>
+        <ion-input placeholder="enter user email" type="text" formControlName="username"></ion-input>
       </ion-card-content>
     </ion-card>
 
     <ion-card>
       <ion-card-header>
         <ion-card-title class="card-title">Permissions</ion-card-title>
+        <p class="dark-color">Read permission is granted by default</p>
       </ion-card-header>
       <ion-card-content class="padding-card">
         <ion-item lines="none" color="transparent">
           <ion-label>
             <h2>Write</h2>
-            <p class="dark-color">Allow to add and update tasks</p>
+            <p class="dark-color">Allow the user to add and update tasks</p>
           </ion-label>
           <ion-toggle [(ngModel)]="writePerm" [ngModelOptions]="{standalone: true}" color="warning"></ion-toggle>
         </ion-item>
         <ion-item lines="none" color="transparent">
           <ion-label>
-            <h2>Delete</h2>
-            <p class="dark-color">Allow to delete this list or its tasks</p>
+            <h2>Share</h2>
+            <p class="dark-color">Allow the user to share this list </p>
           </ion-label>
-          <ion-toggle [(ngModel)]="deletePerm" [ngModelOptions]="{standalone: true}" color="warning"></ion-toggle>
+          <ion-toggle [(ngModel)]="sharePerm" [ngModelOptions]="{standalone: true}" color="warning"></ion-toggle>
         </ion-item>
       </ion-card-content>
     </ion-card>
-
+    
     <ion-button style="padding-inline: 1em"
                 class="ion-margin-horizontal"
                 color='yellow-light' type="submit"

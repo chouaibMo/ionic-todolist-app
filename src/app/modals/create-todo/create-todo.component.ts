@@ -67,6 +67,5 @@ export class CreateTodoComponent implements OnInit {
   onAdressSelect(address) {
     this.selectedAddress = address;
     this.addresses = [];
-    console.log(this.selectedAddress)
   }
 }

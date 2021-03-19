@@ -6,7 +6,7 @@ export class List {
     owner: string
     readers?: string[];
     writers?: string[];
-    deleters?: string[];
+    sharers?: string[];
     nbChecked: number;
     progress: number;
     size: number;
@@ -21,6 +21,6 @@ export class List {
         this.progress = 0;
         this.readers = [];
         this.writers = [];
-        this.deleters = [];
+        this.sharers = [];
     }
 }
