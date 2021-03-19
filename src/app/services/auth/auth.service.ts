@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
-import {ModalController} from "@ionic/angular";
-import { AlertController } from '@ionic/angular';
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
+import {ModalController, AlertController, LoadingController} from "@ionic/angular";
 import {UiService} from "../ui/ui.service";
 import {Router} from "@angular/router";
 import {Plugins} from "@capacitor/core";
 import '@codetrix-studio/capacitor-google-auth';
 import firebase from "firebase";
-import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import User = firebase.User;
 
 
@@ -21,6 +20,7 @@ export class AuthService {
     constructor(public afs: AngularFirestore,
                 public fireAuth: AngularFireAuth,
                 private modalController: ModalController,
+                private loadingController: LoadingController,
                 private uiService: UiService,
                 private alertCtrl : AlertController,
                 private router: Router) {
@@ -39,9 +39,12 @@ export class AuthService {
         })
     }
 
-    public createAccount(username: string, email: string, password: string) {
+    public async createAccount(username: string, email: string, password: string) {
+        const loading = await this.loadingController.create({ message: 'Please wait...'});
+        await loading.present()
         this.fireAuth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
+                loading.dismiss()
                 userCredential.user.sendEmailVerification();
                 this.uiService.presentToast( " Account created successfully.", "success", 3000)
                 this.router.navigate(['/login'])
@@ -52,13 +55,18 @@ export class AuthService {
 
             })
             .catch((error) => {
+                loading.dismiss()
+                //loading.onDidDismiss();
                 this.uiService.presentToast( error.message, "danger", 3000)
-            });
+            }).then()
     }
 
 
-    public signWithEmail(email: string, password: string) {
+    public async signWithEmail(email: string, password: string) {
+        const loading = await this.loadingController.create({ message: 'Please wait...'});
+        await loading.present()
         this.fireAuth.signInWithEmailAndPassword(email, password).then((userCredential) => {
+            loading.dismiss()
             //if(userCredential.user.emailVerified){
             this.uiService.presentToast( "Connected successfully.", "success", 3000);
             this.router.navigate(['/home'])
@@ -67,15 +75,20 @@ export class AuthService {
             //}
         })
             .catch((error) => {
+                loading.dismiss()
                 this.uiService.presentToast( error.message, "danger", 3000)
             });
     }
 
 
     async signWithGoogle(){
+        const loading = await this.loadingController.create({ message: 'Please wait...'});
+        await loading.present()
         let googleUser = await Plugins.GoogleAuth.signIn() as any;
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
-        await this.fireAuth.signInWithCredential(credential);
+        await this.fireAuth.signInWithCredential(credential).then(() =>{
+            loading.dismiss()
+        });
         this.uiService.presentToast( "Connected successfully.", "success", 3000);
         this.router.navigate(['/home'])
     }
@@ -98,13 +111,17 @@ export class AuthService {
           await alert.present();
     }
 
-    public resetPassword(email: string){
+    public async resetPassword(email: string){
+        const loading = await this.loadingController.create({ message: 'Please wait...'});
+        await loading.present()
         this.fireAuth.sendPasswordResetEmail(email).then(
-            () => {
+            async () => {
+                await loading.dismiss()
                 this.modalController.dismiss();
                 this.uiService.presentToast("Reset email sent successfully.", "success", 4000);
             },
-            error => {
+            async error => {
+                await loading.dismiss()
                 this.uiService.presentToast( "An error occurred, please try again.", "danger", 4000)
             });
     }
