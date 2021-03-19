@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
 import {UiService} from "../../services/ui/ui.service";
+import { MenuController } from '@ionic/angular';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -13,6 +13,7 @@ export class RegisterPage implements OnInit {
   dataForm: FormGroup;
 
   constructor(private authService: AuthService,
+              private menuCtrl: MenuController,
               private formBuilder: FormBuilder,
               private uiService: UiService) {
 
@@ -42,6 +43,13 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {}
 
+    ionViewWillEnter() {
+        this.menuCtrl.enable(false);
+    }
+
+    /**
+     * Check whether passwords provided by the user are the same
+     */
     checkPasswords() {
         let pass = this.dataForm.get('password').value;
         let confirmPass = this.dataForm.get('confirmPassword').value;

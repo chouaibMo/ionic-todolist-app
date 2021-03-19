@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
-import { MenuController, ModalController} from "@ionic/angular";
+import {ModalController} from "@ionic/angular";
+import { AlertController } from '@ionic/angular';
 import {UiService} from "../ui/ui.service";
 import {Router} from "@angular/router";
 import {Plugins} from "@capacitor/core";
@@ -9,7 +10,6 @@ import firebase from "firebase";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
 import User = firebase.User;
 
-import { AlertController } from '@ionic/angular';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +21,6 @@ export class AuthService {
     constructor(public afs: AngularFirestore,
                 public fireAuth: AngularFireAuth,
                 private modalController: ModalController,
-                private menuCtrl: MenuController,
                 private uiService: UiService,
                 private alertCtrl : AlertController,
                 private router: Router) {

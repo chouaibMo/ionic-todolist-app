@@ -41,16 +41,13 @@ export class TodoDetailsPage implements OnInit {
   constructor(private listService: ListService,
               private mapService : MapService,
               private settingService: SettingService,
-              private activatedRoute: ActivatedRoute) {
-
-    TextToSpeech.getSupportedVoices().then(result => {
-      this.supportedVoices = result.voices;
-    });
-  }
+              private activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
     mapboxgl.accessToken = environment.mapbox.accessToken;
     this.settingService.getSettings().subscribe(value => this.settings = value)
+    TextToSpeech.getSupportedVoices().then(result => this.supportedVoices = result.voices)
+
   }
 
   ngAfterViewInit(){
@@ -64,27 +61,20 @@ export class TodoDetailsPage implements OnInit {
           if(this.todo.address){
             this.latitude = this.todo?.latitude ? this.todo.latitude : ''
             this.longitude = this.todo?.longitude ? this.todo.longitude : ''
-            setTimeout(() => this.initializeMap(), 10) 
-            
+            setTimeout(() => this.initializeMap(), 50) 
           }
         })
       }
     })
   }
 
-  ngAfterViewChecked() {
-    //console.log('after View Checked')
-  }
-
-
   speech(text) {
-    if(this.currentlySpeaking){
+    if(this.currentlySpeaking)
       this.stop()
-    }
-    else {
+    else
       this.speak(text)
-    }
   }
+
   async stop(): Promise<void> {
     await TextToSpeech.stop();
   }
@@ -96,7 +86,7 @@ export class TodoDetailsPage implements OnInit {
         speechRate: this.settings.speechVolume,
         pitchRate: 0.9,
         volume: 1.0,
-        voice: this.supportedVoices[this.settings.speechLangId],  // supported only for WEB platforms
+        //voice: this.supportedVoices[this.settings.speechLangId],  // supported only for WEB platforms
         //voice: this.settings.speechLangId,
         category: 'ambient',
       };

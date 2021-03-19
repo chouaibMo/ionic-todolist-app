@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import {List} from "../models/list";
 import {ListService} from "../services/list/list.service";
-import {AlertController, IonRouterOutlet, ModalController} from "@ionic/angular";
+import {AlertController, MenuController, IonRouterOutlet, ModalController} from "@ionic/angular";
 import {CreateListComponent} from "../modals/create-list/create-list.component";
 import {SettingService} from "../services/setting/setting.service";
 import {ListSharingComponent} from "../modals/list-sharing/list-sharing.component";
 import {AuthService} from "../services/auth/auth.service";
-import {takeUntil} from "rxjs/operators";
 import {UiService} from "../services/ui/ui.service";
 
 @Component({
@@ -21,34 +20,44 @@ export class HomePage {
     private sharedResult: List[]
     private deleteConfirmation : boolean
 
-    constructor(private listService: ListService,
+    constructor(private uiService : UiService,
+                private listService: ListService,
+                private AuthService: AuthService,
+                private menuCtrl: MenuController,
                 private routerOutlet: IonRouterOutlet,
                 private settingService : SettingService,
-                private authService: AuthService,
-                private uiService : UiService,
                 private alertController: AlertController,
                 private modalController: ModalController) {}
 
     ngOnInit(){
         this.routerOutlet.swipeGesture = false;
-
-        this.settingService.getSettings().subscribe((value) => {
-            this.deleteConfirmation = value.confirmation;
-        });
-
-        this.listService.getAll().subscribe(values => {
-            this.ownedLists = values
-            this.ownedResult = this.ownedLists
-        });
-        this.listService.getAllShared().subscribe(values => {
-            this.sharedLists = values
-            this.sharedResult = this.sharedLists
-        });
-
+        this.settingService.getSettings().subscribe(value => this.deleteConfirmation = value.confirmation)
+        this.AuthService.fireAuth.onAuthStateChanged((credential)=>{
+            if(credential){
+                this.listService.getAll().subscribe(values => {
+                    this.ownedLists = values
+                    this.ownedResult = this.ownedLists
+                })
+                this.listService.getAllShared().subscribe(values => {
+                    this.sharedLists = values
+                    this.sharedResult = this.sharedLists
+                })
+            }
+            else{
+                this.clearLists()
+            }
+        })
     }
 
-    ionViewWillLeave() {
-        this.routerOutlet.swipeGesture = true;
+    ionViewWillEnter() {
+        this.menuCtrl.enable(true);
+    }
+
+    clearLists(){
+        this.ownedLists = []
+        this.ownedResult = []
+        this.sharedLists = []
+        this.sharedResult = []
     }
 
     /**

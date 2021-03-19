@@ -11,7 +11,6 @@ import {AuthService} from "../auth/auth.service";
 })
 export class ListService {
   public listsCollection: AngularFirestoreCollection<List>
-  public sharedLists: Array<List>;
 
   constructor(public afs: AngularFirestore,
               public authService : AuthService) {

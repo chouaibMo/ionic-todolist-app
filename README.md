@@ -101,7 +101,8 @@ ionic serve
 
 <span id="others"></span>
 ### Others :
-    - Open in-app browser **(browser plugins)**
+    - Open in-app browser **(browser plugin)**
+    - Share message with other apps **(share plugin)**
 
 <span id="plugin"></span>
 ## 5 - Plugins used :
@@ -111,9 +112,8 @@ ionic serve
     - ✅ mapbox-gl-directions
     
 <span id="cap"></span>    
-### Capacitor official plugins ([capacitor-plugins](https://github.com/capacitor-community))
-    - ✅ @capacitor/storage                     
-    - ✅ @capacitor/splash-screen         
+### Capacitor official plugins ([capacitor-plugins](https://github.com/ionic-team/capacitor-plugins))
+    - ✅ @capacitor/storage 
     - 🆘 @capacitor/local-notifications    
     - ✅ @capacitor/share                         
     - 🆘 @capacitor/camera                      

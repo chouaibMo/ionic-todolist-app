@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MenuController} from "@ionic/angular";
 import {StorageService} from "../../services/storage/storage.service";
 import {Router} from "@angular/router";
 
@@ -10,9 +11,16 @@ import {Router} from "@angular/router";
 export class SlidesPage implements OnInit {
 
   constructor(private router: Router,
+              private menuCtrl: MenuController,
               private storageService : StorageService) {}
 
+ 
   ngOnInit() {}
+
+  ionViewWillEnter() { 
+    this.menuCtrl.enable(false); 
+  }
+
 
   tutorialFinished(){
     this.storageService.setObject('tutorialFinished', true)
