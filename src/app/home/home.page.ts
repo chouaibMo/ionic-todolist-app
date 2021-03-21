@@ -1,3 +1,4 @@
+import { MapService } from './../services/map/map.service';
 import { Component } from '@angular/core';
 import {List} from "../models/list";
 import {ListService} from "../services/list/list.service";
@@ -21,6 +22,7 @@ export class HomePage {
     private deleteConfirmation : boolean
 
     constructor(private uiService : UiService,
+                private mapService: MapService,
                 private listService: ListService,
                 private AuthService: AuthService,
                 private menuCtrl: MenuController,
@@ -30,6 +32,7 @@ export class HomePage {
                 private modalController: ModalController) {}
 
     ngOnInit(){
+        this.mapService.initCurrentPosition()
         this.routerOutlet.swipeGesture = false;
         this.settingService.getSettings().subscribe(value => this.deleteConfirmation = value.confirmation)
         this.AuthService.fireAuth.onAuthStateChanged((credential)=>{

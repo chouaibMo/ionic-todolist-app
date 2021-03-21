@@ -115,11 +115,14 @@ export class TodoDetailsPage implements OnInit {
         .addTo(this.map);
 
     //user coords
-    this.userCoords = await Geolocation.getCurrentPosition();
-    if(this.userCoords){
+    if(this.mapService.userCoords){
       new mapboxgl.Marker({  color: "#C40000"  })
-          .setLngLat([this.userCoords.coords.longitude, this.userCoords.coords.latitude])
+          .setLngLat([this.mapService.userCoords.coords.longitude, this.mapService.userCoords.coords.latitude])
           .addTo(this.map);
+    this.map.fitBounds([
+      [this.mapService.userCoords.coords.longitude, this.mapService.userCoords.coords.latitude],
+      [this.todo.longitude, this.todo.latitude]
+      ]);    
     }
   }
 

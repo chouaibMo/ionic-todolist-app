@@ -11,9 +11,11 @@
       <ion-menu-button color='yellow-light' menu='main-menu'></ion-menu-button>
     </ion-buttons>
     <!-- TITLE -->
-    <ion-title >Todo App</ion-title>
+    <ion-title >Home</ion-title>
   </ion-toolbar>
-  <ion-searchbar animated debounce="500" (ionChange)="onSearchChange($event)"></ion-searchbar>
+  <ion-toolbar>
+    <ion-searchbar animated debounce="500" (ionChange)="onSearchChange($event)"></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">

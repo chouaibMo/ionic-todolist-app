@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-
+import {Geolocation} from '@capacitor/core';
 import { GeoJson } from '../../models/map';
 import * as mapboxgl from 'mapbox-gl';
 
@@ -20,9 +20,15 @@ export interface Feature {
   providedIn: 'root'
 })
 export class MapService {
+  public userCoords
 
   constructor(private http: HttpClient) { 
     mapboxgl.accessToken = environment.mapbox.accessToken
+  }
+
+  async initCurrentPosition() {
+    this.userCoords = await Geolocation.getCurrentPosition();
+    console.log('Current', this.userCoords);
   }
 
   public search_word(query: string) {
