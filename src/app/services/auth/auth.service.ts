@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
-import {ModalController, AlertController, LoadingController} from "@ionic/angular";
+import {ModalController, AlertController, LoadingController, NavController} from "@ionic/angular";
 import {UiService} from "../ui/ui.service";
 import {Router} from "@angular/router";
 import {Plugins} from "@capacitor/core";
 import '@codetrix-studio/capacitor-google-auth';
 import firebase from "firebase";
 import User = firebase.User;
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -19,6 +21,7 @@ export class AuthService {
 
     constructor(public afs: AngularFirestore,
                 public fireAuth: AngularFireAuth,
+                private navController: NavController,
                 private modalController: ModalController,
                 private loadingController: LoadingController,
                 private uiService: UiService,
@@ -39,26 +42,29 @@ export class AuthService {
         })
     }
 
-    public async createAccount(username: string, email: string, password: string) {
+    public async createAccount(name: string, email: string, password: string) {
         const loading = await this.loadingController.create({ message: 'Please wait...'});
         await loading.present()
         this.fireAuth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
+            .then(async (userCredential) => {
                 loading.dismiss()
                 userCredential.user.sendEmailVerification();
+                this.fireAuth.signOut()
                 this.uiService.presentToast( " Account created successfully.", "success", 3000)
-                this.router.navigate(['/login'])
+                this.navController.navigateBack('login')
+                await userCredential.user.updateProfile({
+                    displayName: name
+                  })
                 this.usersCollection.doc().set({
-                    username: username,
-                    email: email,
-                });
-
+                    username: userCredential.user.displayName,
+                    email: userCredential.user.email,
+                    photo: userCredential.user.photoURL,
+                })
             })
             .catch((error) => {
                 loading.dismiss()
-                //loading.onDidDismiss();
                 this.uiService.presentToast( error.message, "danger", 3000)
-            }).then()
+            })
     }
 
 
@@ -67,12 +73,13 @@ export class AuthService {
         await loading.present()
         this.fireAuth.signInWithEmailAndPassword(email, password).then((userCredential) => {
             loading.dismiss()
-            //if(userCredential.user.emailVerified){
-            this.uiService.presentToast( "Connected successfully.", "success", 3000);
-            this.router.navigate(['/home'])
-            //}else{
-            //this.uiService.presentToast( "Please verify your mail address.", "danger", 3000)
-            //}
+            if(userCredential.user.emailVerified){
+                this.uiService.presentToast( "Connected successfully.", "success", 3000);
+                this.router.navigate(['/home'])
+            }else{
+                this.fireAuth.signOut()     
+                this.uiService.presentToast( "Please verify your mail address.", "danger", 3000)
+            }
         })
             .catch((error) => {
                 loading.dismiss()
@@ -83,12 +90,10 @@ export class AuthService {
 
     async signWithGoogle(){
         const loading = await this.loadingController.create({ message: 'Please wait...'});
-        await loading.present()
-        let googleUser = await Plugins.GoogleAuth.signIn() as any;
+        //await loading.present()
+        let googleUser = (await Plugins.GoogleAuth.signIn() as any)
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
-        await this.fireAuth.signInWithCredential(credential).then(() =>{
-            loading.dismiss()
-        });
+        await this.fireAuth.signInWithCredential(credential)
         this.uiService.presentToast( "Connected successfully.", "success", 3000);
         this.router.navigate(['/home'])
     }
@@ -140,4 +145,21 @@ export class AuthService {
     public getCurrentUser(){
         return this.user
     }
+
+ /**
+  * Get user's data from firestore
+  * @param email : user's email
+  * @returns 
+  */
+  public getOne(email: string) : Observable<any>{
+    return this.usersCollection.doc(email).snapshotChanges().pipe(
+        map(value => this.singleMapper<any>(value))
+    );
+  }
+
+  private singleMapper<T>(actions) {
+    const data = actions.payload.data();
+    const id = actions.payload.id;
+    return { id, ...data} as T;
+  }
 }

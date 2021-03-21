@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import {Geolocation} from '@capacitor/core';
 import { GeoJson } from '../../models/map';
 import * as mapboxgl from 'mapbox-gl';
+import { Plugins, PermissionType } from '@capacitor/core';
+const { Permissions } = Plugins;
 
 export interface MapboxOutput {
   attribution: string;
@@ -27,8 +29,10 @@ export class MapService {
   }
 
   async initCurrentPosition() {
-    this.userCoords = await Geolocation.getCurrentPosition();
-    console.log('Current', this.userCoords);
+    const permission = await Permissions.query({ name: PermissionType.Geolocation });
+    if(permission){
+        this.userCoords = await Geolocation.getCurrentPosition();
+    }
   }
 
   public search_word(query: string) {

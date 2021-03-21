@@ -29,11 +29,13 @@ export class AppComponent {
   }
 
   initializeApp() {
+    document.body.setAttribute('color-theme', 'light');
+    /*
     if(document.body.getAttribute('color-theme') === 'dark')
       document.body.setAttribute('color-theme', 'dark');
     else
       document.body.setAttribute('color-theme', 'light');
-
+    */
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();

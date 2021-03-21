@@ -12,7 +12,7 @@ export class Settings {
      speechVolume: number
 
     constructor(){
-         this.darkMode = document.body.getAttribute('color-theme') === 'dark'
+         this.darkMode = false /*document.body.getAttribute('color-theme') === 'dark'*/
          this.notification = false
          this.haptics = false
          this.vibrations = false
