@@ -1,36 +1,36 @@
 <ion-content >
   <div class="padding">
     
-    <div class="logo">
+    <div class="logo ion-margin-bottom">
       <img src="../../assets/icon/todo-icon.png">
     </div>
 
-    <form [formGroup]="dataForm" (ngSubmit)="createAccount()" novalidate>
-        <ion-item >
-          <ion-icon name="person-outline"></ion-icon>
-          <ion-input class="ion-margin-start" type="text" placeholder="Username" formControlName="username" required></ion-input>
-        </ion-item>
+    <form class="ion-margin-top" [formGroup]="dataForm" (ngSubmit)="createAccount()" novalidate>
+      <ion-item>
+        <ion-icon name="mail-outline"></ion-icon>
+        <ion-input class="ion-margin-start" type="text" placeholder="Email" formControlName="email" required></ion-input>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon name="mail-outline"></ion-icon>
-          <ion-input class="ion-margin-start" type="text" placeholder="Email" formControlName="email" required></ion-input>
-        </ion-item>
+      <ion-item >
+        <ion-icon name="person-outline"></ion-icon>
+        <ion-input class="ion-margin-start" type="text" placeholder="Full name" formControlName="fullName" required></ion-input>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon name="lock-closed-outline"></ion-icon>
-          <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password" required></ion-input>
-        </ion-item>
+      <ion-item>
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password" required></ion-input>
+      </ion-item>
 
-        <ion-item>
-          <ion-icon name="lock-closed-outline"></ion-icon>
-          <ion-input class="ion-margin-start" type="password" placeholder="Confirm password" formControlName="confirmPassword" required></ion-input>
-        </ion-item>
+      <ion-item>
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-input class="ion-margin-start" type="password" placeholder="Confirm password" formControlName="confirmPassword" required></ion-input>
+      </ion-item>
 
-        <ion-button class="ion-margin-top" type="submit"
-                    color="yellow-dark" expand="block"
-                    [disabled]="!dataForm.valid">
-          Register
-        </ion-button>
+      <ion-button class="ion-margin-top" type="submit" style="margin-top: 30px;"
+                  color="yellow-dark" expand="block"
+                  [disabled]="!dataForm.valid">
+        Register
+      </ion-button>
     </form>
 
     <ion-button class="text-color" expand="block" fill="clear" routerLink="/login" routerDirection="back">

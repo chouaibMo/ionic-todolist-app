@@ -46,6 +46,24 @@
     </ion-card-content>
   </ion-card>
 
+    <!-- DATE -->
+    <ion-card *ngIf="this.todo?.date">
+      <ion-card-header>
+        <ion-card-title class="card-title">Date
+          <!--
+          <ion-chip color="primary" [disabled]="this.settings?.textToSpeech == 'false'"   (click)="speech(this.todo?.description)">
+            <ion-icon style="margin:0" name="{{this.settings?.textToSpeech? 'volume-high-outline' : 'volume-mute-outline'}}"></ion-icon>
+          </ion-chip>
+          -->
+          <ion-icon async class="speaker" name="{{this.currentlySpeaking? 'volume-mute-outline' : 'volume-high-outline'}}"
+                    (click)="speech(this.todo?.date.toDate())" aria-disabled="true"></ion-icon>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-card-subtitle>{{this.todo?.date.toDate() | date: 'mediumDate'}}</ion-card-subtitle>
+      </ion-card-content>
+    </ion-card>
+
   <!-- MAP -->
   <ion-card *ngIf="this.todo?.address">
     <ion-card-header style="margin-bottom: 0">

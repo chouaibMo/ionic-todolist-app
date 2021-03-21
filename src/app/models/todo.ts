@@ -6,7 +6,7 @@ export class Todo {
     longitude?: string
     latitude?: string
     address?: string;
-    date?: Date;
+    date?: any;
 
 
     constructor(name: string, description: string){

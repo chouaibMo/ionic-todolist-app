@@ -18,10 +18,9 @@ export class RegisterPage implements OnInit {
               private uiService: UiService) {
 
       this.dataForm = this.formBuilder.group({
-          username: new FormControl('', Validators.compose([
-              Validators.maxLength(25),
-              Validators.minLength(6),
-              Validators.required
+          fullName: new FormControl('', Validators.compose([
+              Validators.required,
+              Validators.pattern("^[a-z]([-']?[a-z]+)*( [a-z]([-']?[a-z]+)*)+$")
           ])),
           password: new FormControl('', Validators.compose([
               Validators.maxLength(25),
@@ -39,7 +38,7 @@ export class RegisterPage implements OnInit {
           ]))
       });
   }
-
+ 
 
   ngOnInit() {}
 
@@ -58,7 +57,7 @@ export class RegisterPage implements OnInit {
 
     createAccount(){
         if(this.dataForm.get('password').value === this.dataForm.get('confirmPassword').value){
-            this.authService.createAccount(this.dataForm.get('username').value,
+            this.authService.createAccount(this.dataForm.get('fullName').value,
                                            this.dataForm.get('email').value,
                                            this.dataForm.get('password').value)
         }

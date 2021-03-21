@@ -16,6 +16,7 @@ export class CreateTodoComponent implements OnInit {
   list: List;
   todoForm: FormGroup;
 
+  todoDate
   addresses = [];
   selectedAddress = null;
 
@@ -26,7 +27,8 @@ export class CreateTodoComponent implements OnInit {
 
     this.todoForm = this.formBuilder.group({
       name: ['', Validators.required],
-      description: ['',Validators.required]
+      description: ['',Validators.required],
+      date: ['']
     });
   }
 
@@ -35,6 +37,7 @@ export class CreateTodoComponent implements OnInit {
   onSubmit(){
     const name = this.todoForm.get('name').value;
     const description = this.todoForm.get('description').value;
+    const date = this.todoForm.get('date').value;
     let todo = new Todo(name, description)
 
     if(this.selectedAddress){
@@ -43,6 +46,9 @@ export class CreateTodoComponent implements OnInit {
       todo.longitude =  this.selectedAddress?.center[0]
     }
 
+    if(date){
+      todo.date = new Date(date)
+    }
 
     this.listService.addTodo(this.list, todo);
     this.listService.updateProgress(this.list);
@@ -68,4 +74,9 @@ export class CreateTodoComponent implements OnInit {
     this.selectedAddress = address;
     this.addresses = [];
   }
+
+  showdate(){
+    console.log(this.todoDate);
+  }
+
 }
