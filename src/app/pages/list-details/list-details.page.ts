@@ -21,6 +21,7 @@ export class ListDetailsPage implements OnInit {
   private todos: Todo[]
   private searchResult: Todo[]
   private deleteConfirmation : boolean
+  private selectedSegment : string
 
   constructor(
       private listService: ListService,
@@ -37,6 +38,7 @@ export class ListDetailsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.selectedSegment = 'tasks'
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('listId');
       if (id) {
@@ -51,6 +53,23 @@ export class ListDetailsPage implements OnInit {
     });
   }
 
+  ionViewWillEnter(){
+    this.selectedSegment = 'tasks'
+  }
+
+  /**
+   * Triggered when the user move to another segment
+   * @param ev 
+   */
+  segmentChanged(ev: any) {
+    this.removeDuplicate()
+    this.selectedSegment = ev.detail.value
+  }
+
+  /**
+   * Present a modal to add a new todo
+   * @returns 
+   */
   async addTodoModal() {
     const modal = await this.modalController.create({
       component: CreateTodoComponent,
@@ -60,15 +79,16 @@ export class ListDetailsPage implements OnInit {
   }
 
 
+  /**
+   * Triggered when the user delete a todo
+   * @param todo 
+   */
   removeTodo(todo: Todo): void {
     if(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email)){
-      console.log(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email))
-      if(this.deleteConfirmation){
+      if(this.deleteConfirmation)
         this.presentTodoAlert(todo)
-      }  
-      else{
+      else
         this.listService.deleteTodo(this.list, todo);
-      } 
     }
     else{
         this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
@@ -97,7 +117,6 @@ export class ListDetailsPage implements OnInit {
 
   /**
    *  Show an alert when delete button is clicked
-   *
    */
   async presentTodoAlert(todo: Todo) {
     this.uiService.vibration()
@@ -138,5 +157,25 @@ export class ListDetailsPage implements OnInit {
         return (item.title.toLowerCase().indexOf(keyword.toLowerCase()) > -1)
       })
     }
+  }
+
+  removeMember(email:string){
+    this.list.readers = this.list.readers.filter(user => user !== email)
+    this.list.writers = this.list.writers.filter(user => user !== email)
+    this.list.sharers = this.list.sharers.filter(user => user !== email)
+    console.log(this.list)
+    this.listService.update(this.list)
+  }
+
+  private removeDuplicate(){
+    let users = [...this.list.readers, ...this.list.writers, ...this.list.sharers]
+    let array = users.reduce((arr, item) => {
+      let exists = !!arr.find(x => x === item);
+      if(!exists){
+        arr.push(item);
+      }
+      return arr;
+    }, []);
+    return array
   }
 }

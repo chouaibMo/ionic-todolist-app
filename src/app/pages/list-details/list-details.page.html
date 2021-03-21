@@ -10,17 +10,31 @@
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
+    <ion-toolbar>
     <ion-searchbar animated debounce="500" (ionChange)="onSearchChange($event)"></ion-searchbar>
-    <div class="progress-wrapper">
-        <div class="progress-bar" [style.width]="this.list?.progress + '%'">
-            {{this.list?.progress}}%
+    </ion-toolbar>
+    <ion-toolbar>
+        <div class="progress-wrapper">
+            <div class="progress-bar" [style.width]="this.list?.progress + '%'">
+                {{this.list?.progress}}%
+            </div>
         </div>
-    </div>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-segment style="width: 100%;" value="tasks" (ionChange)="segmentChanged($event)">
+          <ion-segment-button value="tasks">
+            <ion-label>Tasks</ion-label>
+          </ion-segment-button> 
+          <ion-segment-button value="members">
+            <ion-label>Members</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
 </ion-header>
 
 
 <ion-content [fullscreen]="true">
-    <ion-list>
+    <ion-list *ngIf="this.selectedSegment === 'tasks'">
         <ion-item-sliding *ngFor="let todo of searchResult">
             <ion-item>
                 <ion-row>
@@ -47,5 +61,57 @@
 
         </ion-item-sliding>
 
+    </ion-list>
+
+      <!--------- OWNER  --------->
+    <ion-item-divider *ngIf="this.selectedSegment === 'members'">
+        <ion-label>Owner</ion-label>
+    </ion-item-divider>
+
+    <ion-item-sliding *ngIf="this.selectedSegment === 'members'">
+        <ion-item>
+            <ion-row>
+                <ion-col>
+                    <img class="user-picture" src="https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg" />
+                </ion-col >
+                <ion-col col-10 style="margin:auto">
+                    <ion-label  class="text-padding">
+                        <h2 class="elipsis">{{this.list.owner.split('@')[0] }}</h2>
+                        <p  class="elipsis">{{this.list.owner}}
+                        </p>
+                    </ion-label>
+                </ion-col>
+            </ion-row>
+        </ion-item>
+    </ion-item-sliding>
+
+    <!--------- OTHERS  --------->
+    <ion-item-divider *ngIf="this.selectedSegment === 'members'">
+        <ion-label>Others</ion-label>
+    </ion-item-divider>
+
+    <ion-list *ngIf="this.selectedSegment === 'members'">
+        <ion-item-sliding *ngFor="let user of this.removeDuplicate()">
+            <ion-item>
+                <ion-row>
+                    <ion-col>
+                        <img class="user-picture" src="https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg" />
+                    </ion-col >
+                    <ion-col col-10 style="margin:auto">
+                        <ion-label  class="text-padding">
+                            <h2 class="elipsis">{{user.split('@')[0] }}</h2>
+                            <p  class="elipsis">{{user}}
+                            </p>
+                        </ion-label>
+                    </ion-col>
+                </ion-row>
+            </ion-item>
+            <!-- ITEM OPTIONS -->
+            <ion-item-options side="end" *ngIf="this.AuthService.getCurrentUser().email == this.list.owner">
+                <ion-item-option color="danger" (click)="removeMember(user)">
+                <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
     </ion-list>
 </ion-content>
