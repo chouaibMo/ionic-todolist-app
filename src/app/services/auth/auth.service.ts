@@ -1,3 +1,4 @@
+import { UserData } from '../../models/userData';
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
@@ -17,7 +18,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class AuthService {
-    public usersCollection: AngularFirestoreCollection<any>
+    public usersCollection: AngularFirestoreCollection<UserData>
     private user : User;
 
     constructor(public afs: AngularFirestore,
@@ -29,7 +30,7 @@ export class AuthService {
                 private alertCtrl : AlertController,
                 private router: Router) {
 
-        this.usersCollection = this.afs.collection<any>('users');
+        this.usersCollection = this.afs.collection<UserData>('users');
         this.authStatusListener()
     }
 
@@ -57,11 +58,7 @@ export class AuthService {
                 loading.dismiss()
                 userCredential.user.sendEmailVerification();
                 if(userCredential.additionalUserInfo.isNewUser){
-                    this.usersCollection.doc(userCredential.user.email).set({
-                        username: name,
-                        email: email,
-                        photo: '',
-                    })
+                    this.usersCollection.doc(userCredential.user.email).set(new UserData(name, email, ''))
                 }  
                 await userCredential.user.updateProfile({
                     displayName: name
@@ -112,11 +109,8 @@ export class AuthService {
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
         await this.fireAuth.signInWithCredential(credential).then((userCredential) => {
             if(userCredential.additionalUserInfo.isNewUser){
-                this.usersCollection.doc(userCredential.user.email).set({
-                    username: userCredential.user.displayName,
-                    email: userCredential.user.email,
-                    photo: userCredential.user.photoURL,
-                })
+                this.usersCollection.doc(userCredential.user.email)
+                    .set(new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL))
             } 
             loading.dismiss()
             this.uiService.presentToast( "Connected successfully.", "success", 3000);
@@ -144,11 +138,8 @@ export class AuthService {
                     photoURL: userCredential.user.photoURL + '?type=large&access_token=' + environment.fbAccessToken
                 })
                 if(userCredential.additionalUserInfo.isNewUser){
-                    this.usersCollection.doc(userCredential.user.email).set({
-                        username: userCredential.user.displayName,
-                        email: userCredential.user.email,
-                        photo: userCredential.user.photoURL,
-                    })
+                    this.usersCollection.doc(userCredential.user.email)
+                        .set(new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL)) 
                 }
                 loading.dismiss()
                 this.uiService.presentToast( "Connected successfully.", "success", 3000);

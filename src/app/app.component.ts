@@ -3,9 +3,8 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./services/auth/auth.service";
-import { Plugins } from '@capacitor/core';
 import {UiService} from "./services/ui/ui.service";
-import { registerWebPlugin } from '@capacitor/core';
+import { Plugins, registerWebPlugin } from '@capacitor/core';
 import { FacebookLogin } from '@capacitor-community/facebook-login';
 const { Share, Browser, Network } = Plugins;
 

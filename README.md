@@ -130,4 +130,5 @@ ionic serve
 <span id="cap-com"></span>
 ### Capacitor community plugins ([capacitor-community](https://github.com/capacitor-community))
     - ✅ @capacitor-community/text-to-speech      
-    - ✅ @capacitor-community/privacy-screen     
+    - ✅ @capacitor-community/facebook-login
+    - ✅ @capacitor-community/apple-sign-in    
