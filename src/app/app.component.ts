@@ -5,6 +5,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {AuthService} from "./services/auth/auth.service";
 import { Plugins } from '@capacitor/core';
 import {UiService} from "./services/ui/ui.service";
+import { registerWebPlugin } from '@capacitor/core';
+import { FacebookLogin } from '@capacitor-community/facebook-login';
 const { Share, Browser, Network } = Plugins;
 
 @Component({
@@ -20,6 +22,8 @@ export class AppComponent {
               private authService : AuthService) {
 
     this.initializeApp();
+    registerWebPlugin(FacebookLogin);
+    
     Network.addListener('networkStatusChange', (status) => {
       if(status.connected)
         this.uiService.presentToast('Network connection established sucessfully', 'success',5000)
@@ -29,7 +33,7 @@ export class AppComponent {
   }
 
   initializeApp() {
-    document.body.setAttribute('color-theme', 'light');
+    //document.body.setAttribute('color-theme', 'light');
     /*
     if(document.body.getAttribute('color-theme') === 'dark')
       document.body.setAttribute('color-theme', 'dark');

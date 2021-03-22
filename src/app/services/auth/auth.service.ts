@@ -1,7 +1,8 @@
+import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
-import {ModalController, AlertController, LoadingController, NavController} from "@ionic/angular";
+import {ModalController, AlertController, LoadingController, NavController, Platform} from "@ionic/angular";
 import {UiService} from "../ui/ui.service";
 import {Router} from "@angular/router";
 import {Plugins} from "@capacitor/core";
@@ -42,6 +43,12 @@ export class AuthService {
         })
     }
 
+    /**
+     * Sign up with email & password using firebase
+     * @param name user's full name
+     * @param email user's email
+     * @param password user's password
+     */
     public async createAccount(name: string, email: string, password: string) {
         const loading = await this.loadingController.create({ message: 'Please wait...'});
         await loading.present()
@@ -49,17 +56,19 @@ export class AuthService {
             .then(async (userCredential) => {
                 loading.dismiss()
                 userCredential.user.sendEmailVerification();
-                this.fireAuth.signOut()
-                this.uiService.presentToast( " Account created successfully.", "success", 3000)
-                this.navController.navigateBack('login')
+                if(userCredential.additionalUserInfo.isNewUser){
+                    this.usersCollection.doc(userCredential.user.email).set({
+                        username: name,
+                        email: email,
+                        photo: '',
+                    })
+                }  
                 await userCredential.user.updateProfile({
                     displayName: name
                   })
-                this.usersCollection.doc().set({
-                    username: userCredential.user.displayName,
-                    email: userCredential.user.email,
-                    photo: userCredential.user.photoURL,
-                })
+                this.fireAuth.signOut()
+                this.uiService.presentToast( " Account created successfully.", "success", 3000)
+                this.navController.navigateBack('login')
             })
             .catch((error) => {
                 loading.dismiss()
@@ -68,6 +77,11 @@ export class AuthService {
     }
 
 
+    /**
+     * Sign in with email & password using firebase
+     * @param email user's email
+     * @param password user's password
+     */
     public async signWithEmail(email: string, password: string) {
         const loading = await this.loadingController.create({ message: 'Please wait...'});
         await loading.present()
@@ -81,41 +95,88 @@ export class AuthService {
                 this.uiService.presentToast( "Please verify your mail address.", "danger", 3000)
             }
         })
+        .catch((error) => {
+            loading.dismiss()
+            this.uiService.presentToast( error.message, "danger", 3000)
+        });
+    }
+
+
+    /**
+     * Login with Google
+     */
+    async signWithGoogle(){
+        const loading = await this.loadingController.create({ message: 'Please wait...'});
+        await loading.present()
+        let googleUser = await Plugins.GoogleAuth.signIn() as any
+        const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
+        await this.fireAuth.signInWithCredential(credential).then((userCredential) => {
+            if(userCredential.additionalUserInfo.isNewUser){
+                this.usersCollection.doc(userCredential.user.email).set({
+                    username: userCredential.user.displayName,
+                    email: userCredential.user.email,
+                    photo: userCredential.user.photoURL,
+                })
+            } 
+            loading.dismiss()
+            this.uiService.presentToast( "Connected successfully.", "success", 3000);
+            this.router.navigate(['/home'])
+        })
+        .catch((error) => {
+            loading.dismiss()
+            this.uiService.presentToast( error.message, "danger", 3000)
+        });
+    }
+
+    /**
+     * Login with Facebook : first of all, we use FacebookLogin to signin
+     * then we use the access token as a credential to signin using firebase
+     */
+    public async signWithFacebook(){
+        const loading = await this.loadingController.create({ message: 'Please wait...'})
+        const result =  await Plugins.FacebookLogin.login({ permissions: ['email', 'public_profile'] })
+
+        if (result && result.accessToken) {
+            await loading.present()
+            var credential = firebase.auth.FacebookAuthProvider.credential(result.accessToken.token)
+            this.fireAuth.signInWithCredential(credential).then(async (userCredential) => {
+                await userCredential.user.updateProfile({
+                    photoURL: userCredential.user.photoURL + '?type=large&access_token=' + environment.fbAccessToken
+                })
+                if(userCredential.additionalUserInfo.isNewUser){
+                    this.usersCollection.doc(userCredential.user.email).set({
+                        username: userCredential.user.displayName,
+                        email: userCredential.user.email,
+                        photo: userCredential.user.photoURL,
+                    })
+                }
+                loading.dismiss()
+                this.uiService.presentToast( "Connected successfully.", "success", 3000);
+                this.router.navigate(['/home'])
+            })
             .catch((error) => {
                 loading.dismiss()
                 this.uiService.presentToast( error.message, "danger", 3000)
-            });
+            })
+        }      
     }
 
-
-    async signWithGoogle(){
-        const loading = await this.loadingController.create({ message: 'Please wait...'});
-        //await loading.present()
-        let googleUser = (await Plugins.GoogleAuth.signIn() as any)
-        const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
-        await this.fireAuth.signInWithCredential(credential)
-        this.uiService.presentToast( "Connected successfully.", "success", 3000);
-        this.router.navigate(['/home'])
-    }
-
+    /**
+     * Login with Apple 
+     */
     public async signWithApple(){
         const alert = await this.alertCtrl.create({
             header: 'Coming soon 🚧',
             message: 'This feature will be provided soon',
             buttons: ['OK']
-          });
-          await alert.present();
+            });
+        await alert.present();
     }
 
-    public async signWithFacebook(){
-        const alert = await this.alertCtrl.create({
-            header: 'Coming soon 🚧',
-            message: 'This feature will be provided soon',
-            buttons: ['OK']
-          });
-          await alert.present();
-    }
-
+    /**
+     * Reset user passwork
+     * @param email user email
+     */
     public async resetPassword(email: string){
         const loading = await this.loadingController.create({ message: 'Please wait...'});
         await loading.present()
@@ -131,6 +192,9 @@ export class AuthService {
             });
     }
 
+    /**
+     * Log out
+     */
     public logout() {
         this.fireAuth.signOut().then(
             () => {
@@ -142,24 +206,28 @@ export class AuthService {
             });
     }
 
+    /**
+     * the current state of the user
+     * @returns a User object
+     */
     public getCurrentUser(){
         return this.user
     }
 
- /**
-  * Get user's data from firestore
-  * @param email : user's email
-  * @returns 
-  */
-  public getOne(email: string) : Observable<any>{
-    return this.usersCollection.doc(email).snapshotChanges().pipe(
-        map(value => this.singleMapper<any>(value))
-    );
-  }
+    /**
+     * Get user's data from firestore
+     * @param email : user's email
+     * @returns 
+     */
+    public getOne(email: string) : Observable<any>{
+        return this.usersCollection.doc(email).snapshotChanges().pipe(
+            map(value => this.singleMapper<any>(value))
+        );
+    }
 
-  private singleMapper<T>(actions) {
-    const data = actions.payload.data();
-    const id = actions.payload.id;
-    return { id, ...data} as T;
-  }
+    private singleMapper<T>(actions) {
+        const data = actions.payload.data();
+        const id = actions.payload.id;
+        return { id, ...data} as T;
+    }
 }

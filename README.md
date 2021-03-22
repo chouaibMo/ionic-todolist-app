@@ -56,6 +56,7 @@ ionic serve
     - Email verification
     - Password recovery
     - Google authentication
+    - Facebook authentication
     - Form errors handling
     - Create/Delete a list
     - Create/Delete a task
@@ -95,6 +96,7 @@ ionic serve
 <span id="lists"></span>
 ### Lists and Tasks :
     - Offline mode (create/delete lists or tasks)
+    - Show contributors (readers and writers) of each list
     - Add tasks with address ( address search bar with autocompletion)
     - Cast address to long/lat using geocoding **(mapbox package)**
     - Speak if text-to-speech enabled in settings **(text-to-speech plugin)**
