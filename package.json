@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~10.0.0",
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
+    "@angular/service-worker": "~10.0.0",
     "@capacitor-community/facebook-login": "^1.1.0",
     "@capacitor-community/text-to-speech": "^0.2.1",
     "@capacitor/android": "^2.4.6",

@@ -16,6 +16,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
       AngularFirestoreModule,
       AngularFireStorageModule,
       AngularFireAnalyticsModule,
-      AngularFireModule.initializeApp(environment.firebaseConfig)
+      AngularFireModule.initializeApp(environment.firebaseConfig),
+      ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
       StatusBar,

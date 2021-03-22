@@ -70,6 +70,7 @@ ionic serve
 ## 4 - Advanced features 
 <span id="ui"></span>
 ### UI :
+    - Progressive web app 
     - Erogonomic UX/UI design
     - Custom first launch tutorial 
     - Custom application icon
@@ -130,5 +131,4 @@ ionic serve
 <span id="cap-com"></span>
 ### Capacitor community plugins ([capacitor-community](https://github.com/capacitor-community))
     - ✅ @capacitor-community/text-to-speech      
-    - ✅ @capacitor-community/facebook-login
-    - ✅ @capacitor-community/apple-sign-in    
+    - ✅ @capacitor-community/facebook-login  
