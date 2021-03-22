@@ -1,3 +1,5 @@
+import { UserService } from './../../services/user/user.service';
+import { UserData } from './../../models/userData';
 import { AuthService } from './../../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import {List} from "../../models/list";
@@ -21,29 +23,34 @@ export class ListDetailsPage implements OnInit {
   private todos: Todo[]
   private searchResult: Todo[]
   private deleteConfirmation : boolean
+  
   private selectedSegment : string
+  private ownerData : UserData
+  private membersData: UserData[]
 
-  constructor(
-      private listService: ListService,
-      private uiService : UiService,
-      private AuthService: AuthService,
-      private settingService : SettingService,
-      private alertController : AlertController,
-      private activatedRoute: ActivatedRoute,
-      private modalController: ModalController
-  ) {
+
+  constructor(private listService: ListService,
+              private uiService : UiService,
+              private AuthService: AuthService,
+              private userService: UserService,
+              private settingService : SettingService,
+              private alertController : AlertController,
+              private activatedRoute: ActivatedRoute,
+              private modalController: ModalController) {
+
+    this.selectedSegment = 'tasks'            
     this.settingService.getSettings().subscribe((value) => {
       this.deleteConfirmation = value.confirmation;
     });
   }
 
   ngOnInit() {
-    this.selectedSegment = 'tasks'
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('listId');
       if (id) {
         this.listService.getOne(id).subscribe(values => {
           this.list = values
+          this.updateListMembers()
         });
         this.listService.getAllTodos(id).subscribe(values => {
           this.todos = values
@@ -53,17 +60,26 @@ export class ListDetailsPage implements OnInit {
     });
   }
 
-  ionViewWillEnter(){
-    this.selectedSegment = 'tasks'
-  }
-
   /**
    * Triggered when the user move to another segment
    * @param ev 
    */
   segmentChanged(ev: any) {
-    this.removeDuplicate()
     this.selectedSegment = ev.detail.value
+  }
+
+  /**
+   * Update
+   * @returns 
+   */
+  updateListMembers(){
+    this.membersData = []
+    let users = this.removeDuplicate([...this.list.readers, ...this.list.writers, ...this.list.sharers])
+    users.map(user =>{
+      const data = this.userService.getUserByEmail(user)
+      if(data)
+        this.membersData.push(data)
+    })
   }
 
   /**
@@ -71,11 +87,16 @@ export class ListDetailsPage implements OnInit {
    * @returns 
    */
   async addTodoModal() {
-    const modal = await this.modalController.create({
-      component: CreateTodoComponent,
-      componentProps: { list: this.list }
-    });
-    return await modal.present();
+      if(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email)){
+      const modal = await this.modalController.create({
+        component: CreateTodoComponent,
+        componentProps: { list: this.list }
+      });
+      return await modal.present();
+    }
+    else{
+      this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
+    }  
   }
 
 
@@ -165,11 +186,11 @@ export class ListDetailsPage implements OnInit {
     this.list.sharers = this.list.sharers.filter(user => user !== email)
     console.log(this.list)
     this.listService.update(this.list)
+    this.membersData.filter(data => data.email !== email)
   }
 
-  private removeDuplicate(){
-    let users = [...this.list.readers, ...this.list.writers, ...this.list.sharers]
-    let array = users.reduce((arr, item) => {
+  private removeDuplicate(data){
+    let array = data.reduce((arr, item) => {
       let exists = !!arr.find(x => x === item);
       if(!exists){
         arr.push(item);

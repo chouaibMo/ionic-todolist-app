@@ -63,6 +63,9 @@
 
     </ion-list>
 
+<!---------------------- Members  -------------------------->  
+<!---------------------------------------------------------->   
+
       <!--------- OWNER  --------->
     <ion-item-divider *ngIf="this.selectedSegment === 'members'">
         <ion-label>Owner</ion-label>
@@ -72,13 +75,14 @@
         <ion-item>
             <ion-row>
                 <ion-col>
-                    <img class="user-picture" src="https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg" />
+                    <img class="user-picture"
+                    [src]="this.userService.getUserByEmail(this.list.owner)?.photoURL ? this.userService.getUserByEmail(this.list.owner)?.photoURL : 
+                           'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"/>
                 </ion-col >
                 <ion-col col-10 style="margin:auto">
                     <ion-label  class="text-padding">
-                        <h2 class="elipsis">{{this.list.owner.split('@')[0] }}</h2>
-                        <p  class="elipsis">{{this.list.owner}}
-                        </p>
+                        <h2 class="elipsis">{{ this.userService.getUserByEmail(this.list.owner)?.name }}</h2>
+                        <p  class="elipsis">{{ this.userService.getUserByEmail(this.list.owner)?.email }}</p>
                     </ion-label>
                 </ion-col>
             </ion-row>
@@ -86,29 +90,30 @@
     </ion-item-sliding>
 
     <!--------- OTHERS  --------->
-    <ion-item-divider *ngIf="this.selectedSegment === 'members'">
+    <ion-item-divider *ngIf="this.membersData?.length > 0 && this.selectedSegment === 'members'">
         <ion-label>Others</ion-label>
     </ion-item-divider>
 
     <ion-list *ngIf="this.selectedSegment === 'members'">
-        <ion-item-sliding *ngFor="let user of this.removeDuplicate()">
+        <ion-item-sliding *ngFor="let user of this.membersData">
             <ion-item>
                 <ion-row>
                     <ion-col>
-                        <img class="user-picture" src="https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg" />
+                        <img class="user-picture"
+                        [src]="user?.photoURL ? user?.photoURL : 
+                              'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"/>
                     </ion-col >
                     <ion-col col-10 style="margin:auto">
                         <ion-label  class="text-padding">
-                            <h2 class="elipsis">{{user.split('@')[0] }}</h2>
-                            <p  class="elipsis">{{user}}
-                            </p>
+                            <h2 class="elipsis">{{ user?.name }}</h2>
+                            <p  class="elipsis">{{ user?.email }}</p>
                         </ion-label>
                     </ion-col>
                 </ion-row>
             </ion-item>
             <!-- ITEM OPTIONS -->
-            <ion-item-options side="end" *ngIf="this.AuthService.getCurrentUser().email == this.list.owner">
-                <ion-item-option color="danger" (click)="removeMember(user)">
+            <ion-item-options side="end" *ngIf="this.AuthService.getCurrentUser()?.email == this.list.owner">
+                <ion-item-option color="danger" (click)="removeMember(user?.email)">
                 <ion-icon slot="icon-only" name="trash"></ion-icon>
                 </ion-item-option>
             </ion-item-options>

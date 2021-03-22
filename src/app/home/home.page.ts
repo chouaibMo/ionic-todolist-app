@@ -8,6 +8,7 @@ import {SettingService} from "../services/setting/setting.service";
 import {ListSharingComponent} from "../modals/list-sharing/list-sharing.component";
 import {AuthService} from "../services/auth/auth.service";
 import {UiService} from "../services/ui/ui.service";
+import { UserService } from '../services/user/user.service';
 
 @Component({
     selector: 'app-home',
@@ -25,6 +26,7 @@ export class HomePage {
                 private mapService: MapService,
                 private listService: ListService,
                 private AuthService: AuthService,
+                private userService: UserService,
                 private menuCtrl: MenuController,
                 private routerOutlet: IonRouterOutlet,
                 private settingService : SettingService,
@@ -94,10 +96,7 @@ export class HomePage {
     delete(list: List): void {
         if(this.listService.hasWritePermission(list, this.AuthService.getCurrentUser().email)){
             if(this.deleteConfirmation){
-                if(list.todos?.length > 0)
-                    this.presentListAlert(list)
-                else
-                    this.listService.delete(list)
+                this.presentListAlert(list)
             }
             else{
                 this.listService.delete(list)
