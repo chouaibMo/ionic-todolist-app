@@ -33,3 +33,6 @@ npm-debug.log*
 /ios
 /android
 /resources/*
+
+.firebase
+src/assets/icons

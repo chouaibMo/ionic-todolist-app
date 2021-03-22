@@ -22,7 +22,6 @@ export class ListService {
    */
   public getAll() : Observable<List[]>{
     const lists = this.afs.collection('lists',ref => ref.where('owner', '==', this.authService.getCurrentUser()?.email));
-
     return lists.snapshotChanges().pipe(
         map(value => this.multipleMapper<List>(value))
     );
@@ -51,19 +50,6 @@ export class ListService {
           return this.removeDuplicate(array)
         })
     )
-
-  }
-
-  private removeDuplicate(data){
-    let array = data.reduce((arr, item) => {
-      let exists = !!arr.find(x => x.id === item.id);
-      if(!exists){
-        arr.push(item);
-      }
-      return arr;
-    }, []);
-
-    return array
   }
 
   /**
@@ -175,23 +161,32 @@ export class ListService {
     });
   }
 
+  // ----------------------------------------------------------------------
+  // ----------------------------  UTILS   --------------------------------
+  // ----------------------------------------------------------------------
 
+  /**
+   * 
+   * @param actions 
+   * @returns 
+   */
   private singleMapper<T>(actions) {
     const data = actions.payload.data();
     const id = actions.payload.id;
     return { id, ...data} as T;
   }
 
+  /**
+   * 
+   * @param data 
+   * @returns 
+   */
   private multipleMapper<T>(data) {
     return data.map(d => {
       const id = d.payload.doc.id
       return { id, ...d.payload.doc.data() } as T;
     })
   }
-
-  // ----------------------------------------------------------------------
-  // ----------------------------  UTILS   --------------------------------
-  // ----------------------------------------------------------------------
 
   /**
    * Check whether a user has write permission on a list 
@@ -217,6 +212,23 @@ export class ListService {
       return true;
     else
       return false;
+  }
+
+  /**
+   * Remove duplicated values in an array
+   * @param data the array of object
+   * @returns new array without duplicates
+   */
+  private removeDuplicate(data){
+    let array = data.reduce((arr, item) => {
+      let exists = !!arr.find(x => x.id === item.id);
+      if(!exists){
+        arr.push(item);
+      }
+      return arr;
+    }, []);
+
+    return array
   }
 
 }
