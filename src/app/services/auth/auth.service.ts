@@ -58,7 +58,8 @@ export class AuthService {
                 loading.dismiss()
                 userCredential.user.sendEmailVerification();
                 if(userCredential.additionalUserInfo.isNewUser){
-                    this.usersCollection.doc(userCredential.user.email).set(new UserData(name, email, ''))
+                    const data = new UserData(name, email, '')
+                    this.usersCollection.doc(userCredential.user.email).set(Object.assign({}, data))
                 }  
                 await userCredential.user.updateProfile({
                     displayName: name
@@ -109,8 +110,9 @@ export class AuthService {
         const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
         await this.fireAuth.signInWithCredential(credential).then((userCredential) => {
             if(userCredential.additionalUserInfo.isNewUser){
+                const data =new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL)
                 this.usersCollection.doc(userCredential.user.email)
-                    .set(new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL))
+                    .set(Object.assign({}, data))
             } 
             loading.dismiss()
             this.uiService.presentToast( "Connected successfully.", "success", 3000);
@@ -138,8 +140,9 @@ export class AuthService {
                     photoURL: userCredential.user.photoURL + '?type=large&access_token=' + environment.fbAccessToken
                 })
                 if(userCredential.additionalUserInfo.isNewUser){
+                    const data = new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL)
                     this.usersCollection.doc(userCredential.user.email)
-                        .set(new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL)) 
+                        .set(Object.assign({}, data)) 
                 }
                 loading.dismiss()
                 this.uiService.presentToast( "Connected successfully.", "success", 3000);
