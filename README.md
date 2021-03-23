@@ -57,7 +57,9 @@ ionic serve
     - Password recovery
     - Google authentication
     - Facebook authentication
-    - Form errors handling
+    - Form errors validation
+    - Form errors handling (with toasts)
+     - Firestore security rules
     - Create/Delete a list
     - Create/Delete a task
     - searchbar for lists and tasks
@@ -74,8 +76,9 @@ ionic serve
     - Erogonomic UX/UI design
     - Custom first launch tutorial 
     - Custom application icon
-    - Custom plashScreen **(splash-screen plugin)**
-    - Show toast when network status changes **(network plugin)**
+    - Custom plashScreen (splash-screen plugin)
+    - Status bar updated when mode changes (dark/light)
+    - Show toast when network status changes (network plugin)
     - Loading indicator (spinner) during auth operations 
 
 
@@ -83,16 +86,16 @@ ionic serve
 ### Settings :
     - Enable/disable dark mode
     - Enable/disable delete confirmation (for lists and tasks)
-    - Enable/disable Haptics/Vibrations **(haptics plugin)**
-    - Enable/disable text to speech **(text-to-speech plugin)**
-    - Select speech speed **(text-to-speech plugin)**
+    - Enable/disable Haptics/Vibrations (haptics plugin)
+    - Enable/disable text to speech (text-to-speech plugin)
+    - Select speech speed (text-to-speech plugin)
     - Select speech language (supported only on web platform, english for iOS and Android)
-    - Settings stored in local storage **(local storage plugin)**
+    - Settings stored in local storage (local storage plugin)
 	
 <span id="profile"></span>	
 ### Profile :
     - Update user information.
-    - Update user picture : remove - choose from galery - take picture **(camera plugin + action-sheet)**
+    - Update user picture : take picture - choose from galery - remove (camera plugin + action-sheet)
 
 <span id="lists"></span>
 ### Lists and Tasks :
@@ -118,14 +121,18 @@ ionic serve
     
 <span id="cap"></span>    
 ### Capacitor official plugins ([capacitor-plugins](https://github.com/ionic-team/capacitor-plugins))
+    - ✅ @ionic/pwa-elements
     - ✅ @capacitor/storage 
     - 🆘 @capacitor/local-notifications    
     - ✅ @capacitor/share                         
-    - 🆘 @capacitor/camera                      
-    - ✅ @capacitor/network                     
+    - ✅ @capacitor/camera                      
+    - ✅ @capacitor/network  
+    - ✅ @capacitor/haptics
     - ✅ @capacitor/geolocation               
     - ✅ @capacitor/browser                    
-    - ✅ @capacitor/action-sheet            
+    - ✅ @capacitor/action-sheet      
+    - ✅ @ccapacitor/splash-screen
+    - ✅ @ccapacitor/status-bar
 
 
 <span id="cap-com"></span>

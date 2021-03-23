@@ -3,7 +3,7 @@ import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/auth";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
-import {ModalController, AlertController, LoadingController, NavController, Platform} from "@ionic/angular";
+import {ModalController, AlertController, LoadingController, NavController} from "@ionic/angular";
 import {UiService} from "../ui/ui.service";
 import {Router} from "@angular/router";
 import {Plugins} from "@capacitor/core";

@@ -7,12 +7,28 @@
     <form [formGroup]="dataForm" (ngSubmit)="signWithEmail()">
         <ion-item >
           <ion-icon name="mail-outline"></ion-icon>
-          <ion-input class="ion-margin-start" inputmode="email" type="email" placeholder="Email" formControlName="email" required></ion-input>
+          <ion-input class="ion-margin-start" inputmode="email" type="email" placeholder="Email" formControlName="email"></ion-input>
+          <ion-label color="danger" *ngIf="dataForm.get('email').touched && dataForm.get('email').hasError('required')">
+            <p><ion-icon class="ion-margin-top" name="alert-circle-outline"></ion-icon>
+            This field is required</p>
+        </ion-label>
+        <ion-label color="danger" *ngIf="dataForm.get('email').touched && dataForm.get('email').hasError('pattern')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+          Email is invalid</p>
+        </ion-label>
         </ion-item>
 
         <ion-item>
           <ion-icon name="lock-closed-outline"></ion-icon>
-          <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password" required></ion-input>
+          <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password"></ion-input>
+          <ion-label color="danger" *ngIf="dataForm.get('password').hasError('minlength')">
+            <p><ion-icon style="margin-top: auto;" class="ion-margin-top" name="alert-circle-outline"></ion-icon>
+            Atleast 6 characters</p>
+          </ion-label>
+          <ion-label color="danger" *ngIf="dataForm.get('password').touched && dataForm.get('password').hasError('required')">
+            <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+            This field is required</p>
+          </ion-label>
         </ion-item>
 
         <ion-item lines="none">

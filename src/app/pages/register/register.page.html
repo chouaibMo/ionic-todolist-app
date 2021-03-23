@@ -8,22 +8,54 @@
     <form class="ion-margin-top" [formGroup]="dataForm" (ngSubmit)="createAccount()" novalidate>
       <ion-item>
         <ion-icon name="mail-outline"></ion-icon>
-        <ion-input class="ion-margin-start" type="text" placeholder="Email" formControlName="email" required></ion-input>
+        <ion-input class="ion-margin-start" type="text" placeholder="Email" formControlName="email" ></ion-input>
+        <ion-label color="danger" *ngIf="dataForm.get('email').touched && dataForm.get('email').hasError('required')">
+          <p><ion-icon  style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+          This field is required</p>
+        </ion-label>
+        <ion-label color="danger" *ngIf="dataForm.get('email').touched && dataForm.get('email').hasError('pattern')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+          Email is invalid</p>
+        </ion-label>
       </ion-item>
 
       <ion-item >
         <ion-icon name="person-outline"></ion-icon>
-        <ion-input class="ion-margin-start" type="text" placeholder="Full name" formControlName="fullName" required></ion-input>
+        <ion-input class="ion-margin-start" type="text" placeholder="Full name" formControlName="fullName" ></ion-input>
+        <ion-label color="danger" *ngIf="dataForm.get('fullName').hasError('pattern')">
+          <p><ion-icon style="margin-top: auto;"  name="alert-circle-outline"></ion-icon>
+          Atleast 2 names</p>
+        </ion-label>
+        <ion-label color="danger" *ngIf="dataForm.get('fullName').touched && dataForm.get('fullName').hasError('required')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+          This field is required</p>
+        </ion-label>
       </ion-item>
 
       <ion-item>
         <ion-icon name="lock-closed-outline"></ion-icon>
-        <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password" required></ion-input>
+        <ion-input class="ion-margin-start" type="password" placeholder="Password" formControlName="password" ></ion-input>
+        <ion-label color="danger" *ngIf="dataForm.get('password').hasError('minlength')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+          Atleast 6 characters</p>
+        </ion-label>
+        <ion-label color="danger" *ngIf="dataForm.get('password').touched && dataForm.get('password').hasError('required')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+          This field is required</p>
+        </ion-label>
       </ion-item>
 
       <ion-item>
         <ion-icon name="lock-closed-outline"></ion-icon>
-        <ion-input class="ion-margin-start" type="password" placeholder="Confirm password" formControlName="confirmPassword" required></ion-input>
+        <ion-input class="ion-margin-start" type="password" placeholder="Confirm password" formControlName="confirmPassword" ></ion-input>
+        <ion-label color="danger" *ngIf="dataForm.get('confirmPassword').touched && dataForm.get('confirmPassword').value !== dataForm.get('password').value && !dataForm.get('confirmPassword').hasError('required')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+            Passwords don't match</p>
+        </ion-label>
+        <ion-label color="danger" *ngIf="dataForm.get('confirmPassword').touched && dataForm.get('confirmPassword').hasError('required')">
+          <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
+            This field is required</p>
+        </ion-label>
       </ion-item>
 
       <ion-button class="ion-margin-top" type="submit" style="margin-top: 30px;"
