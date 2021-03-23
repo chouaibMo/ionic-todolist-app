@@ -2,7 +2,7 @@
   <ion-toolbar>
     <!-- EDIT BUTTON -->
     <ion-buttons slot="primary">
-      <ion-button color='yellow-light' (click)="presentActionSheet()">
+      <ion-button color='yellow-light' (click)="updateModal()">
         <ion-icon name="create-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -50,7 +50,7 @@
     <ion-card-header>
       <ion-card-title class="card-title">Mobile</ion-card-title>
     </ion-card-header>
-    <ion-card-content>{{this.authService.user?.phoneNumber ? this.authService.user?.phoneNumber : "Not Available" }}</ion-card-content>
+    <ion-card-content>{{this.ownerData?.phone ? this.ownerData?.phone : "Not Available" }}</ion-card-content>
   </ion-card>
 
 

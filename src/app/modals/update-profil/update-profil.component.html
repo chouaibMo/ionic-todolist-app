@@ -1,0 +1,56 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Update profile</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color='yellow-light' (click)="dismissModal()">close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <form [formGroup]="dataForm" (ngSubmit)="onSubmit()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="card-title">First Name</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input placeholder="Enter your first name" type="text" formControlName="firstName"></ion-input>
+        <ion-label class="form-error" color="danger" *ngIf="dataForm.get('firstName').touched && dataForm.get('firstName').hasError('required')">
+            <ion-icon class="ion-margin-top" name="alert-circle-outline"></ion-icon>
+            This field is required
+        </ion-label>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="card-title">Last Name</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input placeholder="Enter your last name" type="text" formControlName="lastName"></ion-input>
+        <ion-label class="form-error" color="danger" *ngIf="dataForm.get('lastName').touched && dataForm.get('lastName').hasError('required')">
+          <ion-icon class="ion-margin-top" name="alert-circle-outline"></ion-icon>
+          This field is required
+      </ion-label>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="card-title">Phone number</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input placeholder="Enter your phone number" type="text" formControlName="phone"></ion-input>
+        <ion-label class="form-error" color="danger" *ngIf="dataForm.get('phone').touched && dataForm.get('phone').hasError('pattern')">
+          <ion-icon class="ion-margin-top" name="alert-circle-outline"></ion-icon>
+          Phone number is invalid
+      </ion-label>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button style="padding-inline: 1em"
+                class="ion-margin-horizontal"
+                color='yellow-light'
+                type="submit"
+                expand="block" [disabled]="!dataForm.valid">Confirm</ion-button>
+  </form>
+</ion-content>
