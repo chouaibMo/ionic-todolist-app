@@ -15,6 +15,7 @@ export class CreateTodoComponent implements OnInit {
   @Input()
   list: List;
   todoForm: FormGroup;
+  minDate = new Date().toISOString();
 
   todoDate
   addresses = [];

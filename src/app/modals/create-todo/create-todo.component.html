@@ -32,7 +32,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-datetime displayFormat="DDDD MMM D, YYYY" placeholder="Select a date" formControlName="date"
-                      style="padding-left:0px" min="2021"></ion-datetime>
+                      style="padding-left:0px"  [min]="this.minDate" max="2030"></ion-datetime>
       </ion-card-content>
     </ion-card>
 

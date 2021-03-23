@@ -59,7 +59,7 @@ ionic serve
     - Facebook authentication
     - Form errors validation
     - Form errors handling (with toasts)
-     - Firestore security rules
+    - Firestore security rules
     - Create/Delete a list
     - Create/Delete a task
     - searchbar for lists and tasks
@@ -67,6 +67,7 @@ ionic serve
     - List progress with animation
     - Profile page : show & update user informations
     - Settings page : enable/disable provided functionalities
+    - Routing guards
 
 <span id="advanced"></span>
 ## 4 - Advanced features 
