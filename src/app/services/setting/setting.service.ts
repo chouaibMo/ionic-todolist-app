@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Plugins, StatusBarStyle } from '@capacitor/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Settings} from "../../models/settings";
 import {StorageService} from "../storage/storage.service";
+
+const { StatusBar } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +27,15 @@ export class SettingService {
     this.storageService.getObject(key).then(value => {
       if(value){
         this.object.next(value)
-        if (this.object.getValue().darkMode)
+        if (this.object.getValue().darkMode){
+          StatusBar.setStyle({style: StatusBarStyle.Dark});
           document.body.setAttribute('color-theme', 'dark');
-        else
+
+        }
+        else{
           document.body.setAttribute('color-theme', 'light');
+          StatusBar.setStyle({style: StatusBarStyle.Light});
+        }
       }
       else{
         this.storageService.setObject(key, new Settings())
@@ -44,10 +52,15 @@ export class SettingService {
   setSettings(newValue): void {
     this.storageService.setObject('settings', newValue)
     this.object.next(newValue);
-    if (newValue.darkMode)
+    if (newValue.darkMode){
       document.body.setAttribute('color-theme', 'dark');
-    else
+      StatusBar.setStyle({style: StatusBarStyle.Dark});
+    }
+    else{
       document.body.setAttribute('color-theme', 'light');
+      StatusBar.setStyle({style: StatusBarStyle.Light});
+    }
+      
   }
 
 
