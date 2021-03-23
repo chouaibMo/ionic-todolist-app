@@ -10,6 +10,7 @@ import {CreateTodoComponent} from "../../modals/create-todo/create-todo.componen
 import {Todo} from "../../models/todo";
 import {SettingService} from "../../services/setting/setting.service";
 import {UiService} from "../../services/ui/ui.service";
+import { CallNumber } from '@ionic-native/call-number/ngx';
 
 
 
@@ -31,6 +32,7 @@ export class ListDetailsPage implements OnInit {
 
   constructor(private listService: ListService,
               private uiService : UiService,
+              private callNumber: CallNumber,
               private AuthService: AuthService,
               private userService: UserService,
               private settingService : SettingService,
@@ -198,5 +200,21 @@ export class ListDetailsPage implements OnInit {
       return arr;
     }, []);
     return array
+  }
+
+  /**
+   * Triggered when user click on a member's phone number
+   */
+  onCallNumber(number: string){
+    console.log("calling")
+    this.callNumber.callNumber(number, true)
+      .then(res => {
+        console.log('Launched dialer!', res)
+      })
+      .catch(err => {
+        console.log('Error launching dialer', err) 
+        this.uiService.presentToast("Failed to call "+number, "danger", 1000)
+        this.uiService.presentToast(""+err, "danger", 3000)
+      });
   }
 }

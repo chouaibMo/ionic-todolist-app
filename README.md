@@ -124,7 +124,7 @@ ionic serve
 ### Capacitor official plugins ([capacitor-plugins](https://github.com/ionic-team/capacitor-plugins))
     - ✅ @ionic/pwa-elements
     - ✅ @capacitor/storage 
-    - 🆘 @capacitor/local-notifications    
+    - ✅ @capacitor/local-notifications    
     - ✅ @capacitor/share                         
     - ✅ @capacitor/camera                      
     - ✅ @capacitor/network  
@@ -133,7 +133,9 @@ ionic serve
     - ✅ @capacitor/browser                    
     - ✅ @capacitor/action-sheet      
     - ✅ @ccapacitor/splash-screen
-    - ✅ @ccapacitor/status-bar
+    - ✅ @capacitor/status-bar
+    - 🆘 @ionic-native/call-number (Not working)
+    - 🆘 capacitor-biometric-auth (Not working)
 
 
 <span id="cap-com"></span>

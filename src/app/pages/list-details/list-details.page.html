@@ -108,7 +108,7 @@
                         <ion-label  class="text-padding">
                             <h2 class="elipsis">{{ user?.name }}</h2>
                             <p  class="elipsis">{{ user?.email }}</p>
-                            <p  *ngIf="user?.phone" class="elipsis">{{ user?.phone }}</p>
+                            <p  *ngIf="user?.phone" class="elipsis" (click)="onCallNumber(user?.phone)">{{ user?.phone }}</p>
                         </ion-label>
                     </ion-col>
                 </ion-row>
