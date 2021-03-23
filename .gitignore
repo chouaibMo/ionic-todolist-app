@@ -30,9 +30,6 @@ npm-debug.log*
 /plugins
 /www
 /src/environments
-/ios
-/android
-/resources/*
 
 .firebase
 src/assets/icons

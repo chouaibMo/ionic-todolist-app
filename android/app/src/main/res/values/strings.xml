@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Firetask</string>
+    <string name="title_activity_main">Firetask</string>
+    <string name="package_name">fr.m2gi.todolist</string>
+    <string name="custom_url_scheme">fr.m2gi.todolist</string>
+    <string name= "server_client_id">917146175999-c82qs0tbr1ilqoefijg0erq2f3tfnvq7.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">174984364122837</string>
+    <string name="fb_login_protocol_scheme">fb174984364122837</string>
+</resources>

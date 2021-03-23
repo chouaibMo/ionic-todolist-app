@@ -1,4 +1,4 @@
-<h1 align=center> Firetask : a shared todolist app</h1>
+<h1 align=center> Firetask : a shared todolist PWA</h1>
 
 <p align=center>
   <img src="https://cdn-images-1.medium.com/max/1000/1*ZU1eWct801yP-QpUJOaI6Q.png" width="105" height="105"/>
@@ -51,6 +51,10 @@ ionic serve
     
 
 ### First launch
+<p> 
+  <img src="./screenshots/slides.gif" width="250" height="480"/>
+</p>
+
 ### Login/Register
 ### Lists/Tasks
 
