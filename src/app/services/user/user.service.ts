@@ -20,30 +20,11 @@ export class UserService {
 
  /**
   *  Get all users (members) of a list
-   */
-  /*
-  public getAll(list: List) : Observable<UserData[]>{
-  const readers = this.afs.collection('users', ref => ref.where('email', 'in', list.readers))
-  const writers = this.afs.collection('users', ref => ref.where('email', 'in', list.writers))
-  const sharers = this.afs.collection('users', ref => ref.where('email', 'in', list.sharers))
-
-  const readersObs = readers.snapshotChanges().pipe(map(value => this.multipleMapper<UserData>(value)));
-  const writersObs = writers.snapshotChanges().pipe(map(value => this.multipleMapper<UserData>(value)));
-  const sharersObs = sharers.snapshotChanges().pipe(map(value => this.multipleMapper<UserData>(value)));
-
-  return combineLatest(readersObs,writersObs, sharersObs).pipe(
-  map(([list1, list2, list3]) =>{
-    let array = [...list1, ...list2, ...list3]
-    return this.removeDuplicate(array)
-  })
-  )
-}
-*/
-
-public getAll() : Observable<UserData[]>{
-  return this.usersCollection.snapshotChanges().pipe(
-      map(value => this.multipleMapper<List>(value))
-  );
+  */
+  public getAll() : Observable<UserData[]>{
+    return this.usersCollection.snapshotChanges().pipe(
+        map(value => this.multipleMapper<List>(value))
+    );
 }
 
   public getUserByEmail(email: string) : UserData{
@@ -51,24 +32,30 @@ public getAll() : Observable<UserData[]>{
   }
 
 
-   /**
-   * Remove duplicated values in an array
-   * @param data the array of object
-   * @returns new array without duplicates
+  /**
+ * Remove duplicated values in an array
+ * @param data the array of object
+ * @returns new array without duplicates
+ */
+  private removeDuplicate(data){
+    let array = data.reduce((arr, item) => {
+      let exists = !!arr.find(x => x.id === item.id);
+      if(!exists){
+        arr.push(item);
+      }
+      return arr;
+    }, []);
+
+    return array
+  }
+
+
+  /**
+   *  update a user's data in firestore
    */
-    private removeDuplicate(data){
-      let array = data.reduce((arr, item) => {
-        let exists = !!arr.find(x => x.id === item.id);
-        if(!exists){
-          arr.push(item);
-        }
-        return arr;
-      }, []);
-  
-      return array
-    }
-
-
+  public update(data : UserData) : void{
+    this.usersCollection.doc(data.email).update(Object.assign({},data))
+  }
 
   /**
    * 
