@@ -1,12 +1,13 @@
+import { UiService } from './../ui/ui.service';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import {Geolocation} from '@capacitor/core';
 import { GeoJson } from '../../models/map';
 import * as mapboxgl from 'mapbox-gl';
-import { Plugins, PermissionType } from '@capacitor/core';
-const { Permissions } = Plugins;
+import { Plugins } from '@capacitor/core';
+
+const { Geolocation } = Plugins;
 
 export interface MapboxOutput {
   attribution: string;
@@ -24,15 +25,14 @@ export interface Feature {
 export class MapService {
   public userCoords
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient,
+              private uiService: UiService) { 
     mapboxgl.accessToken = environment.mapbox.accessToken
   }
 
   async initCurrentPosition() {
-    const permission = await Permissions.query({ name: PermissionType.Geolocation });
-    if(permission){
-        this.userCoords = await Geolocation.getCurrentPosition();
-    }
+    const coordinates = await Geolocation.getCurrentPosition();
+    this.userCoords = coordinates
   }
 
   public search_word(query: string) {

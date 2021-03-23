@@ -8,7 +8,7 @@ import '@capacitor-community/text-to-speech';
 import { TTSOptions } from '@capacitor-community/text-to-speech';
 import {Geolocation, Plugins} from '@capacitor/core';
 import {SettingService} from "../../services/setting/setting.service";
-const { TextToSpeech } = Plugins;
+const { Device, TextToSpeech } = Plugins;
 
 import * as mapboxgl from 'mapbox-gl';
 import {environment} from "../../../environments/environment";
@@ -80,14 +80,15 @@ export class TodoDetailsPage implements OnInit {
   }
 
   async speak(text: string){
+    const device = await Device.getInfo()
+    const voice :any = device.platform === 'web' ? this.supportedVoices[this.settings.speechLangId] : this.settings.speechLangId
     if(this.settings.textToSpeech){
       const options: TTSOptions = {
         text: text,
         speechRate: this.settings.speechVolume,
         pitchRate: 0.9,
         volume: 1.0,
-        //voice: this.supportedVoices[this.settings.speechLangId],  // supported only for WEB platforms
-        //voice: this.settings.speechLangId,
+        voice: voice,  // supported only for WEB platforms
         category: 'ambient',
       };
 
@@ -125,74 +126,4 @@ export class TodoDetailsPage implements OnInit {
       ]);    
     }
   }
-
-/*
-  async lines(){
-    this.userCoords = await Geolocation.getCurrentPosition();
-    //console.log(this.userCoords.coords.longitude, this.userCoords.coords.latitude, this.longitude, this.latitude)
-    this.mapService.search_directions(this.userCoords.coords.longitude, this.userCoords.coords.latitude, this.longitude, this.latitude)
-        .subscribe(value => {
-          console.log(value)
-          var json = JSON.parse(JSON.stringify(value));
-          var data = json.routes[0];
-          var route = data.geometry.coordinates;
-
-          var geojson = {
-            'type': 'FeatureCollection',
-            'features': [
-              {
-                'type': 'Feature',
-                'geometry': {
-                  'type': 'LineString',
-                  'properties': {},
-                  'coordinates': route
-                }
-              }
-            ]
-          };
-
-          var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [(this.userCoords.coords.longitude+this.longitude)/2, (this.userCoords.coords.latitude+this.latitude)/2],
-            zoom: 12
-          });
-
-          map.on('load', function () {
-            map.addSource('LineString', {
-              'type': 'geojson',
-              'data': geojson
-            });
-            map.addLayer({
-              'id': 'LineString',
-              'type': 'line',
-              'source': 'LineString',
-              'layout': {
-                'line-join': 'round',
-                'line-cap': 'round'
-              },
-              'paint': {
-                'line-color': '#BF93E4',
-                'line-width': 5
-              }
-            });
-
-            document
-                .getElementById('zoomto')
-                .addEventListener('click', function () {
-                  var coordinates = geojson.features[0].geometry.coordinates;
-                  var bounds = coordinates.reduce(function (bounds, coord) {
-                    return bounds.extend(coord);
-                  }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-
-                  map.fitBounds(bounds, {
-                    padding: 20
-                  });
-                });
-          });
-        })
-  }
-
-
- */
 }
