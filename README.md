@@ -46,6 +46,10 @@ ionic serve
 
 <span id="app"></span>
 ## 2 - Preview
+### Live demo
+### [&nbsp;&nbsp;&nbsp;click here](https://todolist-app-e908c.firebaseapp.com) &nbsp;&nbsp;or&nbsp;&nbsp; [here](https://todolist-app-e908c.web.app)
+    
+
 ### First launch
 ### Login/Register
 ### Lists/Tasks

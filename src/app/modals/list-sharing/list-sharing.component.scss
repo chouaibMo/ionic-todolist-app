@@ -1,6 +1,12 @@
+$SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
+
 .card-title{
   font-size: 18px;
   margin-bottom: -12px;
+}
+
+.text-padding {
+  padding-left: 10px;
 }
 
 .padding-card{
@@ -10,4 +16,22 @@
 
 .dark-color{
   color: #858585 !important;
+}
+
+.elipsis{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 70vw
+}
+
+.user-picture{
+  display: inline;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  border: 3px solid $SIDEMENU_TRANSPARENCY;
+  -webkit-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
+  -moz-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
+  box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.95);
 }

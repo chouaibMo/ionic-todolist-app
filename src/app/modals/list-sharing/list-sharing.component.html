@@ -13,7 +13,16 @@
         <ion-card-title class="card-title">User email</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-input placeholder="enter user email" type="text" formControlName="username"></ion-input>
+        <ion-searchbar style="padding: 0" debounce=500
+                       (ionChange)="search($event)"
+                       [value]="selectedUser?.name"></ion-searchbar>
+
+          <ion-item style="padding: 0; margin-left:20px" lines="none" color="transparent" button
+                    *ngFor="let user of this.usersResult" (click)="onUserSelect(user)">
+            
+            <img class="user-picture" [src]="user?.photoURL ? user?.photoURL : 'https://images.assetsdelivery.com/compings_v2/2nix/2nix1408/2nix140800145.jpg'"/>
+            <ion-label  class="text-padding"><h2 class="elipsis">{{ user?.name }}</h2></ion-label>
+          </ion-item>
       </ion-card-content>
     </ion-card>
 
@@ -43,6 +52,6 @@
     <ion-button style="padding-inline: 1em"
                 class="ion-margin-horizontal"
                 color='yellow-light' type="submit"
-                expand="block" [disabled]="!shareForm.valid">Share list</ion-button>
+                expand="block" [disabled]="!this.selectedUser">Share list</ion-button>
   </form>
 </ion-content>

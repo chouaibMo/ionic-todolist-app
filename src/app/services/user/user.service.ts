@@ -10,7 +10,7 @@ import { UserData } from 'src/app/models/userData';
 })
 export class UserService {
   public usersCollection: AngularFirestoreCollection<UserData>
-  private users : UserData[]
+  public users : UserData[]
 
   constructor(public afs: AngularFirestore) { 
     this.usersCollection = this.afs.collection<UserData>('users');
