@@ -104,10 +104,10 @@ export class AuthService {
      * Login with Google
      */
     async signWithGoogle(){
+        let googleUser = await Plugins.GoogleAuth.signIn() as any
+        const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken)
         const loading = await this.loadingController.create({ message: 'Please wait...'});
         await loading.present()
-        let googleUser = await Plugins.GoogleAuth.signIn() as any
-        const credential = firebase.auth.GoogleAuthProvider.credential(googleUser.authentication.idToken);
         await this.fireAuth.signInWithCredential(credential).then((userCredential) => {
             if(userCredential.additionalUserInfo.isNewUser){
                 const data =new UserData(userCredential.user.displayName, userCredential.user.email, userCredential.user.photoURL)
@@ -133,8 +133,8 @@ export class AuthService {
         const result =  await Plugins.FacebookLogin.login({ permissions: ['email', 'public_profile'] })
 
         if (result && result.accessToken) {
-            await loading.present()
             var credential = firebase.auth.FacebookAuthProvider.credential(result.accessToken.token)
+            await loading.present()
             this.fireAuth.signInWithCredential(credential).then(async (userCredential) => {
                 await userCredential.user.updateProfile({
                     photoURL: userCredential.user.photoURL + '?type=large&access_token=' + environment.fbAccessToken

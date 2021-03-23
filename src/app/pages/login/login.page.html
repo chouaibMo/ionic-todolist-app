@@ -9,7 +9,7 @@
           <ion-icon name="mail-outline"></ion-icon>
           <ion-input class="ion-margin-start" inputmode="email" type="email" placeholder="Email" formControlName="email"></ion-input>
           <ion-label color="danger" *ngIf="dataForm.get('email').touched && dataForm.get('email').hasError('required')">
-            <p><ion-icon class="ion-margin-top" name="alert-circle-outline"></ion-icon>
+            <p><ion-icon style="margin-top: auto;" name="alert-circle-outline"></ion-icon>
             This field is required</p>
         </ion-label>
         <ion-label color="danger" *ngIf="dataForm.get('email').touched && dataForm.get('email').hasError('pattern')">

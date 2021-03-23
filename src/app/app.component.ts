@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import {AuthService} from "./services/auth/auth.service";
 import {UiService} from "./services/ui/ui.service";
-import { Plugins, registerWebPlugin, StatusBarStyle } from '@capacitor/core';
+import { Plugins, registerWebPlugin, StatusBarStyle, Capacitor } from '@capacitor/core';
 import { FacebookLogin } from '@capacitor-community/facebook-login';
 const { StatusBar, SplashScreen, Share, Browser, Network } = Plugins;
 
@@ -29,9 +29,13 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      StatusBar.setStyle({style: (document.body.getAttribute('color-theme') === 'dark') ? StatusBarStyle.Dark : StatusBarStyle.Light});
-      StatusBar.setOverlaysWebView({overlay: true});
-      SplashScreen.hide();
+      if(Capacitor.isPluginAvailable('StatusBar')){
+        StatusBar.setStyle({style: (document.body.getAttribute('color-theme') === 'dark') ? StatusBarStyle.Dark : StatusBarStyle.Light});
+        StatusBar.show()
+      }
+      if(Capacitor.isPluginAvailable('SplashScreen')){
+        SplashScreen.hide();
+      }
     });
   }
 
