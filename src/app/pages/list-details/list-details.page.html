@@ -83,6 +83,7 @@
                     <ion-label  class="text-padding">
                         <h2 class="elipsis">{{ this.userService.getUserByEmail(this.list.owner)?.name }}</h2>
                         <p  class="elipsis">{{ this.userService.getUserByEmail(this.list.owner)?.email }}</p>
+                        <p  *ngIf="this.userService.getUserByEmail(this.list.owner)?.phone" class="elipsis">{{ this.userService.getUserByEmail(this.list.owner)?.phone }}</p>
                     </ion-label>
                 </ion-col>
             </ion-row>
@@ -107,6 +108,7 @@
                         <ion-label  class="text-padding">
                             <h2 class="elipsis">{{ user?.name }}</h2>
                             <p  class="elipsis">{{ user?.email }}</p>
+                            <p  *ngIf="user?.phone" class="elipsis">{{ user?.phone }}</p>
                         </ion-label>
                     </ion-col>
                 </ion-row>

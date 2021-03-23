@@ -1,3 +1,4 @@
+import { UpdateProfilComponent } from 'src/app/modals/update-profil/update-profil.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -19,7 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, UpdateProfilComponent],
   entryComponents: [],
   imports: [
       FormsModule,

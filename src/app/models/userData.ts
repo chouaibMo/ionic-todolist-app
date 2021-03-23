@@ -2,6 +2,7 @@ export class UserData {
     name: string;
     email: string;
     photoURL: string;
+    phone? : string
 
 
     constructor(name: string, email: string, photoURL:string){
