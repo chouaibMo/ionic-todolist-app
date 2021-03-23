@@ -44,17 +44,21 @@ export class HomePage {
         })
         this.AuthService.fireAuth.onAuthStateChanged((credential)=>{
             if(credential){
-                this.listService.getAll().subscribe(values => {
+                this.listService.getAll().subscribe(async values => {
                     this.ownedLists = values
                     this.ownedResult = this.ownedLists
                     if(this.settings.notification)
                         this.notifService.setNotifications(1, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.ownedLists) +' active lists')
+                    else    
+                        this.notifService.cancelNotifications('1')
                 })
                 this.listService.getAllShared().subscribe(values => {
                     this.sharedLists = values
                     this.sharedResult = this.sharedLists
                     if(this.settings.notification)
                         this.notifService.setNotifications(2, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.sharedLists) +' active shared lists')
+                    else    
+                        this.notifService.cancelNotifications('2')    
                 })
             }
             else{
