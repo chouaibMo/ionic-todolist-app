@@ -22,6 +22,7 @@ export class HomePage {
     private ownedResult: List[]
     private sharedResult: List[]
     private deleteConfirmation : boolean
+    private notifications : Boolean
 
     constructor(private uiService : UiService,
                 private mapService: MapService,
@@ -38,19 +39,23 @@ export class HomePage {
     ngOnInit(){
         this.mapService.initCurrentPosition()
         this.routerOutlet.swipeGesture = false;
-        this.settingService.getSettings().subscribe(value => this.deleteConfirmation = value.confirmation)
+        this.settingService.getSettings().subscribe(value => {
+            this.deleteConfirmation = value.confirmation
+            this.notifications = value.notification
+        } )
         this.AuthService.fireAuth.onAuthStateChanged((credential)=>{
             if(credential){
                 this.listService.getAll().subscribe(values => {
                     this.ownedLists = values
                     this.ownedResult = this.ownedLists
-                    this.notifService.setNotifications(1, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.ownedLists) +' active lists')
-
+                    if(this.notifications)
+                        this.notifService.setNotifications(1, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.ownedLists) +' active lists')
                 })
                 this.listService.getAllShared().subscribe(values => {
                     this.sharedLists = values
                     this.sharedResult = this.sharedLists
-                    this.notifService.setNotifications(2, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.sharedLists) +' active shared lists')
+                    if(this.notifications)
+                        this.notifService.setNotifications(2, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.sharedLists) +' active shared lists')
                 })
             }
             else{

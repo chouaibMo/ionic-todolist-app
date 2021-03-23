@@ -33,6 +33,5 @@ export class NotificationService {
         }
       ]
     });
-    console.log('scheduled notifications', notifs);
   }
 }
