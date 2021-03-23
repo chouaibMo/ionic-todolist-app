@@ -9,6 +9,7 @@ import {ListSharingComponent} from "../modals/list-sharing/list-sharing.componen
 import {AuthService} from "../services/auth/auth.service";
 import {UiService} from "../services/ui/ui.service";
 import { UserService } from '../services/user/user.service';
+import { NotificationService } from '../services/notification/notification.service';
 
 @Component({
     selector: 'app-home',
@@ -31,7 +32,8 @@ export class HomePage {
                 private routerOutlet: IonRouterOutlet,
                 private settingService : SettingService,
                 private alertController: AlertController,
-                private modalController: ModalController) {}
+                private modalController: ModalController,
+                private notifService: NotificationService,) {}
 
     ngOnInit(){
         this.mapService.initCurrentPosition()
@@ -42,10 +44,13 @@ export class HomePage {
                 this.listService.getAll().subscribe(values => {
                     this.ownedLists = values
                     this.ownedResult = this.ownedLists
+                    this.notifService.setNotifications(1, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.ownedLists) +' active lists')
+
                 })
                 this.listService.getAllShared().subscribe(values => {
                     this.sharedLists = values
                     this.sharedResult = this.sharedLists
+                    this.notifService.setNotifications(2, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.sharedLists) +' active shared lists')
                 })
             }
             else{
@@ -169,5 +174,14 @@ export class HomePage {
             ]
         });
         await alert.present();
+    }
+    
+    countActiveLists(lists: List[]){
+        var active = 0;
+        lists.map(list => {
+            if(list.nbChecked < list.size)
+                active++
+        })
+        return active
     }
 }

@@ -1,10 +1,11 @@
+import { NotificationService } from './services/notification/notification.service';
 import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import {AuthService} from "./services/auth/auth.service";
 import {UiService} from "./services/ui/ui.service";
 import { Plugins, registerWebPlugin, StatusBarStyle, Capacitor } from '@capacitor/core';
 import { FacebookLogin } from '@capacitor-community/facebook-login';
-const { StatusBar, SplashScreen, Share, Browser, Network } = Plugins;
+const { StatusBar, SplashScreen, Share, Browser, Network, LocalNotifications } = Plugins;
 
 @Component({
   selector: 'app-root',
@@ -14,11 +15,12 @@ const { StatusBar, SplashScreen, Share, Browser, Network } = Plugins;
 export class AppComponent {
   constructor(private platform: Platform,
               private uiService: UiService,
-              private authService : AuthService) {
+              private authService : AuthService,
+              private notifService: NotificationService) {
 
     this.initializeApp();
     registerWebPlugin(FacebookLogin);
-    
+    this.notifService.requestPermission()
     Network.addListener('networkStatusChange', (status) => {
       if(status.connected)
         this.uiService.presentToast('Network connection established sucessfully', 'success',5000)
