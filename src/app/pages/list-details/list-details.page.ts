@@ -11,6 +11,8 @@ import {Todo} from "../../models/todo";
 import {SettingService} from "../../services/setting/setting.service";
 import {UiService} from "../../services/ui/ui.service";
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { Settings } from 'src/app/models/settings';
+import { Capacitor } from '@capacitor/core';
 
 
 
@@ -23,7 +25,7 @@ export class ListDetailsPage implements OnInit {
   public list: List
   private todos: Todo[]
   private searchResult: Todo[]
-  private deleteConfirmation : boolean
+  private settings : Settings
   
   private selectedSegment : string
   private ownerData : UserData
@@ -41,9 +43,7 @@ export class ListDetailsPage implements OnInit {
               private modalController: ModalController) {
 
     this.selectedSegment = 'tasks'            
-    this.settingService.getSettings().subscribe((value) => {
-      this.deleteConfirmation = value.confirmation;
-    });
+    this.settingService.getSettings().subscribe(value => this.settings = value )
   }
 
   ngOnInit() {
@@ -108,7 +108,7 @@ export class ListDetailsPage implements OnInit {
    */
   removeTodo(todo: Todo): void {
     if(this.listService.hasWritePermission(this.list, this.AuthService.getCurrentUser().email)){
-      if(this.deleteConfirmation)
+      if(this.settings.confirmation)
         this.presentTodoAlert(todo)
       else
         this.listService.deleteTodo(this.list, todo);
@@ -206,15 +206,11 @@ export class ListDetailsPage implements OnInit {
    * Triggered when user click on a member's phone number
    */
   onCallNumber(number: string){
-    console.log("calling")
-    this.callNumber.callNumber(number, true)
-      .then(res => {
-        console.log('Launched dialer!', res)
-      })
-      .catch(err => {
-        console.log('Error launching dialer', err) 
-        this.uiService.presentToast("Failed to call "+number, "danger", 1000)
-        this.uiService.presentToast(""+err, "danger", 3000)
-      });
+    if(Capacitor.isNative){
+      this.callNumber.callNumber(number, true)
+        .catch(err => {
+          this.uiService.presentToast("Failed to call : "+err, "danger", 3000)
+        });
+      }    
   }
 }

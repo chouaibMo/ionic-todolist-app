@@ -10,6 +10,7 @@ import {AuthService} from "../services/auth/auth.service";
 import {UiService} from "../services/ui/ui.service";
 import { UserService } from '../services/user/user.service';
 import { NotificationService } from '../services/notification/notification.service';
+import { Settings } from '../models/settings';
 
 @Component({
     selector: 'app-home',
@@ -21,8 +22,7 @@ export class HomePage {
     private sharedLists: List[]
     private ownedResult: List[]
     private sharedResult: List[]
-    private deleteConfirmation : boolean
-    private notifications : Boolean
+    private settings : Settings
 
     constructor(private uiService : UiService,
                 private mapService: MapService,
@@ -40,21 +40,20 @@ export class HomePage {
         this.mapService.initCurrentPosition()
         this.routerOutlet.swipeGesture = false;
         this.settingService.getSettings().subscribe(value => {
-            this.deleteConfirmation = value.confirmation
-            this.notifications = value.notification
-        } )
+            this.settings = value
+        })
         this.AuthService.fireAuth.onAuthStateChanged((credential)=>{
             if(credential){
                 this.listService.getAll().subscribe(values => {
                     this.ownedLists = values
                     this.ownedResult = this.ownedLists
-                    if(this.notifications)
+                    if(this.settings.notification)
                         this.notifService.setNotifications(1, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.ownedLists) +' active lists')
                 })
                 this.listService.getAllShared().subscribe(values => {
                     this.sharedLists = values
                     this.sharedResult = this.sharedLists
-                    if(this.notifications)
+                    if(this.settings.notification)
                         this.notifService.setNotifications(2, 'Are you eady for today ?', 'You have '+ this.countActiveLists(this.sharedLists) +' active shared lists')
                 })
             }
@@ -105,7 +104,7 @@ export class HomePage {
      */
     delete(list: List): void {
         if(this.listService.hasWritePermission(list, this.AuthService.getCurrentUser().email)){
-            if(this.deleteConfirmation){
+            if(this.settings.confirmation){
                 this.presentListAlert(list)
             }
             else{
@@ -148,8 +147,9 @@ export class HomePage {
     share(list: List) {
         if(this.listService.hasSharePermission(list, this.AuthService.getCurrentUser().email))
             this.presentModal('share', list)
-        else
+        else{
             this.uiService.presentToast("You don't have permission to perform this operation", "danger", 3000)
+        }    
     }
 
     /**
@@ -157,7 +157,8 @@ export class HomePage {
      * @param list: the list to be deleted
      */
     async presentListAlert(list: List) {
-        this.uiService.vibration()
+        if(this.settings.haptics)
+            this.uiService.vibration()
         const alert = await this.alertController.create({
             cssClass: 'my-custom-class',
             header: 'Delete '+list.name,

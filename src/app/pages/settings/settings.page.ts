@@ -1,3 +1,4 @@
+import { UiService } from './../../services/ui/ui.service';
 import { map } from 'rxjs/operators';
 import {Component, OnInit} from '@angular/core';
 import {SettingService} from "../../services/setting/setting.service";
@@ -18,9 +19,10 @@ export class SettingsPage implements OnInit {
   private supportedVoices;
   private languages = []
   
-  constructor(private settingService : SettingService,
-              private pickerController: PickerController) {
-  }
+  constructor(private uiService: UiService,
+              private settingService: SettingService,
+              private pickerController: PickerController) {}
+              
 
   ngOnInit() { 
     this.settingService.getSettings().subscribe(value => this.settings = value)
@@ -36,6 +38,8 @@ export class SettingsPage implements OnInit {
 
 
   async onLanguageChange() {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     let options = {
       buttons: [
         {
@@ -44,7 +48,8 @@ export class SettingsPage implements OnInit {
             this.settings.speechLang = value.languages.text
             this.settings.speechLangId = value.languages.value
             this.settingService.setSettings(this.settings)
-
+            if(this.settings.haptics)
+              this.uiService.hapticsImpactMedium()
           }
         }
       ],
@@ -56,6 +61,10 @@ export class SettingsPage implements OnInit {
 
     let picker = await this.pickerController.create(options);
     picker.present()
+    picker.addEventListener('ionPickerColChange', async (event: any) => {
+      if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
+    }) 
   }
 
   /**
@@ -63,6 +72,9 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onDarkModeToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
+
     this.settings.darkMode = !!event.detail.checked
     this.settingService.setSettings(this.settings);
 
@@ -73,6 +85,8 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onNotificationToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     this.settings.notification = !!event.detail.checked
     this.settingService.setSettings(this.settings);
   }
@@ -82,6 +96,8 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onConfirmDeleteToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     this.settings.confirmation = !!event.detail.checked
     this.settingService.setSettings(this.settings);
   }
@@ -91,6 +107,8 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onSecureUnlockToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     this.settings.passcode = !!event.detail.checked
     this.settingService.setSettings(this.settings);
   }
@@ -100,6 +118,8 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onHapticsToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     this.settings.haptics = !!event.detail.checked
     this.settingService.setSettings(this.settings);
   }
@@ -109,15 +129,10 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onVibrationsToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     this.settings.vibrations = !!event.detail.checked
     this.settingService.setSettings(this.settings);
-  }
-
-  /**
-   * Change speech language
-   * @param event
-   */
-  onSpeechLanguageChange(event) {
   }
 
   /**
@@ -125,6 +140,8 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onSpeechToggle(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactMedium()
     this.settings.textToSpeech = !!event.detail.checked
     this.settingService.setSettings(this.settings);
   }
@@ -134,6 +151,8 @@ export class SettingsPage implements OnInit {
    * @param event
    */
   onRangeChange(event) {
+    if(this.settings.haptics)
+      this.uiService.hapticsImpactLight()
     this.settings.speechVolume = event.detail.value
     this.settingService.setSettings(this.settings);
   }

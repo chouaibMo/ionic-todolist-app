@@ -103,15 +103,16 @@ ionic serve
     - Offline mode (create/delete lists or tasks)
     - Show contributors (readers and writers) of each list
     - Add tasks with address ( address search bar with autocompletion)
-    - Cast address to long/lat using geocoding **(mapbox package)**
-    - Speak if text-to-speech enabled in settings **(text-to-speech plugin)**
+    - Cast address to long/lat using geocoding (mapbox package)
+    - Speak if text-to-speech enabled in settings (text-to-speech plugin)
     - Show address in a mapbox with a marker (if address provided in task)
-    - Show user localisation if available **(geolocation plugin)**
+    - Show user localisation if available (geolocation plugin)
 
 <span id="others"></span>
 ### Others :
-    - Open in-app browser **(browser plugin)**
-    - Share message with other apps **(share plugin)**
+    - Call members with provided phone number (call-number plugin)
+    - Open in-app browser (browser plugin)
+    - Share message with other apps (share plugin)
 
 <span id="plugin"></span>
 ## 5 - Plugins used :
@@ -134,7 +135,7 @@ ionic serve
     - ✅ @capacitor/action-sheet      
     - ✅ @ccapacitor/splash-screen
     - ✅ @capacitor/status-bar
-    - 🆘 @ionic-native/call-number (Not working)
+    - ✅ @ionic-native/call-number
     - 🆘 capacitor-biometric-auth (Not working)
 
 
