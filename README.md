@@ -56,7 +56,25 @@ ionic serve
 </p>
 
 ### Login/Register
+<p> 
+  <img src="./screenshots/login.gif" width="250" height="480"/>
+  <img src="./screenshots/facebook.gif" width="250" height="480"/>
+  <img src="./screenshots/google.gif" width="250" height="480"/>
+</p>
+
 ### Lists/Tasks
+<p> 
+  <img src="./screenshots/addlist.gif" width="250" height="480"/>
+  <img src="./screenshots/tasks.gif" width="250" height="480"/>
+  <img src="./screenshots/taskdetails.gif" width="250" height="480"/>
+</p>
+
+### Others (profile, settings ...)
+<p> 
+  <img src="./screenshots/profil.gif" width="250" height="480"/>
+  <img src="./screenshots/settings.gif" width="250" height="480"/>
+  <img src="./screenshots/share.gif" width="250" height="480"/>
+</p>
 
 <span id="basic"></span>
 ## 3 - Basic features 
